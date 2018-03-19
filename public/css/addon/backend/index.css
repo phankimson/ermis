@@ -1,0 +1,91 @@
+﻿ 
+            .circle {
+                    z-index: 1;
+                    position: relative;
+                    margin-top: 4%;
+                    margin-left: 30%;
+                    padding : 60px 0;
+                }
+
+                dl {
+                    z-index: 2;
+                    position: relative;
+                    top: -320px;
+                    left: 23.5%;
+                    list-style-type: none;
+                }
+
+                dd {
+                    position: absolute;
+                    width: 150px;
+                    height: 150px;
+                    padding: 5px;
+                    overflow: hidden;
+                    display: table;
+                }
+                #bank dd ,#safe dd,#buy dd,#sell dd,#material dd,#fixed_assets dd,#tools dd,#general dd{
+                width: 130px;
+                height: 130px;
+                       }
+                #bank dd:nth-child(1),#safe dd:nth-child(1),#buy dd:nth-child(1),#sale dd:nth-child(1),#material dd:nth-child(1),#fixed_assets dd:nth-child(1),#tools dd:nth-child(1),#general dd:nth-child(1){
+                top : 110px;
+                }
+                #bank dd:nth-child(2),#safe dd:nth-child(2),#buy dd:nth-child(2),#sale dd:nth-child(2),#material dd:nth-child(2),#fixed_assets dd:nth-child(2),#tools dd:nth-child(2),#general dd:nth-child(2){
+                bottom : -20px;
+                }
+                #bank dd:nth-child(3),#safe dd:nth-child(3),#buy dd:nth-child(3),#sale dd:nth-child(3),#material dd:nth-child(3),#fixed_assets dd:nth-child(3),#tools dd:nth-child(3),#general dd:nth-child(3){
+                top : 110px;
+                right : 220px;
+                }
+                #bank dd:nth-child(4),#safe dd:nth-child(4),#buy dd:nth-child(4),#sale dd:nth-child(4),#material dd:nth-child(4),#fixed_assets dd:nth-child(4),#tools dd:nth-child(4),#general dd:nth-child(4){
+                right : 220px;
+                bottom : -20px;
+                }
+                #bank dd:nth-child(5), #safe dd:nth-child(5),#buy dd:nth-child(5),#sale dd:nth-child(5),#material dd:nth-child(5),#fixed_assets dd:nth-child(5),#tools dd:nth-child(5),#general dd:nth-child(5){
+                top : 110px;
+                left : -350px;
+                }
+                #bank dd:nth-child(6),#safe dd:nth-child(6),#buy dd:nth-child(6),#sale dd:nth-child(6),#material dd:nth-child(6),#fixed_assets dd:nth-child(6),#tools dd:nth-child(6),#general dd:nth-child(6){
+                left : -350px;
+                bottom : -20px;
+                }
+
+                    dd a {
+                        text-align: center;
+                    }
+
+                    @media only screen and (min-width: 1300px) and (max-width: 1400px) {
+                        dl {
+                            left: 23.4%;
+                        }
+                         #bank dd:nth-child(1),#safe dd:nth-child(1),#buy dd:nth-child(1),#sale dd:nth-child(1),#material dd:nth-child(1),#fixed_assets dd:nth-child(1),#tools dd:nth-child(1),#general dd:nth-child(1){
+                        top : 160px;
+                        }
+                          #bank dd:nth-child(2),#safe dd:nth-child(2),#buy dd:nth-child(2),#sale dd:nth-child(2),#material dd:nth-child(2),#fixed_assets dd:nth-child(2),#tools dd:nth-child(2),#general dd:nth-child(2){
+                        bottom : -60px;
+                        }
+                           #bank dd:nth-child(3),#safe dd:nth-child(3),#buy dd:nth-child(3),#sale dd:nth-child(3),#material dd:nth-child(3),#fixed_assets dd:nth-child(3),#tools dd:nth-child(3),#general dd:nth-child(3){
+                        top : 160px;
+                        right : 180px;
+                        }
+                        #bank dd:nth-child(4),#safe dd:nth-child(4),#buy dd:nth-child(4),#sale dd:nth-child(4),#material dd:nth-child(4),#fixed_assets dd:nth-child(4),#tools dd:nth-child(4),#general dd:nth-child(4){
+                        right : 180px;
+                        bottom : -60px;
+                        }
+                          #bank dd:nth-child(5),#safe dd:nth-child(5),#buy dd:nth-child(5),#sale dd:nth-child(5),#material dd:nth-child(5),#fixed_assets dd:nth-child(5),#tools dd:nth-child(5),#general dd:nth-child(5){
+                        top : 160px;
+                        left : -350px;
+                        }
+                        #bank dd:nth-child(6),#safe dd:nth-child(6),#buy dd:nth-child(6),#sale dd:nth-child(6),#material dd:nth-child(6),#fixed_assets dd:nth-child(6),#tools dd:nth-child(6),#general dd:nth-child(6){
+                        left : -350px;
+                        bottom : -60px;
+                        }
+                    }
+                     @media only screen and (min-width:1550px) and (max-width: 1600px) {
+                    dl {
+                        left: 19%;
+                    }
+                      #bank dd span {
+                        margin-left : 10px;
+                        }
+                }

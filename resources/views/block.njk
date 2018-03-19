@@ -1,0 +1,50 @@
+{% extends 'manage.layouts.default' %}
+{% block css %}
+<title>Ermis Manage</title>
+
+<!-- additional styles for plugins -->
+    <!-- weather icons -->
+    <link rel="stylesheet" href="{{ url('library/weather-icons/css/weather-icons.min.css') }}" media="all">
+    <!-- metrics graphics (charts) -->
+    <link rel="stylesheet" href="{{ url('library/metrics-graphics/dist/metricsgraphics.css') }}">
+    <!-- chartist -->
+    <link rel="stylesheet" href="{{ url('library/chartist/dist/chartist.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/addon/backend/index.css') }}">
+{% endblock %}
+
+{% block content %}
+ 
+<div class="md-card uk-margin-medium-bottom" id="all">
+<div class="md-card-content">
+ <h2>Bạn không có quyền vào trang này ! Vui lòng liên hệ quản trị viên .</h2>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+ <!-- page specific plugins -->
+      <!-- page specific plugins -->           
+            <!-- d3 -->
+            <script src="{{ url('library/d3/d3.min.js') }}"></script>
+            <!-- metrics graphics (charts) -->
+            <script src="{{ url('library/metrics-graphics/dist/metricsgraphics.min.js') }}"></script>
+            <!-- chartist (charts) -->
+            <script src="{{ url('library/chartist/dist/chartist.min.js') }}"></script>
+            <!-- maplace (google maps) -->
+            <script src="http://maps.google.com/maps/api/js"></script>
+            <script src="{{ url('library/maplace-js/dist/maplace.min.js') }}"></script>
+            <!-- peity (small charts) -->
+            <script src="{{ url('library/peity/jquery.peity.min.js') }}"></script>
+            <!-- easy-pie-chart (circular statistics) -->
+            <script src="{{ url('library/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js') }}"></script>
+            <!-- countUp -->
+            <script src="{{ url('library/countUp.js/dist/countUp.min.js') }}"></script>
+            <!-- handlebars.js -->
+            <script src="{{ url('library/handlebars/handlebars.min.js') }}"></script>
+            <script src="{{ url('scripts/custom/handlebars_helpers.min.js') }}"></script>
+            <!-- CLNDR -->
+            <script src="{{ url('library/clndr/clndr.min.js') }}"></script>
+            <!--  dashbord functions -->
+            <script src="{{ url('scripts/pages/dashboard.min.js') }}"></script>
+            <script src="{{ url('scripts/addon/backend/index.js') }}"></script>     
+{% endblock %}

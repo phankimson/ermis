@@ -1,0 +1,89 @@
+{% extends 'manage.layouts.ermisform7-t' %}
+
+{% block content_add %}
+      <div class="uk-width-medium-4-4 search-table-outter">
+      {% include 'manage.includes._TableTransferReceiptWarehouseVoucher' %}
+    </div>
+{% endblock %}
+{% block tabs %}
+    <div id="tabstrip">
+        <ul style="display:none"><li class="k-state-active">{{ antl.get('inventory_voucher.item') }}</li><li>{{ antl.get('global.expand') }}</li></ul>
+        <div><div id="grid"></div> </div>
+        <div>
+            <table>
+                <tr>
+                    <td class="row-label-responsive"><label>{{ antl.get('global.expand') }}</label></td>
+                    <td colspan="2"><input type="text" class="k-textbox large" /></td>
+
+                    <td class="row-label-responsive"></td>
+                    <td><label>{{ antl.get('global.expand') }}</label></td>
+                    <td colspan="2"><input type="text" class="k-textbox large" /></td>
+                </tr>
+
+                <tr>
+                    <td><label>{{ antl.get('global.expand') }}</label></td>
+                    <td colspan="2"><input type="text" class="k-textbox large" /></td>
+
+                    <td class="row-label-responsive"></td>
+                    <td><label>{{ antl.get('global.expand') }}</label></td>
+                    <td colspan="2"><input type="text" class="k-textbox large" /></td>
+                </tr>
+
+                <tr>
+                    <td><label>{{ antl.get('global.expand') }}</label></td>
+                    <td colspan="2"><input type="text" class="k-textbox large" /></td>
+
+                    <td class="row-label-responsive"></td>
+                    <td><label>{{ antl.get('global.expand') }}</label></td>
+                    <td colspan="2"><input type="text" class="k-textbox large" /></td>
+                </tr>
+
+            </table>
+        </div>
+
+    </div>
+    <div class="uk-width-medium-4-4">
+        <div id="grid"></div>
+    </div>
+{% endblock %}
+
+{% block scripts_add %}
+    <script>
+        jQuery(document).ready(function () {
+            Ermis.data = [];
+            Ermis.link = "{{ key }}";
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.room = "{{ room }}";
+            Ermis.columns    = [{"field" :"detail", hidden : true},
+                                { "field" : "purchase_price", hidden : true, "set" : "3"},
+                                {  title: 'Select All',headerTemplate: '<input type="checkbox" id="header-chb-b" class="k-checkbox"><label class="k-checkbox-label" for="header-chb-b"></label>',template: '<input type="checkbox" id="s-#= id #" #= status == 2 ? \'checked="checked"\' : "" #  class="k-checkbox"><label class="k-checkbox-label" for="s-#= id #"></label>', width: 80},
+                                { "field" : "barcode","title" : "{{ antl.get('inventory_voucher.item_code') }}" ,"width" : "200px" },
+                                { "field" : "item_name","title" : "{{ antl.get('inventory_voucher.item_name') }}" ,"width" : "200px" ,"set" : "1",aggregates: ['count'], footerTemplate: "<p>Total Count: #=count#</p>" },
+                                { "field" : "unit","title" : "{{ antl.get('inventory_voucher.unit') }}","width" : "100px" ,"set" : "1" },
+                                { "field" : "size","title" : "{{ antl.get('inventory_voucher.size') }}","width" : "100px" ,"set" : "1" },
+                                { "field" : "quantity","title" : "{{ antl.get('inventory_voucher.quantity') }}","width" : "100px",aggregates: ['sum'], footerTemplate: "<p id='quantity_total'>#=sum#</p>" },
+                                { "field" : "quantity_receipt","title" : "{{ antl.get('inventory_voucher.quantity_receipt') }}","width" : "100px","editor" : QuantityEditor,aggregates: ['sum'], footerTemplate: "<p id='quantity_receipt_total'>#=sum#</p>" , "editable" : QREditable },
+                                { "field" : "price","title" : "{{ antl.get('inventory_voucher.price') }}" ,"width" : "150px",format: "{0:n0}",decimals: 0 , footerTemplate: "<p>#=kendo.toString(average, 'n0')#</p>" ,"set" : "3"},
+                                { "field" : "amount","title" : "{{ antl.get('inventory_voucher.amount') }}" ,"width" : "200px",format: "{0:n0}" ,decimals: 0 , footerTemplate: "<p id='amount_total'>#=calculatePriceAggregate()#</p>" ,template: "#=calculateAmount(quantity,price)#"} ];
+
+
+            Ermis.field = {
+                purchase_price : {field :"purchase_price" ,defaultValue: 0},
+                detail : {field :"detail" ,defaultValue: 0},
+                barcode : { field : "barcode",editable: false },
+                item_name : {editable: false },
+                unit :      {editable: false },
+                size :      {editable: false },
+                quantity : {field : "quantity",type:"number" , editable: false},
+                quantity_receipt : {field : "quantity_receipt",type:"number" },
+                price:     {field : "price",type:"number" , editable: false },
+                amount:    {editable: false ,type:"number"  , editable: false }
+            };
+            Ermis.aggregate = [ { field: "item_name", aggregate: "count" },
+                                { field: "quantity", aggregate: "sum" },
+                                { field: "quantity_receipt", aggregate: "sum" },
+                                { field: "price", aggregate: "average" },
+                                { field: "amount", aggregate: "sum" } ];
+        });
+    </script>
+{% endblock %}

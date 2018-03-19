@@ -1,0 +1,43 @@
+
+{% extends 'manage.layouts.ermisform2' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.code') }} *</label></td>
+            <td><input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('global.code') }} *" data-null="true" data-width="200px" data-type="string" name="code" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('global.name') }} *</label></td>
+            <td><input type="text" class="k-textbox large" data-position="2" data-title="{{ antl.get('global.name') }} *" data-null="true" data-width="200px" data-type="string" name="name" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('global.name_en') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('global.name_en') }}" data-width="200px" data-type="string" name="name_en" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('action.active') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="4" data-value="1" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+        </tr>
+    </table>
+    {% endblock %}
+{% block tabs %}
+    <div id="tabstrip" style="display:none">
+        <ul>
+            <li data-search="1" class="k-state-active">{{ antl.get('object_group.customer') }} </li>
+            <li data-search="2">{{ antl.get('object_group.suplier') }}</li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block scripts_add %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.data = {{ data | json | safe }};
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.flag = 1;
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+{% endblock %}

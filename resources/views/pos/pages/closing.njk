@@ -1,0 +1,64 @@
+{% set moment = use('moment/moment') %}
+{% extends 'manage.layouts.default' %}
+{% block css %}
+    <title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('css/addon/backend/permission.css') }}">
+    <link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+{% endblock %}
+{% block content %}
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+            {{ title }}
+        </div>
+        <div class="md-card-toolbar-actions">
+        <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+        <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+        </div>
+    </div>
+    <div class="md-card-content">
+        <div class="uk-grid">
+            <div class="uk-width-medium-2-4">
+                <div id="grid"></div>
+            </div>
+            <div class="uk-width-medium-2-4">
+                <div id="notification"></div>
+                <div id="form-action">
+                    <table>
+                        <tr>
+                            <td><label class="label">{{ antl.get('closing.date') }}</label></td>
+                            <td class="row-height"><input type="text" class="month-picker" name="date" value="{{ moment().format("MM/YYYY") }}" /></td>
+                        </tr>
+                        <tr class="row-height"></tr>
+                        <tr>
+                            <td></td>
+                            <td class="row-height"><a id="kendoIconSave">{{ antl.get('closing.start') }}</a>    <a id="kendoIconDelete">{{ antl.get('closing.delete') }}</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        jQuery(document).ready(function () {
+            Ermis.data = {{ data | json | safe }};
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+            Ermis.columns    =   [{ "field" : "id",hidden: true },
+                                { "field" : "name","title" :"{{ antl.get('closing.name') }}" ,"width" : "200px"},
+                                { "field" : "name_en","title" :"{{ antl.get('closing.name_en') }}" ,"width" : "200px"},
+                                { "field" : "date","title" :"{{ antl.get('closing.date') }}" ,"width" : "200px" },
+                                { "field" : "created_at","title" :"{{ antl.get('closing.date_created') }}" ,"width" : "200px" },
+                                { "field" : "active","title" :"{{ antl.get('action.active') }}" ,"width" : "200px" ,"template" : "#= FormatCheckBox(active) #"},];
+        });
+    </script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js' )}}"></script>
+    <script src="{{ url('library/kendoui/js/jszip.min.js' )}}"></script>
+    <script src="{{ url('library/uniform/dist/js/jquery.uniform.standalone.js' )}}"></script>
+    <script src="{{ url('scripts/addon/backend/ermis-form-10.js' )}}"></script>
+{% endblock %}

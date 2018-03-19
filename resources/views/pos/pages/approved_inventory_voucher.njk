@@ -1,0 +1,159 @@
+{% set moment = use('moment/moment') %}
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+    <link rel="stylesheet" href="{{ url('css/addon/approved.css') }}" />
+{% endblock %}
+{% block content %}
+        <div id="page_content_inner">
+
+            <div class="md-card">
+                <div class="md-card-content" >
+                    <div class="uk-grid" data-uk-grid-margin="" id="form-action">
+                    <div class="uk-width-medium-1-10">
+                        <label for="date_voucher_search">{{ antl.get('inventory_voucher.date_voucher') }}</label>
+                        <input class="md-input" type="text" name="date_voucher_search" data-uk-datepicker="{format:'DD/MM/YYYY'}">
+                    </div>
+                        <div class="uk-width-medium-1-10">
+                            <label for="voucher_search">{{ antl.get('inventory_voucher.voucher') }}</label>
+                            <input type="text" class="md-input" name="voucher_search">
+                        </div>
+                        <div class="uk-width-medium-3-10">
+                            <div class="uk-margin-small-top">
+                                <select name="status_search" id="status_search" data-md-selectize multiple data-md-selectize-bottom>
+                                    <option value="">{{ antl.get('inventory_voucher.status') }}</option>
+                                    <option value="0">{{ antl.get('action.not_accepted') }}</option>
+                                    <option value="1">{{ antl.get('action.accepted') }}</option>
+                                    <option value="2">{{ antl.get('action.completed') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-10">
+                            <div class="uk-margin-top uk-text-nowrap">
+                                <input type="checkbox" name="active_search" data-md-icheck/>
+                                <label for="active_search" class="inline-label">{{ antl.get('action.active') }}</label>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-2-10 uk-text-center">
+                            <a href="javascript:;" id="filter" class="md-btn md-btn-primary uk-margin-small-top">{{ antl.get('action.filter') }}</a>
+                        </div>
+                        <div class="uk-width-medium-2-10 uk-text-center">
+                            <a href="javascript:;" id="approved_all" class="md-btn md-btn-warning uk-margin-small-top"><i class="material-icons md-24">colorize</i> {{ antl.get('action.approved_all') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-1-1">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-align-vertical">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ antl.get('inventory_voucher.type') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.date_voucher') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.voucher') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.description') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.inventory_receipt') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.inventory_issue') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.total_number') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.total_amount') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.status') }}</th>
+                                            <th>{{ antl.get('action.active') }}</th>
+                                            <th>{{ antl.get('global.action') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="load hidden">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="uk-text-large uk-text-nowrap"><a href="javascript:;"></a></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="uk-text-nowrap"></td>
+                                        <td class="uk-text-nowrap"></td>
+                                        <td class="uk-text-nowrap"><span class="uk-badge uk-badge-success"></span></td>
+                                        <td><i class="material-icons md-color-light-blue-600 md-24"></i></td>
+                                        <td class="uk-text-nowrap">
+                                            <a data-id="3" class="approved" class="disabled md-color-indigo-A200" href="javascript:;"><i class="material-icons md-24">colorize</i></a>
+                                        </td>
+                                    </tr>
+                                    {% for d in data.data %}
+                                    <tr>
+                                        {% if d.type == 1 %}
+                                        <td>{{ antl.get('inventory_voucher.receipt') }}</td>
+                                        {% elseif d.type == 2 %}
+                                        <td>{{ antl.get('inventory_voucher.issue') }}</td>
+                                        {% elseif d.type == 3 %}
+                                        <td>{{ antl.get('inventory_voucher.transfer') }}</td>
+                                        {% elseif d.type == 4 %}
+                                        <td>{{ antl.get('inventory_voucher.wholesale') }}</td>
+                                        {% elseif d.type == 5 %}
+                                        <td>{{ antl.get('inventory_voucher.sale') }}</td>
+                                        {% elseif d.type == 6 %}
+                                        <td>{{ antl.get('inventory_voucher.return') }}</td>
+                                        {% elseif d.type == 7 %}
+                                        <td>{{ antl.get('inventory_voucher.receipt_cash') }}</td>
+                                        {% else %}
+                                        <td></td>
+                                        {% endif %}
+                                        <td>{{ moment(d.date_voucher, "YYYY-MM-DD").format('DD/MM/YYYY') }}</td>
+                                        <td>{{d.voucher}}</td>
+                                        <td class="uk-text-large uk-text-nowrap"><a href="javascript:;">{{d.description}}</a></td>
+                                        <td>{{d.inventory_receipt}}</td>
+                                        <td>{{d.inventory_issue}}</td>
+                                        <td class="uk-text-nowrap">{{antl.formatNumber(d.total_number)}}</td>
+                                        <td class="uk-text-nowrap">{{antl.formatNumber(d.total_amount)}}</td>
+                                        {% if d.status == 0 %}
+                                        <td class="uk-text-nowrap"><span class="uk-badge uk-badge-muted">{{ antl.get('action.not_accepted') }}</span></td>
+                                        {% elseif d.status == 1 %}
+                                        <td class="uk-text-nowrap"><span class="uk-badge uk-badge-info">{{ antl.get('action.accepted') }}</span></td>
+                                        {% elseif d.status == 2 %}
+                                        <td class="uk-text-nowrap"><span class="uk-badge uk-badge-success">{{ antl.get('action.completed') }}</span></td>
+                                        {% endif %}
+                                        {% if d.active == 1 %}
+                                        <td><i class="material-icons md-color-light-blue-600 md-24"></i></td>
+                                        {% else %}
+                                        <td></td>
+                                        {% endif %}
+                                        {% if d.status == 0 %}
+                                        <td class="uk-text-nowrap">
+                                            <a data-id="{{d.id}}" class="approved" href="javascript:;"><i class="material-icons md-24">colorize</i></a>
+                                        </td>
+                                        {% else %}
+                                        <td class="uk-text-nowrap">
+                                            <a data-id="{{d.id}}" class="approved disabled md-color-indigo-A200" href="javascript:;"><i class="material-icons md-24">colorize</i></a>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                              <ul class="uk-pagination  uk-margin-medium-top uk-margin-medium-bottom" data-uk-pagination="{pages: {{data.page}} ,lblPrev : '<' ,lblNext : '>'}"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endblock %}
+        {% block scripts %}
+        <script>
+        jQuery(document).ready(function () {
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+        });
+        </script>
+        <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+        <script src="{{ url('scripts/uikit.min.js') }}"></script>
+        <script src="{{ url('scripts/ukit_pagination.js') }}"></script>
+        <script src="{{ url('scripts/addon/backend/approved.js') }}"></script>
+        {% endblock %}

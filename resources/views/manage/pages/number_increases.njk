@@ -1,0 +1,54 @@
+
+{% extends 'manage.layouts.ermisform1' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.code') }}</label></td>
+            <td><input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('global.code') }}" data-width="200px" data-type="string" name="code" /></td>
+        </tr>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.name') }}</label></td>
+            <td><input type="text" class="k-textbox xxlarge" data-position="2" data-title="{{ antl.get('global.name') }}" data-width="200px" data-type="string" name="name" /></td>
+        </tr>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.prefix') }}</label></td>
+            <td><input type="text" class="k-textbox medium" data-position="3" data-title="{{ antl.get('global.prefix') }}" data-width="200px" data-type="string" name="prefix" /></td>
+        </tr>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.suffixed') }}</label></td>
+            <td><input type="text" class="k-textbox medium" data-position="3" data-title="{{ antl.get('global.suffixed') }}" data-width="200px" data-type="string" name="suffixed" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('option.value') }}</label></td>
+            <td><input type="number" class="k-textbox medium" data-position="3" data-title="{{ antl.get('option.value') }}" data-width="200px" data-type="string" name="value" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('number_increases.length_number') }}</label></td>
+            <td><input type="number" class="k-textbox medium" data-position="3" data-title="{{ antl.get('number_increases.length_number') }}" data-width="200px" data-type="string" name="length_number" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.title') }}</label></td>
+            <td>
+                <select class="droplist large" data-position="4" data-title="{{ antl.get('inventory.title') }}"  data-template="#= FormatDropList(inventory,'inventory') #" data-type="number" data-width="200px" name="inventory">
+                    <option readonly selected value="0">--Select--</option>
+                      {% for m in inventory %}
+                        <option value="{{ m.id }}">{{ m.code }} - {{ shortif( lang == 'vn' , m.name , m.name_en )}}</option>
+                       {% endfor %}
+                </select>
+            </td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block scripts_add %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.data = {{ data | json | safe }};
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.flag = 1;
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,50 @@
+<div id="top_bar">
+    <div class="md-top-bar">
+        <ul id="menu_top" class="uk-clearfix">
+        {% set Menu = use('App/Model/Menu') %}
+        {% yield menu = Menu.query().where('active','1').where('type',type).where('parent_id','0').fetch() %}
+        {% yield count = Menu.query().where('active','1').where('type',type).count('* as total') %}
+        {% if count[0].total > 0 %}
+        {% for m1 in menu.toJSON() %}
+        {% if m1.link == "" %}
+            <li data-uk-dropdown class="uk-hidden-small mobile_hidden">
+                <a href="javascript:;"><i class="material-icons">{{ m1.icon }}</i><span>{{  shortif( lang == 'vn' , m1.name , m1.name_en ) }}</span></a>
+                <div class="uk-dropdown">
+                    <ul class="uk-nav uk-nav-dropdown">
+                    {% yield menu1 = Menu.query().where('active','1').where('type',type).where('parent_id',m1.id).fetch() %}
+                        {% for m2 in menu1.toJSON() %}
+                        <li><a href="{{ shortif(m2.link != "", url(m2.link) , "javascript:;" ) }}">{{  shortif( lang == 'vn' , m2.name , m2.name_en ) }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+            {%else%}
+            <li class="mobile_hidden">
+            <a href="{{ shortif(m1.link != "", url(m1.link) , "javascript:;" ) }}"><i class="material-icons">{{ m1.icon }}</i><span>{{  shortif( lang == 'vn' , m1.name , m1.name_en ) }}</span></a>
+            </li>
+            {% endif%}
+            {% endfor %}
+         {% endif%}
+        </ul>
+        <div class="dropdown mobile_show">
+        <a class="md-btn md-btn-flat md-btn-wave waves-effect waves-button" href="javascript:void(0)">Menu <i class="material-icons">&#xE313;</i></a>
+            <div class="dropdown-content">
+            <ul class="uk-nav uk-nav-dropdown">
+            {% if count[0].total > 0 %}
+            {% for m1 in menu.toJSON() %}
+            {% if m1.link == "" %}
+                <li class="uk-nav-header">{{  shortif( lang == 'vn' , m1.name , m1.name_en ) }}</li>
+                {% yield menu1 = Menu.query().where('active','1').where('type',type).where('parent_id',m1.id).fetch() %}
+                    {% for m2 in menu1.toJSON() %}
+                <li><a href="{{ shortif(m2.link != "", url(m2.link) , "javascript:;" ) }}">{{  shortif( lang == 'vn' , m2.name , m2.name_en ) }}</a></li>
+                    {% endfor %}
+            {%else%}
+                <li><a href="{{ shortif(m1.link != "", url(m1.link) , "javascript:;" ) }}">{{  shortif( lang == 'vn' , m1.name , m1.name_en ) }}</a></li>
+            {% endif%}
+            {% endfor %}
+            {% endif%}
+            </ul>
+            </div>
+          </div>
+    </div>
+</div>

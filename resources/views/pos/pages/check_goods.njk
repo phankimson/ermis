@@ -1,0 +1,100 @@
+{% set moment = use('moment/moment') %}
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('css/addon/backend/permission.css') }}">
+    <link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+{% endblock %}
+{% block content %}
+<div id="export"></div>
+<div id="import"></div>
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+            <a class="load"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.load') }}">move_to_inbox</i></a>
+            <a class="save"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.save') }}">save</i></a>
+            <a class="cancel"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.cancel') }}">cancel</i></a>
+            <a class="import"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.import') }}">archive</i></a>
+            <a class="export"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.export') }}">unarchive</i></a>
+        </div>
+        <div class="md-card-toolbar-actions">
+        <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+        <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+            <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expanded="false">
+                <i class="md-icon material-icons"></i>
+                <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                    <ul class="uk-nav">
+                        <li><a href="javascript:;" class="load">{{ antl.get('action.load') }}</a></li>
+                        <li><a href="javascript:;" class="save">{{ antl.get('action.save') }}</a></li>
+                        <li><a href="javascript:;" class="cancel">{{ antl.get('action.cancel') }}</a></li>
+                        <li><a href="javascript:;" class="import">{{ antl.get('action.import') }}</a></li>
+                        <li><a href="javascript:;" class="export">{{ antl.get('action.export') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-card-content">
+        <div id="notification"></div>
+                <div class="uk-margin-bottom uk-margin-left-30" id="form-action">
+                <label>{{ antl.get('check_goods.date') }} </label>
+                <input type="text" class="month-picker" name="date" value="{{ moment().format("DD/MM/YYYY") }}" />
+
+                <label>{{ antl.get('inventory.title') }} </label>
+                <select class="droplist large" data-position="6" data-hidden="true" name="stock">
+                {% for x in stock %}
+                {% if x.id == inventory.id %}
+                    <option value="{{ x.id }}" selected>{{ x.code }} - {{ shortif( lang == 'vn' , x.name ,x.name_en )}}</option>
+                {% else %}
+                    <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name ,x.name_en )}}</option>
+                {% endif %}
+                {% endfor %}
+                </select>
+
+                </div>
+               <div id="grid" style="display : none"></div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    jQuery(document).ready(function () {
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+        Ermis.data = [];
+        Ermis.columns = [{"field" :"id", hidden : true},
+         { "field" : "goods", hidden : true},
+         { "field" : "barcode","title" : "{{ antl.get('inventory_voucher.item_code') }}" ,"width" : "120px"},
+         { "field" : "item","title" : "{{ antl.get('inventory_voucher.item_name') }}" ,"width" : "300px"},
+         { "field" : "unit","title" : "{{ antl.get('inventory_voucher.unit') }}" ,"width" : "150px"},
+         { "field" : "price","title" : "{{ antl.get('inventory_voucher.price') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px"},
+         { "field" : "balance","title" : "{{ antl.get('check_goods.balance') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px",aggregates: ['sum'] , footerTemplate: "<p id='balance_total'>#=FormatNumber(sum)#</p>" },
+         { "field" : "balance_amount","title" : "{{ antl.get('check_goods.amount') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px",aggregates: ['sum'] , footerTemplate: "<p id='balance_amount_total'>#=FormatNumber(sum)#</p>"},
+         { "field" : "check","title" : "{{ antl.get('check_goods.check') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px",aggregates: ['sum'] , footerTemplate: "<p id='check_total'>#=FormatNumber(sum)#</p>"},
+         { "field" : "check_amount","title" : "{{ antl.get('check_goods.amount') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px" , template: "#=calculateAmount(check,price)#",aggregates: ['sum'] , footerTemplate: "<p id='check_amount_total'>#=calculatePriceAggregate()#</p>"},
+         { "field" : "difference","title" : "{{ antl.get('check_goods.difference') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px" ,template: "#=calculateDiffirent(balance,check)#",aggregates: ['sum'], footerTemplate: "<p id='difference_total'>#=calculatePriceAggregateDf()#</p>" },
+         { "field" : "difference_amount","title" : "{{ antl.get('check_goods.amount') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px",template: "#=calculateDiffirentAmount(balance_amount,check,price)#",aggregates: ['sum'] , footerTemplate: "<p id='difference_amount_total'>#=calculatePriceAggregateDfa()#</p>" },
+         ];
+         Ermis.field = {
+             balance:    {type:"number" },
+             balance_amount :   {type:"number"},
+             check:    {type:"number" },
+             check_amount:    {type:"number" },
+             difference:    {type:"number" },
+             difference_amount:    {type:"number" },
+         };
+         Ermis.aggregate = [  { field: "balance", aggregate: "sum" },
+                             { field: "balance_amount", aggregate: "sum" },
+                             { field: "check", aggregate: "sum" },
+                             { field: "check_amount", aggregate: "sum" },
+                             { field: "difference", aggregate: "sum" },
+                             { field: "difference_amount", aggregate: "sum" } ];
+    });
+</script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/jszip.min.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/check_goods.js') }}"></script>
+{% endblock %}

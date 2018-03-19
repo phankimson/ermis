@@ -1,0 +1,13 @@
+{
+    "code": "Mã kho",
+    "name" : "Tên kho",
+    "name_en" : "Tên tiếng anh",
+    "title": "Kho",
+    "manager" : "Người quản lý",
+    "address" : "Địa chỉ",
+    "phone" : "Điện thoại",
+    "fax" : "Fax",
+    "email" : "Email",
+    "company" : "Công ty",
+    "description" : "Ghi chú"
+}

@@ -1,0 +1,19 @@
+<!doctype html>
+<!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
+
+<head>
+{% include 'pos-shop.includes.head' %}
+{% block css %}{% endblock %}
+</head>
+ <body class="top_menu">
+ {% include 'pos-shop.includes.header' %}
+ {% include 'pos-shop.includes.menu' %}
+
+ {% block content %}{% endblock %}
+
+ {% include 'pos-shop.includes.footer' %}
+ {% block scripts %}{% endblock %}
+ {% include 'language' %}  
+</body>
+</html>

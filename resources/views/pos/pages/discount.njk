@@ -1,0 +1,75 @@
+
+{% extends 'manage.layouts.ermisform1' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+      <tr>
+          <td class="row-label"><label>{{ antl.get('global.type') }}</label></td>
+          <td>
+          <select class="droplist large" data-title="{{ antl.get('global.type') }}" data-position="1" data-template="#= FormatDropList(type,'type') #" data-width="200px" data-type="number" name="type">
+                <option readonly selected value="0">--Select--</option>
+                <option value="1">{{ antl.get('discount.type1') }}</option>
+                <option value="2">{{ antl.get('discount.type2') }}</option>
+                <option value="3">{{ antl.get('discount.type3') }}</option>
+          </select>
+          </td>
+      </tr>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.code') }} *</label></td>
+            <td><input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('user.code') }}" data-width="200px" data-type="string" name="code" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('global.name') }} *</label></td>
+            <td><input type="text" class="k-textbox large" data-position="2" data-title="{{ antl.get('global.name') }}" data-width="200px" data-null="true" data-type="string" name="name" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('global.name_en') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('global.name_en') }}" data-width="200px" data-type="string" name="name_en" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('discount.date_start') }}</label></td>
+            <td><input type="text" id="start" class="k-widget k-datepicker k-header k-textbox" data-position="3" data-title="{{ antl.get('discount.date_start') }}" data-template="#= kendo.toString(kendo.parseDate(date_start, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" data-width="200px" data-type="date" name="date_start" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('discount.date_end') }}</label></td>
+            <td><input type="text" id="end" class="k-widget k-datepicker k-header k-textbox" data-position="3" data-title="{{ antl.get('discount.date_end') }}" data-template="#= kendo.toString(kendo.parseDate(date_end, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" data-width="200px" data-type="date" name="date_end" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('discount.discount') }}</label></td>
+            <td><input type="text" class="number-price medium k-input" data-position="3" data-title="{{ antl.get('discount.discount') }}" data-width="200px" data-type="number" name="discount" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('discount.discount_percent') }}</label></td>
+            <td><input type="text" class="number-price medium k-input" data-position="3" data-title="{{ antl.get('discount.discount_percent') }}" data-width="200px" data-type="number" name="discount_percent" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('discount.inventory') }}</label></td>
+            <td class="row-height">
+            <select class="multiselect large" multiple="multiple" data-placeholder="--Select--" data-position="6" data-hidden="true" name="inventory">
+                {% for x in stock %}
+                <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                {% endfor %}
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('discount.accumulative') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="4" data-value="1" data-title="{{ antl.get('discount.accumulative') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(accumulative) #" name="accumulative" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('action.active') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="5" data-value="1" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+        </tr>
+    </table>
+    {% endblock %}
+    {% block scripts_add %}
+        <script>
+        jQuery(document).ready(function () {
+            Ermis.data = {{ data | json | safe }};
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.flag = 1;
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+        });
+        </script>
+    {% endblock %}

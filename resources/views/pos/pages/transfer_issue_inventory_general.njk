@@ -1,0 +1,91 @@
+{% extends 'manage.layouts.ermisform6' %}
+{% block content_add %}
+    <div class="uk-grid" id="form-search">
+        <div class="uk-width-medium-4-4">
+            <select class="droplist medium" id="fast_date">
+                <option value="">{{ antl.get('action.choose') }}</option>
+                <option value="today">{{ antl.get('global.today') }}</option>
+                <option value="this_week">{{ antl.get('global.this_week') }}</option>
+                <option value="this_month">{{ antl.get('global.this_month') }}</option>
+                <option value="this_quarter">{{ antl.get('global.this_quarter') }}</option>
+                <option value="this_year">{{ antl.get('global.this_year') }}</option>
+                <option value="january">{{ antl.get('global.january') }}</option>
+                <option value="february">{{ antl.get('global.february') }}</option>
+                <option value="march">{{ antl.get('global.march') }}</option>
+                <option value="april">{{ antl.get('global.april') }}</option>
+                <option value="may">{{ antl.get('global.may') }}</option>
+                <option value="june">{{ antl.get('global.june') }}</option>
+                <option value="july">{{ antl.get('global.july') }}</option>
+                <option value="august">{{ antl.get('global.august') }}</option>
+                <option value="september">{{ antl.get('global.september') }}</option>
+                <option value="october">{{ antl.get('global.october') }}</option>
+                <option value="november">{{ antl.get('global.november') }}</option>
+                <option value="december">{{ antl.get('global.december') }}</option>
+                <option value="the_1st_quarter">{{ antl.get('global.the_1st_quarter') }}</option>
+                <option value="the_2nd_quarter">{{ antl.get('global.the_2nd_quarter') }}</option>
+                <option value="the_3rd_quarter">{{ antl.get('global.the_3rd_quarter') }}</option>
+                <option value="the_4th_quarter">{{ antl.get('global.the_4th_quarter') }}</option>
+            </select>
+
+            <span>{{ antl.get('global.start_date') }} :</span>
+            <input type="text" data-type="date" id="start" name="start_date" value="{{ start_date }}" />
+
+            <span>{{ antl.get('global.end_date') }}:</span>
+            <input type="text" data-type="date" id="end" name="end_date" value="{{ end_date }}" />
+
+            <select class="droplist medium-responsive" name="active">
+                <option value="">{{ antl.get('global.all') }}</option>
+                <option value="0">{{ antl.get('global.not_recorded') }}</option>
+                <option value="1">{{ antl.get('global.recorded') }}</option>
+            </select>
+
+            <a href="javascript:;" class="uk-margin-left-30 k-button k-primary" id="get_data" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_available</i>{{ antl.get('global.get_data') }}</a>
+        </div>
+    </div>
+    <div class="uk-grid">
+        <div class="uk-width-medium-4-4">
+            <div id="grid"></div>
+        </div>
+    </div>
+    <div class="uk-grid">
+        <div class="uk-width-medium-4-4">
+            <div class="search-table-outter" id="grid-detail"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts_add %}
+    <script>
+        jQuery(document).ready(function () {
+            Ermis.data = {{ data | json | safe }};
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.flag = 1;
+            Ermis.room = "{{ room }}";
+            Ermis.link = "{{ key }}";
+            Ermis.column_grid = [{ "field" : "id",hidden: true },
+                                 { "field" : "inventory_receipt","title" : "{{ antl.get('inventory_voucher.inventory_receipt') }}",width : '200px' },
+                                 { "field" : "date_voucher","title" : "{{ antl.get('inventory_voucher.date_voucher') }}", type:"date" ,template: '#= kendo.toString(kendo.parseDate(date_voucher, "yyyy-MM-dd"), "dd/MM/yyyy") #' ,width : '150px'},
+                                 { "field" : "voucher","title" : "{{ antl.get('inventory_voucher.voucher') }}"  ,width : '150px'},
+                                 { "field" : "description","title" : "{{ antl.get('inventory_voucher.description') }}",width : '200px' },
+                                 { "field" : "total_number","title" : "{{ antl.get('inventory_voucher.total_number') }}" ,type:"number",template: '#= kendo.toString(total_number, "n0")#',format: '{0:n0}' ,width : '150px'},
+                                 { "field" : "total_amount","title" : "{{ antl.get('inventory_voucher.total_amount') }}" ,type:"number",template: '#= kendo.toString(total_amount, "n0")#' ,width : '150px'},
+                                 { "field" : "active","title" : "{{ antl.get('inventory_voucher.active') }}",template: '#= FormatCheckBox(active)#' ,width : '100px'}];
+            Ermis.field = {
+                                date_voucher :   {type : "date"},
+                                total_number:    {type:"number" },
+                                total_amount:    {type:"number" }
+                            };
+            Ermis.columns    =   [{ "field" : "id",hidden: true },
+                                  { "field" : "barcode","title" :"{{ antl.get('inventory_voucher.item_code') }}" ,"width" : "200px"},
+                                  { "field" : "item_name","title" :"{{ antl.get('inventory_voucher.item_name') }}" ,"width" : "200px" ,aggregates: ['count'], footerTemplate: "<p>{{ antl.get('global.total_count') }}: #=count#</p>"},
+                                  { "field" : "unit","title" :"{{ antl.get('inventory_voucher.unit') }}" ,"width" : "100px" },
+                                  { "field" : "quantity","title" :"{{ antl.get('inventory_voucher.quantity') }}" ,"width" : "100px",aggregates: ['sum'], footerTemplate: "<p id='quantity_total'>#=sum#</p>" },
+                                  { "field" : "price","title" :"{{ antl.get('inventory_voucher.price') }}" ,"width" : "150px",template: '#= FormatNumber(price)#',format: '{0:n0}', footerTemplate: "<p>#=FormatNumber(average)#</p>"  },
+                                  { "field" : "amount","title" :"{{ antl.get('inventory_voucher.amount') }}" ,"width" : "200px",format: "{0:n0}" ,decimals: 0 , footerTemplate: "<p id='amount_total'>#=FormatNumber(sum)#</p>" ,template: "#=calculateAmount(quantity,price)#"}];
+            Ermis.aggregate = [ { field: "item_name", aggregate: "count" },
+                                { field: "quantity", aggregate: "sum" },
+                                { field: "price", aggregate: "average" },
+                                { field: "amount", aggregate: "sum" } ];
+            Ermis.action = {"new":"transfer-issue-inventory-voucher"}
+        });
+    </script>
+  {% endblock %}

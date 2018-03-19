@@ -1,0 +1,396 @@
+
+{% extends 'manage.layouts.ermisform5-i' %}
+{% block content_add %}
+<table>
+<tr>
+    <td class="row-label"><label>{{ antl.get('marial_goods.nature') }}</label></td>
+    <td class="row-height">
+        <select class="droplist large" data-title="{{ antl.get('marial_goods.nature') }}" data-value="1" data-position="1" data-template="#= FormatDropList(nature,'nature') #" data-hidden="true" data-width="200px" data-type="number" name="nature">
+            <option value="1">{{ antl.get('marial_goods.material_goods') }}</option>
+            <option value="2">{{ antl.get('marial_goods.finished') }}</option>
+            <option value="3">{{ antl.get('marial_goods.service') }}</option>
+        </select>
+    </td>
+    <td class="row-space"></td>
+    <td class="row-label"><label>{{ antl.get('global.code') }}</label></td>
+    <td class="row-height">
+    <input type="text" class="k-textbox large" data-position="2" data-title="{{ antl.get('global.code') }}" data-width="200px" data-type="string" name="code" />
+    </td>
+</tr>
+    <tr>
+        <td class="row-label"><label>{{ antl.get('global.name') }}</label></td>
+        <td class="row-height">
+            <input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('global.name') }}" data-width="200px" data-type="string" name="name" />
+        </td>
+        <td class="row-space"></td>
+        <td class="row-label"><label>{{ antl.get('global.name_en') }}</label></td>
+        <td class="row-height">
+            <input type="text" class="k-textbox large" data-position="4" data-title="{{ antl.get('global.name_en') }}" data-width="200px" data-type="string" name="name_en" />
+        </td>
+    </tr>
+    <tr>
+        <td class="row-label"><label>{{ antl.get('marial_goods.barcode') }}</label></td>
+        <td class="row-height">
+            <input type="text" class="k-textbox large" data-position="5" data-null="true" data-title="{{ antl.get('marial_goods.barcode') }}" data-width="200px" data-type="string" name="barcode" />
+        </td>
+        <td class="row-space"></td>
+        <td class="row-label"><label>{{ antl.get('marial_goods.unit') }}</label></td>
+        <td class="row-height">
+            <select class="droplist large" data-title="{{ antl.get('marial_goods.unit') }}" data-position="6" data-template="#= FormatDropList(unit,'unit') #" data-width="200px" data-type="number" name="unit">
+                <option readonly selected value="0">--Select--</option>
+                {% for x in unit %}
+                <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+    <tr class="sv-content">
+        <td class="row-label"><label>{{ antl.get('marial_goods.model') }}</label></td>
+        <td class="row-height">
+          <select class="droplist large" data-position="6" data-hidden="true" name="model">
+          <option readonly selected value="0">--Select--</option>
+            {% asyncAll x in model %}
+            <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+            {% endall %}
+        </select>
+        </td>
+        <td class="row-space"></td>
+        <td class="row-label"><label>{{ antl.get('marial_goods.group') }}</label></td>
+        <td class="row-height">
+            <select class="droplist large" data-title="{{ antl.get('marial_goods.group') }}" data-position="0" data-template="#= FormatDropList(group,'group') #" data-width="200px" data-type="number" name="group">
+                <option readonly selected value="0">--Select--</option>
+                {% for x in group %}
+                <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+    <tr class="sv-content">
+        <td class="row-label"><label>{{ antl.get('marial_goods.origin') }}</label></td>
+        <td class="row-height">
+            <select class="droplist large" data-position="6" data-hidden="true" name="origin">
+                <option readonly selected value="0">--Select--</option>
+                {% for x in origin %}
+                <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+                {% endfor %}
+            </select>
+        </td>
+        <td class="row-space"></td>
+        <td class="row-label"><label>{{ antl.get('marial_goods.style') }}</label></td>
+        <td class="row-height">
+          <select class="droplist large" data-position="6" data-hidden="true" name="style">
+              <option readonly selected value="0">--Select--</option>
+              {% for x in style %}
+              <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+              {% endfor %}
+          </select>
+        </td>
+    </tr>
+    <tr class="sv-content">
+        <td class="row-label"><label>{{ antl.get('marial_goods.type') }}</label></td>
+        <td class="row-height">
+          <select class="droplist large" data-position="6" data-hidden="true" name="type">
+              <option readonly selected value="0">--Select--</option>
+              {% for x in type_ %}
+              <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+              {% endfor %}
+          </select>
+        </td>
+        <td class="row-space"></td>
+          <td class="row-label"><label>{{ antl.get('marial_goods.gender') }}</label></td>
+        <td class="row-height">
+        <select class="droplist large" data-position="6" data-hidden="true" name="gender">
+            <option readonly selected value="0">--Select--</option>
+            {% for x in gender %}
+            <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+            {% endfor %}
+        </select>
+        </td>
+    </tr>
+    <tr class="sv-content">
+        <td class="row-label"><label>{{ antl.get('marial_goods.maximum_stock') }}</label></td>
+        <td class="row-height">
+            <input type="number" class="k-textbox large" data-position="5" data-title="{{ antl.get('marial_goods.maximum_stock') }}" data-width="200px" data-type="number" name="maximum_stock" />
+        </td>
+        <td class="row-space"></td>
+        <td class="row-label"><label>{{ antl.get('marial_goods.minimum_stock') }}</label></td>
+        <td class="row-height">
+            <input type="number" class="k-textbox large" data-position="5" data-title="{{ antl.get('marial_goods.minimum_stock') }}" data-width="200px" data-type="number" name="minimum_stock" />
+        </td>
+    </tr>
+    <tr>
+        <td class="row-label"><label>{{ antl.get('marial_goods.description') }}</label></td>
+        <td class="row-height" colspan="3">
+            <textarea class="k-textbox xxlarge" data-title="{{ antl.get('marial_goods.description') }}" data-hidden="true" data-position="14" data-width="200px" name="description" cols="80" rows="2"></textarea>
+        </td>
+    </tr>
+    <tr class="sv-content">
+    <td class="row-label"><label>{{ antl.get('marial_goods.warranty_period') }}</label></td>
+    <td class="row-height">
+        <select class="droplist large" data-position="6" data-hidden="true"  name="warranty_period">
+          <option readonly selected value="0">--Select--</option>
+          {% for x in warranty_period %}
+          <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+          {% endfor %}
+        </select>
+    </td>
+        <td class="row-space"></td>
+        <td class="row-label"><label>{{ antl.get('marial_goods.image') }}</label></td>
+        <td class="row-height">
+            <form id="image-form" enctype="multipart/form-data" role="form" method="post">
+            <input name="image" id="image" type="file" data-hidden="true" aria-label="files" />
+            </form>
+          </td>
+    </tr>
+    <tr class="sv-content">
+      <td class="row-label"><label>{{ antl.get('marial_goods.size') }}</label></td>
+      <td class="row-height">
+      <select class="multiselect large" multiple="multiple" data-placeholder="--Select--" data-position="6" data-hidden="true" name="size">
+          {% for x in size %}
+          <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+          {% endfor %}
+      </select>
+      </td>
+    </tr>
+</table>
+
+<div class="uk-grid uk-margin-left-10 uk-grid-medium">
+    <ul class="uk-tab" data-uk-tab="{connect:'#tabs_anim', animation:'slide-left', swiping: false}">
+        <li class="uk-active"><a href="javascript:;">{{ antl.get('global.accountant') }}</a></li>
+        <li><a href="javascript:;">{{ antl.get('global.expand') }}</a></li>
+        <li><a href="javascript:;" class="sv-content">{{ antl.get('marial_goods.purchase_discount') }}</a></li>
+        <li><a href="javascript:;" class="tp-content">{{ antl.get('marial_goods.cost_norms') }}</a></li>
+        <li><a href="javascript:;" class="tp-content">{{ antl.get('marial_goods.material_norms') }}</a></li>
+    </ul>
+    <ul id="tabs_anim" class="uk-switcher uk-margin">
+        <li>
+            <table>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.discount') }}</label></td>
+                    <td class="row-height">
+                        <select class="droplist large" data-position="6" data-hidden="true" name="discount">
+                            <option readonly selected value="0">--Select--</option>
+                            {% for x in discount %}
+                            <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.price') }}</label></td>
+                    <td class="row-height">
+                        <input type="text" class="number-price medium" data-position="5" data-null="true" data-title="{{ antl.get('marial_goods.price') }}" data-width="200px" data-template="#= FormatNumber(price) #" data-type="number" name="price" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.price_policy') }}</label></td>
+                    <td class="row-height">
+                        <select class="droplist large" data-position="6" data-hidden="true" name="price_policy">
+                        <option readonly selected value="0">--Select--</option>
+                        {% for x in price_policy %}
+                        <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                        {% endfor %}
+                        </select>
+                    </td>
+
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.purchase_price') }}</label></td>
+                    <td class="row-height">
+                        <input type="text" class="number-price medium" data-null="true" data-position="5" data-title="{{ antl.get('marial_goods.purchase_price') }}" data-width="200px" data-type="number" data-template="#= FormatNumber(purchase_price) #" name="purchase_price" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.account_cost') }}</label></td>
+                    <td class="row-height">
+                        <select class="droplist large" data-position="6" data-hidden="true" name="account_cost">
+                            <option readonly selected value="0">--Select--</option>
+                            {% for x in account_cost %}
+                            <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.tax') }}</label></td>
+                    <td class="row-height">
+                        <select class="droplist large" data-position="6" data-hidden="true" name="tax">
+                            <option readonly selected value="">--Select--</option>
+                            <option value="KCT">KCT</option>
+                            <option value="0">0%</option>
+                            <option value="5">5%</option>
+                            <option value="10">10%</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.account_revenue') }}</label></td>
+                    <td class="row-height">
+                        <select class="droplist large" data-position="6" data-hidden="true" name="account_revenue">
+                            <option readonly selected value="0">--Select--</option>
+                            {% for x in account_revenue %}
+                            <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.excise_taxes') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="excise_taxes" />
+                    </td>
+                </tr>
+                <tr class="sv-content">
+                    <td class="row-label"><label>{{ antl.get('marial_goods.account_warehouse') }}</label></td>
+                    <td class="row-height">
+                        <select class="droplist large" data-position="6" data-hidden="true" name="account_warehouse">
+                            <option readonly selected value="0">--Select--</option>
+                            {% for x in account_warehouse %}
+                            <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.import_tax_rate') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="import_tax_rate" />
+                    </td>
+                </tr>
+                <tr class="sv-content">
+                    <td class="row-label"><label>{{ antl.get('marial_goods.default_warehouse') }}</label></td>
+                    <td class="row-height">
+                        <select class="droplist large" data-position="6" data-hidden="true" name="default_warehouse">
+                            <option readonly selected value="0">--Select--</option>
+                            {% for x in default_warehouse %}
+                            <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.export_tax_rate') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="export_tax_rate" />
+                    </td>
+                </tr>
+
+            </table>
+        </li>
+        <li>
+        <table>
+            <tr>
+                <td class="row-label"><label>{{ antl.get('global.expand') }}</label></td>
+                <td class="row-height">
+                    <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="expand1" />
+                </td>
+                <td class="row-space"></td>
+                <td class="row-label"><label>{{ antl.get('global.expand') }}</label></td>
+                <td class="row-height">
+                    <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="expand2" />
+                </td>
+            </tr>
+            <tr>
+                <td class="row-label"><label>{{ antl.get('global.expand') }}</label></td>
+                <td class="row-height">
+                    <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="expand3" />
+                </td>
+                <td class="row-space"></td>
+                <td class="row-label"><label>{{ antl.get('global.expand') }}</label></td>
+                <td class="row-height">
+                    <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="expand4" />
+                </td>
+            </tr>
+            <tr>
+                <td class="row-label"><label>{{ antl.get('global.expand') }}</label></td>
+                <td class="row-height">
+                    <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="expand5" />
+                </td>
+                <td class="row-space"></td>
+                <td class="row-label"><label>{{ antl.get('global.expand') }}</label></td>
+                <td class="row-height">
+                    <input type="number" class="k-textbox large" data-position="5" data-hidden="true" name="expand6" />
+                </td>
+            </tr>
+
+        </table>
+        </li>
+        <li>
+
+        </li>
+        <li>
+            <table>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.direct_materials') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large sum-total" data-position="5" data-hidden="true" name="direct_materials" />
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.indirect_materials') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large sum-total" data-position="5" data-hidden="true" name="indirect_materials" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.direct_labor') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large sum-total" data-position="5" data-hidden="true" name="direct_labor" />
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.indirect_labor') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large sum-total" data-position="5" data-hidden="true" name="indirect_labor" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.depreciation') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large sum-total" data-position="5" data-hidden="true" name="depreciation" />
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.cost_purchase_outside') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large sum-total" data-position="5" data-hidden="true" name="cost_purchase_outside" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.other_costs') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" class="k-textbox large sum-total" data-position="5" data-hidden="true" name="other_costs" />
+                    </td>
+                    <td class="row-space"></td>
+                    <td class="row-label"><label>{{ antl.get('marial_goods.total') }}</label></td>
+                    <td class="row-height">
+                        <input type="number" id="total" class="k-textbox large" readonly data-position="5" data-remove="true" />
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li>
+
+        </li>
+    </ul>
+</div>
+<div class="uk-margin" style="float : left">
+<input type="checkbox" data-md-icheck="" data-position="15" data-value="1" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="number" data-template="#= FormatCheckBox(active) #" name="active" />
+<label class="row-label">{{ antl.get('action.active') }}</label>
+</div>
+<div class="uk-margin" style="float : right">
+<a href="javascript:;" class="k-button k-primary save" data-uk-tooltip title="{{ antl.get('action.save') }} (Alt+Ctrl+S)"><i class="md-18 material-icons md-color-white">save</i>{{ antl.get('action.save') }}</a>
+<a href="javascript:;" class="k-button k-primary cancel" data-uk-tooltip title="{{ antl.get('action.cancel') }} (Alt+Ctrl+C)"><i class="md-18 material-icons md-color-white">cancel</i>{{ antl.get('action.cancel') }}</a>
+</div>
+
+{% endblock %}
+
+  {% block scripts_add %}
+      <script>
+      jQuery(document).ready(function () {
+          Ermis.data = {{ data | json | safe }};
+          Ermis.per = JSON.parse('{{ permission | safe }}');
+          Ermis.flag = 1;
+          Ermis.link = "{{ key }}";
+          Ermis.room = "{{ room }}";
+    });
+       </script>
+       <script src="{{ url('scripts/addon/backend/materialgoods.js') }}"></script>
+  {% endblock %}
+  {% block scripts_end %}
+  <script id="toolTipTemplate" type="text/x-kendo-template">
+       <img src="{{ url('#=image#') }}">
+   </script>
+       <script src="{{ url('scripts/addon/backend/ermis-add-2.js') }}"></script>
+  {% endblock %}

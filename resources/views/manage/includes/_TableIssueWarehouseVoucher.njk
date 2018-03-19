@@ -1,0 +1,58 @@
+<table>
+    <tr>
+        <td class="row-label-responsive"><label>{{ antl.get('inventory_voucher.subject') }}</label></td>
+        <td>
+            <input type="text" name="subject" hidden />
+            <span class="k-textbox k-space-right">
+                <input type="text" name="code" readonly />
+                <a href="javascript:;" style="right : 10px" class="k-icon k-i-filter filter">&nbsp;</a>
+            </span>
+        </td>
+        <td><input type="text" class="k-textbox large" name="name" /></td>
+        <td class="row-label-responsive"></td>
+        <td><label>{{ antl.get('inventory_voucher.date_voucher') }}</label></td>
+        <td colspan="2"><input type="text" data-type="date" class="k-textbox date-picker" name="date_voucher" /></td>
+    </tr>
+    <!--<tr>
+        <td><label>@receipt_warehouse_voucher.deliver</label></td>
+        <td colspan="2"><input type="text" class="k-textbox xxlarge" name="traders" /></td>
+
+        <td class="row-label-responsive"></td>
+        <td><label>{{ antl.get('inventory_voucher.date_account') }}</label></td>
+        <td colspan="2"><input type="text" data-type="date" class="k-textbox date-picker" name="date_account" /></td>
+    </tr>-->
+    <tr>
+        <td><label>{{ antl.get('inventory_voucher.receiver') }}</label></td>
+        <td colspan="2"><input type="text" class="k-textbox xxlarge" name="traders" /></td>
+
+        <td class="row-label-responsive"></td>
+        <td><label>{{ antl.get('inventory_voucher.voucher') }}</label></td>
+        <td colspan="2"><input type="text" class="k-textbox medium voucher" name="voucher" /></td>
+    </tr>
+    <tr>
+        <td><label>{{ antl.get('inventory_voucher.description') }}</label></td>
+        <td colspan="2"><input type="text" class="k-textbox xxlarge" name="description" /></td>
+    </tr>
+    <tr>
+        <td><label>{{ antl.get('inventory_voucher.barcode_item') }}</label></td>
+        <td colspan="2">
+            <span class="k-textbox k-space-right xxlarge">
+                <input type="text" id="barcode" name="barcode" />
+                <a href="javascript:;" style="right : 10px"  class="k-icon k-i-search barcode">&nbsp;</a>
+            </span>
+        </td>
+    </tr>
+    <!--<tr>
+        <td><label>{{ antl.get('inventory_voucher.attach') }}</label></td>
+        <td colspan="2"><input type="text" class="k-textbox xxlarge" name="attach" /></td>
+    </tr>
+    <tr>
+        <td><label>{{ antl.get('inventory_voucher.reference') }}</label></td>
+        <td colspan="2">
+            <span class="k-textbox k-space-right xxlarge">
+                <input type="text" name="reference" readonly />
+                <a href="javascript:;"  class="k-icon k-i-search reference">&nbsp;</a>
+            </span>
+        </td>
+    </tr>-->
+</table>

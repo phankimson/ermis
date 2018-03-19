@@ -1,0 +1,34 @@
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="csrf_token" content="{{ csrfToken }}">
+    <link rel="icon" type="image/png" href="{{ url('images/img/favicon-16x16.png') }}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{{ url('images/img/favicon-32x32.png') }}" sizes="32x32">
+
+    <!-- uikit -->
+    <link rel="stylesheet" href="{{ url('./library/uikit/css/uikit.almost-flat.min.css') }}" media="all">
+
+    <!-- flag icons -->
+    <link rel="stylesheet" href="{{ url('./fonts/flags/flags.min.css') }}" media="all">
+
+    <!-- style switcher -->
+    <link rel="stylesheet" href="{{ url('./css/style_switcher.min.css') }}" media="all">
+
+    <!-- altair admin -->
+    <link rel="stylesheet" href="{{ url('./css/main.min.css') }}" media="all">
+
+    <!-- themes -->
+    <link rel="stylesheet" href="{{ url('./css/themes/themes_combined.min.css') }}" media="all">
+    <link rel="stylesheet" href="{{ url('./css/customize.css') }}" media="all">
+
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.common-material.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.mobile.min.css') }}" />
+    <!-- matchMedia polyfill for testing media queries in JS -->
+    <!--[if lte IE 9]>
+        <script type="text/javascript" src="{{ url('./library/matchMedia/matchMedia.js') }}"></script>
+        <script type="text/javascript" src="{{ url('./library/matchMedia/matchMedia.addListener.js') }}"></script>
+        <link rel="stylesheet" href="{{ url('./css/ie.css') }}" media="all">
+    <![endif]-->

@@ -1,0 +1,10 @@
+{
+  "name": "Danh mục",
+  "view": "Xem",
+  "add" :"Thêm",
+  "edit" : "Sửa",
+  "delete" : "Xóa",
+  "priority" : "Ưu tiên",
+  "special" : "Đặc biệt",
+  "all" : "Tất cả"
+}

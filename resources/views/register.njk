@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Đăng nhập hệ thống Ermis</title>
+    <meta name="csrf_token" content="{{ csrfToken }}">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.1.223/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2017.1.223/styles/kendo.material.min.css" />
+    <link rel="stylesheet" href="{{ url('css/customize.css') }}" />
+    <link rel="stylesheet" href="{{ url('css/login.css') }}" />
+    <script src="{{ url('library/kendoui/js/jquery.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+</head>
+<body>
+    <div class="logo">
+        <a href="/">
+            <img src="{{ url('images/logo-big-blue.png') }}" alt="Epos" />
+        </a>
+    </div>
+    <!-- END LOGO -->
+    <h3 class="form-title font-green">Đăng ký</h3>
+    <div id="login-form">
+        <div class="login-section k-content">
+            <ul class="fieldlist login-form">
+                <li>
+                <div id="notification"></div>
+                </li>
+                <li>
+                    <label for="icon-right">Tên đăng ký</label>
+                    <span class="k-textbox k-space-right" style="width: 100%;">
+                        <input type="text" id="icon-right" name="username" placeholder="Tên đăng ký" />
+                        <a href="javascript:;" class="k-icon k-i-user" >&nbsp;</a>
+                    </span>
+                </li>
+                <li>
+                    <label for="icon-right">Email</label>
+                    <span class="k-textbox k-space-right" style="width: 100%;">
+                        <input type="email" id="icon-right" name="email" placeholder="Email" />
+                        <a href="javascript:;" class="k-icon k-i-user" >&nbsp;</a>
+                    </span>
+                </li>
+                <li>
+                    <label for="icon-right">Mật khẩu</label>
+                    <span class="k-textbox k-space-right" style="width: 100%;">
+                        <input type="password" id="icon-right" name="password" placeholder="Mật khẩu"/>
+                        <a href="javascript:;" class="k-icon k-i-password" >&nbsp;</a>
+                    </span>
+                </li>
+                <li>
+                    <a id="button_register" href="javascript:;" class="k-button k-primary">Đăng ký</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <script>
+            jQuery(document).ready(function () {
+                var headers = {
+                   'csrf-token' : jQuery('meta[name="csrf_token"]').attr('content')
+               }
+               jQuery.ajaxSetup({ headers: headers})
+            });
+    </script>
+    <script src="{{ url('scripts/addon/framework.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/register.js') }}"></script>
+</body>
+</html>

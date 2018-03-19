@@ -1,0 +1,367 @@
+{% extends 'pos-shop.layouts.default' %}
+{% block css %}
+<title>{{ inventory.name + ' - ' + company.name }}</title>
+{% endblock %}
+
+{% block content %}
+<div id="page_content">
+    <div id="page_content_inner">
+        <div class="uk-grid uk-grid-width-medium-1-2" data-uk-grid-margin="">
+                <div class="uk-row-first">
+                    <div class="md-card md-card-warning">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                            <div class="uk-float-right">
+                              <a href="javascript:;" id="add_tabs"><i class="md-icon material-icons">note_add</i></a>
+                            </div>
+                            <ul class="uk-tab uk-tab-flip uk-float-right" id="invoice_tabs"  data-uk-tab>
+                            <li class="uk-tab-responsive uk-hidden" id="tabs_dropdown" data-uk-dropdown="{mode:'click',delay: 1000}">
+                                <a id="tabs_dropdown_name" href="javascript:;">Active</a>
+                                <div class="uk-dropdown uk-dropdown-small">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                    </ul>
+                                </div>
+                            </li>
+                              <li class="load_tabs uk-active" data-id="1" aria-expanded="true"><a href="javascript:;">{{ antl.get('store.carts') }} 1</a></li>
+
+                              </ul>
+                          </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                              <i class="md-icon material-icons md-color-orange-A700">local_offer</i> <span class="title_hide">{{ antl.get('store.sales_invoice') }}</span>
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                        <div id="action_button">
+                        <a class="md-btn md-btn-primary md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" id="payment" href="javascript:void(0)">
+                            <i class="material-icons">attach_money</i>
+                            {{ antl.get('store.payment') }}
+                        </a>
+                        <a class="md-btn md-btn-warning md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" id="print" href="javascript:void(0)">
+                            <i class="material-icons">print</i>
+                            {{ antl.get('action.print') }}
+                        </a>
+                        <a class="md-btn md-btn-danger md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" id="close_tabs" href="javascript:void(0)">
+                            <i class="material-icons">block</i>
+                            {{ antl.get('action.cancel') }}
+                        </a>
+                        </div>
+                        <div class="search-table-outter wrapper">
+                        <table class="search-table inner" id="form-action">
+                        <tr>
+                            <td class="row-label-responsive"><label>{{ antl.get('wholesale_voucher.discount') }} %</label></td>
+                            <td>
+                            <input type="text" name="discount_percent" value="{{discount.discount_percent}}" readonly class="k-textbox large disabled" />
+                            <input type="text" name="discount_percent_defaukt" readonly value="{{discount.discount_percent}}" class="hidden" />
+                            </td>
+                            <td class="row-label-responsive"></td>
+                            <td  class="row-label-responsive"><label>{{ antl.get('wholesale_voucher.discount') }}</label></td>
+                            <td>
+                            <input type="text" name="discount" readonly value="{{discount.discount}}" class="k-textbox large disabled" />
+                            <input type="text" name="discount_defaukt" readonly value="{{discount.discount}}" class="hidden" />
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="row-label-responsive"><label>{{ antl.get('inventory_voucher.voucher') }}</label></td>
+                                <td><input type="text" class="voucher k-textbox large disabled" readonly name="voucher"/></td>
+                                <td class="row-label-responsive"></td>
+                                <td  class="row-label-responsive"><label>{{ antl.get('inventory_voucher.subject') }}</label></td>
+                                <td>
+                                <select class="droplist" name="subject">
+                                {% for x in subject %}
+                                <option value="{{x.id}}">{{ x.code+' - '+x.name }}</option>
+                                {% endfor %}
+                                </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="row-label-responsive"><label>{{ antl.get('inventory_voucher.description') }}</label></td>
+                                <td colspan="4" ><input type="text" value="" style="width : 100%" name="description" class="k-textbox large" /></td>
+                            </tr>
+
+                        </table>
+                        </div>
+                            <div id="grid"></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="md-card md-card-primary">
+                        <div class="md-card-toolbar">
+                            <div class="md-card-toolbar-actions">
+                            <div class="uk-float-right">
+                              <i class="md-icon material-icons"></i>
+                              <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed "></i>
+                            </div>
+                              <div class="uk-float-right mobile_hidden">
+                                  <select id="select_toolbar" data-md-selectize>
+                                      <option value="">Select...</option>
+                                      {% for x in type_item %}
+                                      <option value="{{x.id}}">{{ x.code+' - '+x.name }}</option>
+                                      {% endfor %}
+                                  </select>
+                              </div>
+                            </div>
+                            <div class="uk-input-group uk-float-right" style="width : 40%">
+                              <div class="md-input-wrapper"><label>Barcode</label><input type="text" id="barcode" class="md-input"><span class="md-input-bar "></span></div>
+                              <span class="uk-input-group-addon">
+                                  <a href="javascript:;" class="barcode"><i class="material-icons">search</i></a>
+                              </span>
+                            </div>
+                            <h3 class="md-card-toolbar-heading-text">
+                            <i class="md-icon material-icons md-color-light-blue-500">attach_file</i> <span class="title_hide">{{ antl.get('store.product') }}</span>
+                            </h3>
+                        </div>
+                          <div class="md-card-content">
+                          <div class="gallery_grid uk-grid-width-medium-1-4 uk-grid-width-large-1-4" data-uk-grid="{gutter: 4}">
+
+                          <div class="hidden load_item item_sub">
+                                <div class="md-card md-card-hover">
+                                    <div class="gallery_grid_item md-card-content">
+                                        <a href="javascript:;" data-uk-lightbox="{group:'gallery'}">
+                                            <img src="" alt="">
+                                        </a>
+                                        <div class="gallery_grid_image_caption">
+                                            <div class="gallery_grid_image_menu" data-uk-dropdown="{pos:'top-right'}">
+                                                <i class="md-icon material-icons">&#xE5D4;</i>
+                                                <div class="uk-dropdown uk-dropdown-small">
+                                                    <ul class="uk-nav">
+                                                        <li><a class="add_item" data-id="" href="javascript:;"><i class="material-icons uk-margin-small-right">expand_less</i> {{ antl.get('store.add') }}</a></li>
+                                                        <li><a class="reduce_item" data-id="" href="javascript:;"><i class="material-icons uk-margin-small-right">expand_more</i> {{ antl.get('store.reduce') }}</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                              <a class="add_item" data-id="" href="javascript:;">
+                                            <span class="gallery_image_title uk-text-truncate"></span>
+                                            <span class="uk-text-muted uk-text-small"></span>
+                                              </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% for i in data.data %}
+                                <div class="item_sub">
+                                      <div class="md-card md-card-hover">
+                                          <div class="gallery_grid_item md-card-content">
+                                              <a href="{{ shortif(i.image != "", url(i.image) , url('images/product.png') ) }}" data-uk-lightbox="{group:'gallery'}">
+                                                  <img src="{{ shortif(i.image != "", url(i.image) , url('images/product.png') ) }}" alt="">
+                                              </a>
+                                              <div class="gallery_grid_image_caption">
+                                                  <div class="gallery_grid_image_menu" data-uk-dropdown="{pos:'top-right'}">
+                                                      <i class="md-icon material-icons">&#xE5D4;</i>
+                                                      <div class="uk-dropdown uk-dropdown-small">
+                                                          <ul class="uk-nav">
+                                                              <li ><a class="add_item" data-id="{{i.code}}" href="javascript:;"><i class="material-icons uk-margin-small-right">expand_less</i> {{ antl.get('store.add') }}</a></li>
+                                                              <li ><a class="reduce_item" data-id="{{i.id}}"href="javascript:;"><i class="material-icons uk-margin-small-right">expand_more</i> {{ antl.get('store.reduce') }}</a></li>
+                                                          </ul>
+                                                      </div>
+                                                  </div>
+                                                  <a class="add_item" data-id="{{i.code}}" href="javascript:;">
+                                                  <span class="gallery_image_title uk-text-truncate">{{ i.code }}</span>
+                                                  <span class="uk-text-muted uk-text-small">{{ i.name + '-' + i.size }}</span>
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                {% endfor %}
+                              </div>
+                              <ul class="uk-pagination  uk-margin-medium-top uk-margin-medium-bottom" data-uk-pagination="{pages: {{data.page}} ,lblPrev : '<' ,lblNext : '>'}"></ul>
+                          </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+
+<!-- PAYMENT FORM -->
+<div id="form-window-payment" style="display:none">
+<div class="uk-width-medium-4-4" style="margin-bottom : 10px;">
+    <input type="radio" name="coupon_type" id="none" value="" class="k-radio" checked="checked">
+    <label class="k-radio-label" for="none">{{ antl.get('coupon.none') }}</label>
+    <input type="radio" name="coupon_type" id="coupon" value="coupon" class="k-radio">
+    <label class="k-radio-label" for="coupon">{{ antl.get('coupon.title') }}</label>
+    <input type="radio" name="coupon_type" id="discount_coupon" value="discount_coupon" class="k-radio">
+    <label class="k-radio-label" for="discount_coupon">{{ antl.get('discount_coupon.title') }}</label>
+    <input type="radio" name="coupon_type" id="customer_coupon" value="customer_coupon" class="k-radio">
+    <label class="k-radio-label" for="customer_coupon">{{ antl.get('customer_coupon.title') }}</label>
+</div>
+<table>
+<tr>
+    <td class="row-label"><label>{{ antl.get('store.payment_method') }}</label></td>
+    <td>  <select class="droplist large-responsive" name="payment_method">
+      {% for x in payment_method %}
+      <option value="{{x.id}}">{{ x.code+' - '+x.name }}</option>
+      {% endfor %}
+      </select>
+    </td>
+</tr>
+<tr class="hidden coupon_code_content">
+    <td class="row-label"><label>{{ antl.get('coupon.code') }}</label></td>
+    <td> <input type="text" class="k-textbox large-responsive" name="coupon_code" /> </td>
+</tr>
+<tr>
+    <td class="row-label"><label>{{ antl.get('wholesale_voucher.discount') }} %</label></td>
+    <td> <input type="text" class="percent large-responsive k-input" name="discount_percent_special" /> </td>
+</tr>
+<tr>
+    <td class="row-label"><label>{{ antl.get('wholesale_voucher.discount') }}</label></td>
+    <td> <input type="text" class="number-price large-responsive k-input"  name="discount_special" /> </td>
+</tr>
+<tr>
+    <td class="row-label"><label>{{ antl.get('inventory_voucher.total_amount') }}</label></td>
+    <td> <input type="text" class="k-textbox large-responsive disabled" readonly  name="total_amount" />  </td>
+</tr>
+<tr class="hidden coupon_content">
+    <td class="row-label"><label>{{ antl.get('store.coupon') }}</label></td>
+    <td><input type="text" readonly class="k-textbox large-responsive disabled" value="0" name="coupon" /></td>
+</tr>
+<tr>
+    <td class="row-label"><label>{{ antl.get('store.payment') }}</label></td>
+    <td><input type="text" class="number-price large-responsive k-input" name="payment" /></td>
+</tr>
+<tr>
+    <td class="row-label"><label>{{ antl.get('store.refund') }}</label></td>
+    <td>  <input type="text" class="k-textbox large-responsive disabled" readonly  name="refund" />  </td>
+</tr>
+<tr>
+    <td class="row-label"><label>{{ antl.get('store.rate') }}</label></td>
+    <td>
+      <input type="text" class="k-textbox medium-responsive disabled" readonly  name="rate" />
+      <label id="date_rate"></label>
+    </td>
+</tr>
+<tr>
+    <td class="row-label"><label>{{ antl.get('store.total_exchange') }}</label></td>
+    <td>
+      <input type="text" class="k-textbox medium-responsive disabled" readonly  name="total_exchange" />
+      <select class="droplist small-responsive" id="exchange"  name="exchange">
+        <option readonly selected value="0">Select</option>
+        <option value="1">USD</option>
+        <option value="2">EUR</option>
+      </select>
+    </td>
+</tr>
+</table>
+
+<div class="uk-margin" style="float : right">
+    <a href="javascript:;" class="k-button k-primary agree-payment" data-uk-tooltip title="{{ antl.get('action.agree') }}"><i class="md-18 material-icons md-color-white">done</i>{{ antl.get('action.agree') }}</a>
+    <a href="javascript:;" class="k-button k-primary cancel-window" data-uk-tooltip title="{{ antl.get('action.close') }}"><i class="md-18 material-icons md-color-white">not_interested</i>{{ antl.get('action.close') }}</a>
+</div>
+</div>
+<!-- PAYMENT FORM -->
+
+
+
+
+<!-- BARCODE FORM -->
+<div id="form-window-barcode" style="display:none">
+<div class="uk-width-medium-4-4">
+    <input type="radio" name="filter_nature" id="1" value="1" class="k-radio" checked="checked">
+    <label class="k-radio-label" for="1">{{ antl.get('marial_goods.material_goods') }}</label>
+    <input type="radio" name="filter_nature" id="2" value="2" class="k-radio">
+    <label class="k-radio-label" for="2">{{ antl.get('marial_goods.finished') }}</label>
+    <input type="radio" name="filter_nature" id="3" value="3" class="k-radio">
+    <label class="k-radio-label" for="3">{{ antl.get('marial_goods.service') }}</label>
+</div>
+<div class="uk-margin-medium-top"></div>
+
+<select class="droplist" name="filter_field">
+    <option readonly selected value="">--Select--</option>
+    <option value="barcode">{{ antl.get('marial_goods.barcode') }}</option>
+    <option value="code">{{ antl.get('global.code') }}</option>
+    <option value="name">{{ antl.get('global.name') }}</option>
+    <option value="name_en">{{ antl.get('global.name_en') }}</option>
+    <option value="price">{{ antl.get('marial_goods.price') }}</option>
+</select>
+<input type="text" name="filter_value" class="k-textbox">
+<a href="javascript:;" class="uk-margin-left-30 k-button k-primary" id="search_barcode" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">search</i>{{ antl.get('action.search') }}</a>
+
+<div class="uk-margin-medium-top"></div>
+
+<div id="grid_barcode"></div>
+
+<div class="uk-margin" style="float : right">
+    <a href="javascript:;" class="k-button k-primary choose_barcode" data-uk-tooltip title="{{ antl.get('action.choose') }}"><i class="md-18 material-icons md-color-white">done</i>{{ antl.get('action.choose') }}</a>
+    <a href="javascript:;" class="k-button k-primary cancel-window" data-uk-tooltip title="{{ antl.get('action.close') }}"><i class="md-18 material-icons md-color-white">not_interested</i>{{ antl.get('action.close') }}</a>
+</div>
+</div>
+<!-- BARCODE FORM -->
+<! -- PRINT FORM -->
+<div id="printbill" class="hidden">
+  <div>
+  <img src="{{url('images/logo-intem.png')}}">
+  <p class='name'>{{ inventory.name + ' - ' + company.name }}</p>
+  <p >Khách hàng: <span class='customer_p clear'></span></p>
+  <p >Số phiếu: <span class='voucher_p clear'></span> - Ngày: <span class='date_p clear'></span></p>
+  <p >Ca : <span class='shift_p clear'></span> - Thu ngân: <span class='user_p clear'></span></p>
+  </div>
+        <table>
+            <thead style="font-size:12px; border-bottom:1px solid black">
+                  <th style="padding-right:10px ; padding-top : 10px ; border-bottom:1px solid black">{{antl.get('inventory_voucher.item_name')}}</th>
+                  <th style="padding-right:15px ; padding-top : 10px; border-bottom:1px solid black">{{antl.get('inventory_voucher.price')}}</th>
+                  <th style="padding-right:10px ; padding-top : 10px; border-bottom:1px solid black">{{antl.get('inventory_voucher.quantity')}}</th>
+                  <th style="padding-right:10px ; padding-top : 10px; border-bottom:1px solid black">{{antl.get('inventory_voucher.amount')}}</th>
+            </thead>
+                <tbody>
+
+                </tbody>
+        </table>
+          <span class='clear'>Thank you & see you again !</span>
+  </div>
+<! -- PRINT FORM -->
+{% endblock %}
+{% block scripts %}
+<script id="toolTipTemplate" type="text/x-kendo-template">
+     <img src="{{ url('#=image# ') }}">
+ </script>
+<script>
+jQuery(document).ready(function () {
+    Ermis.print_data = {{ print_data | json | safe }};
+    Ermis.per = JSON.parse('{{ permission | safe }}');
+    Ermis.link = "{{ key }}";
+    Ermis.room = "{{ room }}";
+    Ermis.voucher  =  {{ voucher | json | safe }};
+    Ermis.columns_barcode = [{title: 'Select All',headerTemplate: '<input type="checkbox" id="header-chb-b" class="k-checkbox"><label class="k-checkbox-label" for="header-chb-b"></label>',template: function(dataItem){return '<input type="checkbox" id="c-'+dataItem.id+'" class="k-checkbox"><label class="k-checkbox-label" for="c-'+dataItem.id+'"></label>'},width: 80},
+                               {"field" : "code","title" : "{{ antl.get('global.code') }}" },
+                               {"field" : "name","title" : "{{ antl.get('global.name') }}" },
+                               {"field" : "unit","title" : "{{ antl.get('marial_goods.unit') }}" },
+                               {"field" : "size","title" :  "{{ antl.get('marial_goods.size') }}" },
+                               {"field" : "price","title" :  "{{ antl.get('marial_goods.price') }}" ,format: "{0:n0}" ,decimals: 0 } ]
+     Ermis.columns    = [{"field" :"id", hidden : true},
+                         {title: 'Select All',headerTemplate: '<a href="javascript:;" id="delete_row_all" ><i class="md-icon material-icons">delete_sweep</i></a>',template: function(dataItem){return '<a href="javascript:;" class="delete_row" ><i class="md-icon material-icons">remove_shopping_cart</i></a>'},width: 70},
+                         { "field" : "code","title" : "{{ antl.get('inventory_voucher.item_code') }}" ,"width" : "130px"},
+                         { "field" : "item_name","title" : "{{ antl.get('inventory_voucher.item_name') }}" ,"width" : "130px" ,"set" : "1",aggregates: ['count'], footerTemplate: "<p>Total Count: #=count#</p>" },
+                         { "field" : "unit","title" : "{{ antl.get('inventory_voucher.unit') }}","width" : "70px" ,"set" : "1" },
+                         { "field" : "size","title" : "{{ antl.get('inventory_voucher.size') }}","width" : "80px" ,"set" : "1" },
+                         { "field" : "quantity","title" : "{{ antl.get('inventory_voucher.quantity') }}","width" : "80px",aggregates: ['sum'], footerTemplate: "<p id='quantity_total'>#=sum#</p>" },
+                         { "field" : "price","title" : "{{ antl.get('inventory_voucher.price') }}" ,"width" : "80px",format: "{0:n0}",decimals: 0 , footerTemplate: "<p>#=kendo.toString(average, 'n0')#</p>" ,"set" : "3"},
+                         { "field" : "amount","title" : "{{ antl.get('inventory_voucher.amount') }}" ,"width" : "100px",format: "{0:n0}" ,decimals: 0 , footerTemplate: "<p id='amount_total'>#=calculatePriceAggregateDiscount()#</p>" ,template: "#=calculateAmountDiscount(quantity,price,discount_percent,discount)#"},
+                         { "field" : "discount_percent","title" : "{{ antl.get('wholesale_voucher.discount') }} %" ,format: "{0:n0}",decimals: 0 ,"width" : "100px" },
+                         { "field" : "discount","title" : "{{ antl.get('wholesale_voucher.discount') }}" ,format: "{0:n0}",decimals: 0 ,"width" : "100px" }];
+
+
+     Ermis.field = {
+         id : {field :"id" ,defaultValue: 0},
+         code : { field : "code"},
+         item_name : {editable: false },
+         unit :      {editable: false },
+         size :      {editable: false },
+         quantity : {field : "quantity",type:"number" , validation: { min: 0, required: true }},
+         price:     {editable: false ,field : "price",type:"number" , validation: { min: 0, required: true }},
+         amount:    {editable: false ,type:"number" , validation: { min: 0, required: true }},
+         discount_percent:     {editable: false ,field : "discount_percent",type:"number" , validation: { min: 0 , max : 100 }},
+         discount:     {editable: false ,field : "discount",type:"number" , validation: { min: 0 , step: 1000 }}
+     };
+     Ermis.aggregate = [ { field: "item_name", aggregate: "count" },
+                         { field: "quantity", aggregate: "sum" },
+                         { field: "price", aggregate: "average" },
+                         { field: "amount", aggregate: "sum" } ];
+});
+</script>
+<script src="{{ url('scripts/uikit.min.js') }}"></script>
+<script src="{{ url('scripts/ukit_pagination.js') }}"></script>
+<script src="{{ url('library/jquery.print/jQuery.print.js') }}"></script>
+<script src="{{ url('scripts/addon/frontend/store_sale.js') }}"></script>
+{% endblock %}

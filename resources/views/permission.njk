@@ -1,0 +1,125 @@
+
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{ antl.get('index.title') }}</title>
+<link rel="stylesheet" href="{{ url('css/addon/backend/permission.css') }}">
+<link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+{% endblock %}
+
+{% block content %}
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+            <a class="save"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.save') }}">save</i></a>
+            <a class="cancel"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.cancel') }}">cancel</i></a>
+        </div>
+        <select placeholder="Select..." id="user" class="uk-form-width-medium">
+            <option value="" hidden>Select...</option>
+          {% for u in users %}
+            <option value="{{ u.id }}">{{ u.username }}</option>
+          {% endfor %}
+        </select>
+        <div class="md-card-toolbar-actions">
+        <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+        <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+            <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expanded="false">
+                <i class="md-icon material-icons"></i>
+                <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                    <ul class="uk-nav">
+                        <li><a href="javascript:;" class="save">{{ antl.get('action.save') }}</a></li>
+                        <li><a href="javascript:;" class="cancel">{{ antl.get('action.cancel') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-card-content">
+
+        <div id="notification"></div>
+        <table class="uk-table">
+            <thead>
+                <tr>
+                    <th>{{ antl.get('permission.name') }}</th>
+                    <th>{{ antl.get('permission.view') }}</th>
+                    <th>{{ antl.get('permission.add') }}</th>
+                    <th>{{ antl.get('permission.edit') }}</th>
+                    <th>{{ antl.get('permission.delete') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="filter-all">
+                    <td><a href="javascript:;" class="group"><i class="material-icons">remove</i>{{ antl.get('permission.all') }}</a></td>
+                    <td><input type="checkbox" class="all" name="v"/></td>
+                    <td><input type="checkbox" class="all" name="a" /></td>
+                    <td><input type="checkbox" class="all" name="e"/></td>
+                    <td><input type="checkbox" class="all" name="d"/></td>
+                </tr>
+                {% set Menu = use('App/Model/Menu') %}
+                {% yield menu = Menu.query().where('type','1').where('parent_id','0').fetch() %}
+                {% yield count = Menu.query().where('type','1').count('* as total') %}
+
+                {% if count[0].total > 0 %}
+                  {% for m1 in menu.toJSON() %}
+                    {% if m1.icon == "" and m1.link == "" %}
+                        <tr><td colspan="7" style="text-align:center; text-transform: uppercase;font-weight:bold">{{  shortif( lang == 'vn' , m1.name , m1.name_en ) }}</td></tr>
+                        {% yield menu1 = Menu.query().where('type','1').where('parent_id',m1.id).fetch() %}
+                        {% for m2 in menu1.toJSON() %}
+                        {% yield count1 = Menu.query().where('type','1').where('parent_id',m2.id).count('* as total') %}
+                        {% if count1[0].total >0 %}
+                                <tr class="group">
+                                    <td><a href="javascript:;" class="group_click" data-group="{{ m2.id }}"><i class="material-icons">remove</i>{{  shortif( lang == 'vn' , m2.name , m2.name_en ) }}</a></td>
+                                    <td><input type="checkbox" class="checkbox-group" name="v-{{ m2.id }}" /></td>
+                                    <td><input type="checkbox" class="checkbox-group" name="a-{{ m2.id }}" /></td>
+                                    <td><input type="checkbox" class="checkbox-group" name="e-{{ m2.id }}" /></td>
+                                    <td><input type="checkbox" class="checkbox-group" name="d-{{ m2.id }}" /></td>
+                                </tr>
+                                {% yield menu2 = Menu.query().where('type','1').where('parent_id',m2.id).fetch() %}
+                                 {% for m3 in menu2.toJSON() %}
+                                    <tr class="item" data-group="{{ m3.parent_id }}" data-id="{{ m3.id }}">
+                                        <td>{{  shortif( lang == 'vn' , m3.name , m3.name_en ) }}</td>
+                                        <td><input type="checkbox" class="checkbox-item" data-group="v-{{ m3.parent_id }}" name="v-{{ m3.id }}" /></td>
+                                        <td><input type="checkbox" class="checkbox-item" data-group="a-{{ m3.parent_id }}" name="a-{{ m3.id }}" /></td>
+                                        <td><input type="checkbox" class="checkbox-item" data-group="e-{{ m3.parent_id }}" name="e-{{ m3.id }}" /></td>
+                                        <td><input type="checkbox" class="checkbox-item" data-group="d-{{ m3.parent_id }}" name="d-{{ m3.id }}" /></td>
+                                    </tr>
+                                  {% endfor %}
+
+                            {% else %}
+                                <tr class="item" data-id="{{ m2.id }}">
+                                    <td><a href="javascript:;" data-group="{{ m2.id }}">{{  shortif( lang == 'vn' , m2.name , m2.name_en ) }}</a></td>
+                                    <td><input type="checkbox" class="checkbox-item" name="v-{{ m2.id }}" /></td>
+                                    <td><input type="checkbox" class="checkbox-item" name="a-{{ m2.id }}" /></td>
+                                    <td><input type="checkbox" class="checkbox-item" name="e-{{ m2.id }}" /></td>
+                                    <td><input type="checkbox" class="checkbox-item" name="d-{{ m2.id }}" /></td>
+                                </tr>
+
+                            {% endif %}
+                            {% endfor %}
+                        {% else %}
+                        <tr class="item" data-id="{{ m1.id }}">
+                            <td><a href="javascript:;" data-group="{{ m1.id }}">{{  shortif( lang == 'vn' , m1.name , m1.name_en ) }}</a></td>
+                            <td><input type="checkbox" class="checkbox-item" name="v-{{ m1.id }}" /></td>
+                            <td><input type="checkbox" class="checkbox-item" name="a-{{ m1.id }}" /></td>
+                            <td><input type="checkbox" class="checkbox-item" name="e-{{ m1.id }}" /></td>
+                            <td><input type="checkbox" class="checkbox-item" name="d-{{ m1.id }}" /></td>
+                        </tr>
+                       {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script>
+            jQuery(document).ready(function () {
+                Permission.per = JSON.parse('{{ permission | safe }}')
+            });
+    </script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/jszip.min.js') }}"></script>
+    <script src="{{ url('library/uniform/dist/js/jquery.uniform.standalone.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/permission.js ') }}"></script>
+{% endblock %}

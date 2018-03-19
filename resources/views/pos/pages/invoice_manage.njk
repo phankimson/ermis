@@ -1,0 +1,177 @@
+{% set moment = use('moment/moment') %}
+{% extends 'manage.layouts.default-b' %}
+
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+{% endblock %}
+{% block content %}
+
+    <div id="page_content_inner">
+
+        <div class="uk-width-medium-8-10 uk-container-center reset-print">
+            <div class="uk-grid uk-grid-collapse" data-uk-grid-margin>
+                <div class="uk-width-large-7-10">
+                    <div class="md-card md-card-single main-print" id="invoice">
+                        <div id="invoice_preview"></div>
+                        <div id="invoice_form"></div>
+                    </div>
+                </div>
+                <div class="uk-width-large-3-10 hidden-print uk-visible-large">
+                    <div class="md-list-outside-wrapper">
+                        <ul class="md-list md-list-outside invoices_list" id="invoices_list">
+                          <!--<li class="heading_list">October 2016</li>-->
+
+                            <li class="heading_list">Oldest</li>
+                            {% for x in data.data %}
+                            <li>
+                                <a href="#" class="md-list-content" data-invoice-id="{{x.id}}">
+                                    <span class="md-list-heading uk-text-truncate">{{x.voucher}} - <span class="uk-text-small uk-text-muted">{{x.inventory_name}}</span></span>
+                                    <span class="uk-text-small uk-text-muted">{{x.description}}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--<div class="md-fab-wrapper">
+        <a class="md-fab md-fab-accent md-fab-wave-light" href="#" id="invoice_add">
+            <i class="material-icons">&#xE145;</i>
+        </a>
+    </div>-->
+
+    <div id="sidebar_secondary">
+        <div class="sidebar_secondary_wrapper uk-margin-remove"></div>
+    </div>
+
+    <div id="invoice_template" style="display:none">
+    <div class="md-card-toolbar hidden-print">
+        <div class="md-card-toolbar-actions hidden-print">
+            <i class="md-icon material-icons" id="invoice_print">&#xE8ad;</i>
+            <!--<div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}">
+                <i class="md-icon material-icons">&#xE5D4;</i>
+                <div class="uk-dropdown uk-dropdown-small">
+                    <ul class="uk-nav">
+                        <li><a href="#">Archive</a></li>
+                        <li><a href="#" class="uk-text-danger">Remove</a></li>
+                    </ul>
+                </div>
+            </div>-->
+        </div>
+        <h3 class="md-card-toolbar-heading-text" style="float:none" id="invoice_voucher">
+        {{company.name}}
+        </h3>
+    </div>
+        <div class="md-card-content invoice_content print_bg invoice_footer_active">
+                <div class="invoice_header md-bg-blue-grey-500">
+                    <img src="{{url('images/logo-small-white.png')}}" alt="" height="30" width="140"/>
+                </div>
+            <div class="uk-margin-medium-bottom">
+                <h3 class="heading_a uk-margin-bottom invoice_name">  </h3>
+                <span class="uk-text-muted uk-text-small uk-text-italic">{{ antl.get('inventory_voucher.date_voucher') }}</span>
+                <br/>
+                <span class="uk-text-muted uk-text-small uk-text-italic date_voucher"></span>
+            </div>
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-small-3-5">
+                    <div class="uk-margin-bottom">
+                        <span class="uk-text-muted uk-text-small uk-text-italic">From :</span>
+                        <address>
+                            <p><strong class="shop"> </strong></p>
+                            <p class="shop_phone"></p>
+                            <p class="shop_address"></p>
+                        </address>
+                    </div>
+                    <div class="uk-margin-medium-bottom">
+                        <span class="uk-text-muted uk-text-small uk-text-italic">To:</span>
+                        <address>
+                            <p><strong class="customer"></strong></p>
+                            <p class="customer_phone"></p>
+                            <p class="customer_address"></p>
+                        </address>
+                    </div>
+                </div>
+                <div class="uk-width-small-2-5">
+                    <span class="uk-text-muted uk-text-small uk-text-italic">Total:</span>
+                    <p class="heading_b uk-text-success total_number"></p>
+                    <p class="heading_b uk-text-success total_amount"></p>
+                    <!--<p class="uk-text-small uk-text-muted uk-margin-top-remove">Incl. VAT -
+                        </p>-->
+                </div>
+            </div>
+            <div class="uk-grid uk-margin-large-bottom">
+                <div class="uk-width-1-1">
+                    <table class="uk-table">
+                        <thead>
+                            <tr class="uk-text-upper">
+                                <th>{{ antl.get('inventory_voucher.description') }}</th>
+                                <th>{{ antl.get('inventory_voucher.unit') }}</th>
+                                <th class="uk-text-center">{{ antl.get('inventory_voucher.quantity') }}</th>
+                                <th class="uk-text-center">{{ antl.get('inventory_voucher.price') }}</th>
+                                <th class="uk-text-center">{{ antl.get('inventory_voucher.amount') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                              <tr class="uk-table-middle item_load hidden">
+                                <td>
+                                    <span class="uk-text-large"></span><br/>
+                                    <span class="uk-text-muted uk-text-small"></span>
+                                </td>
+                                <td>
+
+                                </td>
+                                <td class="uk-text-center">
+
+                                </td>
+                                <td class="uk-text-center">
+
+                                </td>
+                                <td class="uk-text-center">
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="uk-grid">
+                <div class="uk-width-1-1">
+                    <span class="uk-text-muted uk-text-small uk-text-italic">Payment to:</span>
+                    <p class="uk-margin-top-remove payment_method">
+
+                    </p>
+                </div>
+            </div>
+            <div class="invoice_footer">
+                {{ company.name }}<span>&middot;</span>{{ company.address }}<br>
+                </span>{{ company.phone }}<span>&middot;</span>{{ company.email }}
+           </div>
+        </div>
+    </div>
+
+
+    {% endblock %}
+    {% block scripts %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.data = {{ data | json | safe }};
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <!-- handlebars.js -->
+    <script src="{{ url('library/handlebars/handlebars.min.js') }}"></script>
+    <script src="{{ url('scripts/custom/handlebars_helpers.min.js') }}"></script>
+
+    <!--  invoices functions -->
+    <script src="{{ url('scripts/pages/page_invoices.min.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/invoice.js') }}"></script>
+    {% endblock %}

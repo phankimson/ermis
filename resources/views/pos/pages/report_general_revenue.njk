@@ -1,0 +1,121 @@
+{% extends 'manage.layouts.ermisform8' %}
+{% block css_add %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+{% endblock %}
+
+{% block content_add %}
+    <div class="uk-grid" id="form-search">
+        <div class="uk-width-medium-1-4">
+
+        </div>
+        <div class="width-large">
+        <table>
+            <tr>
+            <td><span class="row-padding-right-small">{{ antl.get('global.start_date') }} :</span></td>
+            <td>
+            <input type="text" data-type="date" id="start" name="start_date" value="{{ start_date }}" />
+            <span class="row-padding-right-small"></span>
+
+            <span class="row-padding-right-small">{{ antl.get('global.end_date') }}:</span>
+            <input type="text" data-type="date" id="end" name="end_date" value="{{ end_date }}" />
+             </td>
+            </tr>
+            <tr>
+            <td><label class="row-padding-right-medium">{{ antl.get('report_general_revenue.shop') }}:</label></td>
+            <td>
+            <select class="droplist xlarge" name="inventory">
+                {% if type == 1 or type == 2 %}
+                {% for x in stock %}
+                {% if x.id == inventory.id %}
+                <option value="{{ x.id }}" selected>{{ x.code }} - {{x.name}}</option>
+                {% else %}
+                <option value="{{ x.id }}" >{{ x.code }} - {{x.name}}</option>
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                <option value="{{ inventory.id }}" selected>{{ inventory.code }} - {{inventory.name}}</option>
+                {% endif %}
+            </select>
+            </td>
+            </tr>
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('global.recorded') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="active" />
+            </td>
+            </tr>
+
+        </table>
+
+            <div class="row-padding-bottom-small"></div>
+            <div>
+                <a href="javascript:;" class="k-button uk-alert-success row-padding-bottom-small get_report" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_note</i>{{ antl.get('global.report') }}</a>
+                <a href="javascript:;" class="k-button k-primary row-padding-bottom-small get_data" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_available</i>{{ antl.get('global.get_data') }}</a>
+                <a href="javascript:;" class="k-button uk-alert-warning btn-hide" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">exit_to_app</i>{{ antl.get('global.hidden_condition') }}</a>
+            </div>
+
+        </div>
+        <div class="uk-width-medium-1-4">
+
+        </div>
+
+    </div>
+    <div class="uk-grid">
+        <div class="uk-width-medium-4-4">
+            <div id="grid" style="display:none"></div>
+        </div>
+    </div>
+<div class="uk-grid">
+    <div class="uk-width-medium-4-4">
+        <div id="report" style="display:none">
+            <div class="row">
+                <h3 id="title" class="text-center"></h3>
+                <table id="table"
+                       data-toggle="table"
+                       data-show-export="true"
+                       data-pagination="true"
+                       data-click-to-select="true"
+                       data-toolbar="#toolbar"
+                       data-search="true"
+                       data-show-footer="true"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-show-print="true"
+                       data-show-columns="true">
+                    <thead>
+                        <tr>
+                            <th data-formatter="runningFormatter">#</th>
+                            <th data-field="date_voucher" data-formatter="DateFormatter" data-sortable="true">{{ antl.get('inventory_voucher.date_voucher') }}</th>
+                            <th data-field="description" data-sortable="true">{{ antl.get('inventory_voucher.description') }}</th>
+                            <th data-field="quantity" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.quantity') }}</th>
+                            <th data-field="amount" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.amount') }}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block scripts_add %}
+    <script>
+        jQuery(document).ready(function () {
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+            Ermis.field = {
+                quantity :   {type:"number"},
+                amount :   {type:"number"},
+                date_voucher :   {type:"date"}
+            };
+            Ermis.columns    =   [ { "field" : "date_voucher","title" :"{{ antl.get('inventory_voucher.date_voucher') }}" ,"width" : "150px", type:"date" ,template: '#= FormatDate(date_voucher) #' },
+                                   { "field" : "description","title" :"{{ antl.get('inventory_voucher.description') }}" ,"width" : "150px"},
+                                   { "field" : "quantity","title" :"{{ antl.get('inventory_voucher.quantity') }}" ,"width" : "150px", format: "{0:n0}" ,decimals: 0},
+                                   { "field" : "amount","title" :"{{ antl.get('inventory_voucher.amount') }}" ,"width" : "150px", format: "{0:n0}" ,decimals: 0},
+            ];
+            Ermis.aggregate = [{ field: "quantity", aggregate: "sum" },
+                               { field: "amount", aggregate: "sum" }];
+        });
+    </script>
+    {% endblock %}

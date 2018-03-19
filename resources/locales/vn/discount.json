@@ -1,0 +1,12 @@
+{
+    "title": "Giảm giá",
+    "discount_percent" : "Giảm giá %",
+    "discount" : "Giảm giá",
+    "date_start" : "Ngày bắt đầu",
+    "date_end" : "Ngày kết thúc",
+    "inventory" : "Kho áp dụng",
+    "type1":"Áp dụng cho mặt hàng",
+    "type2":"Áp dụng chung cho shop",
+    "type3":"Áp dụng chung cho khách hàng",
+    "accumulative" : "Cộng dồn"
+}

@@ -1,0 +1,14 @@
+﻿table tr th{
+font-weight: bold!important;
+}
+.group{
+font-weight: bold!important;
+}
+#uniform-user{
+margin-left: 30%;
+margin-top : 8px;
+float:left
+}
+#uniform-inventory{
+  margin-top : 8px;
+}

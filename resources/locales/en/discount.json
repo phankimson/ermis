@@ -1,0 +1,12 @@
+{
+    "title": "Discount",
+    "discount_percent" : "Discount %",
+    "discount" : "Discount",
+    "date_start" : "Date start",
+    "date_end" : "Date end",
+    "inventory" : "Inventory",
+    "type1":"Apply for items",
+    "type2":"Apply for shop",
+    "type3":"Apply for customer",
+    "accumulative":"Accumulative"
+}

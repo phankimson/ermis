@@ -1,0 +1,128 @@
+{% extends 'manage.layouts.ermisform1' %}
+{% block content_add %}
+<div id="notification"></div>
+<div class="uk-grid uk-margin-left-10 uk-grid-medium">
+    <ul class="uk-tab" data-uk-tab="{connect:'#tabs_anim', animation:'slide-left', swiping: false}">
+        <li class="uk-active"><a href="javascript:;">{{ antl.get('user.user_info') }}</a></li>
+        <li><a href="javascript:;">{{ antl.get('user.info') }}</a></li>
+        <li><a href="javascript:;">{{ antl.get('global.expand') }}</a></li>
+    </ul>
+    <ul id="tabs_anim" class="uk-switcher uk-margin">
+        <li>
+            <table>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('user.code') }}</label></td>
+                    <td><input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('user.code') }}" data-width="200px" data-type="string" name="barcode" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('global.username') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="2" data-title="{{ antl.get('global.username') }}" data-width="200px" data-null="true" data-type="string" name="username" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('global.password') }}</label></td>
+                    <td><input type="password" class="k-textbox large" data-position="3" data-title="{{ antl.get('global.password') }}" data-hidden="true" data-width="200px" data-type="string" name="password" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.email') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="4" data-title="{{ antl.get('user.email') }}" data-null="true" data-width="200px" data-type="string" name="email" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.stock_default') }}</label></td>
+                    <td>
+                        <select class="droplist large" data-position="4" data-title="{{ antl.get('user.stock_default') }}"  data-template="#= FormatDropList(stock_default,'stock_default') #" data-type="number" data-width="200px" name="stock_default">
+                            <option readonly selected value="0">--Select--</option>
+                              {% for m in inventory %}
+                                <option value="{{ m.id }}">{{ m.code }} - {{ shortif( lang == 'vn' , m.name , m.name_en )}}</option>
+                               {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.role') }}</label></td>
+                    <td class="row-height">
+                    <select class="droplist large" data-position="4" data-title="{{ antl.get('user.stock_default') }}"  data-template="#= FormatDropList(role,'role') #" data-type="number" data-width="200px" name="role">
+                        <option readonly selected value="0">--Select-- </option>
+                        <option value="2">{{ antl.get('user.role') }}  </option>
+                        <option value="3">{{ antl.get('user.stock') }} </option>
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('action.active') }}</label></td>
+                    <td class="row-height"><input type="checkbox" data-md-icheck="" data-value="1"  data-position="18" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+                </tr>
+            </table>
+        </li>
+        <li>
+            <table>
+                <tr>
+                    <td class="row-label"><label>{{ antl.get('user.fullname') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="5" data-title="{{ antl.get('user.fullname') }}" data-width="200px" data-type="string" name="fullname" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.identity_card') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="6" data-title="{{ antl.get('user.identity_card') }}" data-width="200px" data-type="string" name="identity_card" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.firstname') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="7" data-title="{{ antl.get('user.firstname') }}" data-width="200px" data-type="string" name="firstname" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.lastname') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="7" data-title="{{ antl.get('user.lastname') }}" data-width="200px" data-type="string" name="lastname" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.birthday') }}</label></td>
+                    <td><input type="text" class="k-datepicker date" data-position="8" data-title="{{ antl.get('user.birthday') }}" data-width="200px" data-type="date" data-template="#= kendo.toString(kendo.parseDate(birthday, 'yyyy-MM-dd'), 'dd/mm/yyyy') #" name="birthday" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.phone') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="9" data-title="{{ antl.get('user.phone') }}" data-width="200px" data-type="string" name="phone" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.address') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="10" data-title="{{ antl.get('user.address') }}" data-width="200px" data-type="string"  name="address" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.city') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="11" data-title="{{ antl.get('user.city') }}" data-width="200px" data-type="string" name="city" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.jobs') }}</label></td>
+                    <td><input type="text" class="k-textbox large" data-position="12" data-title="{{ antl.get('user.jobs') }}" data-width="200px" data-type="string" name="jobs" /></td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.country') }}</label></td>
+                    <td>
+                        <select class="droplist" data-position="13" data-title="{{ antl.get('user.country') }}" data-width="200px" data-type="string" data-template="#= FormatDropList(country,'country') #" name="country">
+                            <option value="" selected>--- Select ---</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="US">United States</option>
+                            <option value="VN">Viet Nam</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>{{ antl.get('user.about') }}</label></td>
+                    <td>
+                        <textarea class="k-textbox large" data-title="{{ antl.get('user.about') }}" data-position="14" data-width="200px" data-type="string" name="about" cols="30" rows="4"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </li>
+        <li></li>
+    </ul>
+    </div>
+    {% endblock %}
+
+    {% block scripts_add %}
+        <script>
+        jQuery(document).ready(function () {
+            Ermis.data = {{ data | json | safe }};
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.flag = 1;
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+        });
+        </script>
+    {% endblock %}

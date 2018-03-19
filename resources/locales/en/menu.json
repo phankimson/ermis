@@ -1,0 +1,18 @@
+{
+    "code": "Code",
+    "name" : "Name",
+    "name_en" : "Name english",
+    "tab1": "Manage",
+    "tab2": "Pos",
+    "tab3": "Store",
+    "tab4": "Edu",
+    "tab5": "Human resource",
+    "tab6": "Account",
+    "tab7": "Hotel",
+    "title": "Category menu",
+    "type": "Type",
+    "parent" : "Parent",
+    "link" : "Link",
+    "icon" : "Icon",
+    "position" : "Position"
+}

@@ -1,0 +1,11 @@
+{
+    "title": "Coupon",
+    "value" : "Value",
+    "discount" : "Discount",
+    "discount_percent" : "Discount %",
+    "times" : "Times",
+    "number" : "Number",
+    "cumulative" : "Cumulative",
+    "none" : "None",
+    "code" : "Code coupon"
+}

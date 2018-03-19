@@ -1,0 +1,72 @@
+
+{% extends 'manage.layouts.ermisform1' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('inventory.code') }}</label></td>
+            <td><input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('inventory.code') }}" data-width="200px" data-type="string" name="code" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.name') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="2" data-title="{{ antl.get('inventory.name') }}" data-width="300px" data-type="string" name="name" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.name_en') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('inventory.name_en') }}" data-width="300px" data-type="string" name="name_en" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.manager') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('inventory.manager') }}" data-width="300px" data-type="string" name="manager" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.address') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('inventory.address') }}" data-width="300px" data-type="string" name="address" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.phone') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('inventory.phone') }}" data-width="300px" data-type="string" name="phone" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.fax') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('inventory.fax') }}" data-width="300px" data-type="string" name="fax" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.email') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('inventory.email') }}" data-width="300px" data-type="string" name="email" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.company') }}</label></td>
+            <td>
+                <select class="droplist large" data-position="3" data-title="{{ antl.get('inventory.company') }}" data-template="#= FormatDropList(company,'company') #" data-type="number" data-width="200px" name="company">
+                    <option readonly selected value="0">--Select--</option>
+                     {% for x in company %}
+                        <option value="{{ x.id }}">{{ x.code }} - {{ x.name }}</option>
+                     {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('inventory.description') }}</label></td>
+            <td>
+                <textarea class="k-textbox large" data-title="{{ antl.get('inventory.description') }}" data-hidden="true" data-position="4" data-width="200px" name="description" cols="30" rows="4"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('action.active') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="5" data-value="1" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block scripts_add %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.data = {{ data | json | safe }};
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.flag = 1;
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+{% endblock %}

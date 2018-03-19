@@ -1,0 +1,8 @@
+{
+    "debt_customer_init_balance": "Debt customer init balance",
+    "debt_suplier_init_balance": "Debt suplier init balance",
+    "stock_init_balance" : "Stock init balance",
+    "debt_account" : "Debt account",
+    "credit_account" : "Credit account",
+    "title" : "Số dư đầu kỳ"
+}

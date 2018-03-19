@@ -1,0 +1,15 @@
+{
+    "menu": "Danh mục",
+    "user": "Người dùng",
+    "tab1": "Đăng xuất",
+    "tab2": "Đăng nhập",
+    "tab3": "Thêm",
+    "tab4": "Sao chép",
+    "tab5": "Sửa",
+    "tab6": "Xóa",
+    "tab7": "Import",
+    "title": "Lịch sử hoạt động",
+    "type": "Type",
+    "data": "Dữ liệu",
+    "created_at" : "Ngày giờ"
+}

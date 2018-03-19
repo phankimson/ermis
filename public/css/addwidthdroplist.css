@@ -1,0 +1,8 @@
+﻿.k-list-container{
+    min-width:400px !important;//give a min width of your choice
+    width: auto!important;
+}
+.k-list
+{
+    width:auto !important;
+}

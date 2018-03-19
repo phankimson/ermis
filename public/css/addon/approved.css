@@ -1,0 +1,7 @@
+th {
+  font-weight: bold !important;
+  color : #2196f3!important;
+}
+tr.hidden {
+  display: none;
+}

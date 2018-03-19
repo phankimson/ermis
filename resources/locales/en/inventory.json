@@ -1,0 +1,13 @@
+{
+    "code": "Code",
+    "name" : "Name",
+    "name_en" : "Name english",
+    "title": "Inventory",
+    "manager" : "Manager",
+    "address" : "Address",
+    "phone" : "Phone",
+    "fax" : "Fax",
+    "email" : "Email",
+    "company" : "Company",
+    "description" : "Description"
+}

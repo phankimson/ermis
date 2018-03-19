@@ -1,0 +1,62 @@
+{% set moment = use('moment/moment') %}
+{% extends 'manage.layouts.default' %}
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.common-material.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.mobile.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/handsontable/dist/pro/handsontable.full.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+    <link rel="stylesheet" href="{{ url('css/addwidthdroplist.css') }}" />
+    {% block css_add %}{% endblock %}
+    {% endblock %}
+    {% block content %}
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+            {{ title }}
+        </div>
+        <div class="md-card-toolbar-actions">
+        <input type="text" class="month-picker uk-margin-right-30" name="date" value="{{ moment().format('MM/YYYY') }}" />
+        <i class="md-icon material-icons toolbar_fixed" id="btn-show" data-uk-tooltip title="{{ antl.get('global.open_condition') }}" style="display:none">launch</i>
+        <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+        <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+            <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expanded="false">
+                <i class="md-icon material-icons"></i>
+                <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                    <ul class="uk-nav">
+                        <li><a class="load" href="javascript:;">{{ antl.get('action.load') }}</a></li>
+                        <li><a class="print" href="javascript:;">{{ antl.get('action.print') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="print"></div>
+    <div class="md-card-content">
+        <div id="form-action">
+            {% block content_add %}{% endblock %}
+        </div>
+    </div>
+</div>
+<ul id="context-menu" style="display:none">
+    <li>
+        <a class="load"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.load') }} (Alt+L)">cloud_download</i>{{ antl.get('action.load') }}</a>
+    </li>
+    <li>
+        <a class="print"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.print') }} (Alt+P)">local_printshop</i>{{ antl.get('action.print') }}</a>
+    </li>
+</ul>
+{% endblock %}
+{% block scripts %}
+    {% block scripts_add %}{% endblock %}
+    <script src="{{ url('library/handsontable/dist/pro/handsontable.full.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/jszip.min.js') }}"></script>
+    <script src="{{ url('library/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url('library/jquery.print/jQuery.print.js') }}"></script>
+    <script src="{{ url('scripts/shortcuts.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/ermis-form-14.js') }}"></script>
+      {% block scripts_end %}{% endblock %}
+{% endblock %}

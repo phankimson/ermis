@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ERMIS - Giải pháp công nghệ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        html {
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <link href="{{ url('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url('css/addon/site.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.common-material.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.mobile.min.css') }}" />
+
+    <script src="{{ url('library/kendoui/js/jquery.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/jszip.min.js') }}"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!--open container-->
+        <div class="row row-offcanvas row-offcanvas-left">
+            <div id="main-section" class="col-xs-12 column">
+                <div id="main-section-header" class="row">
+                    <a href="{{ url('/') }}"><img id="team-efficiency" class="col-xs-3" src="{{ url('images/logo-big-blue.png') }}" alt="Ermis" />  </a>
+                    <div id="dateFilter" class="col-md-9">
+                        <label for="language">{{ antl.get('index.choose_language') }}</label>
+                        <select id="language">
+                            <option value="?lang=en" {{shortif(lang == 'en',"selected","")}} >English</option>
+                            <option value="?lang=vn" {{shortif(lang == 'vn',"selected","")}}  >Vietnamese</option>
+                        </select>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+
+                <div class="main-section-content row" style="">
+
+                    <div id="solution-list" class="col col-xs-2">
+                        <h3>{{ antl.get('index.solution') }}</h3>
+                        <div id="solutions-list">
+                            <div class="solution-wrapper">
+                                <a href="{{ url('pos/') }}">
+                                    <img src="{{ url('images/ermis-pos.png') }}" class="img-responsive solution-list-image">
+                                    <dl class="solution-list-details">
+                                        <p class="name">ERMIS POS</p>
+                                        <p class="title">Phần mềm bán hàng</p>
+                                    </dl>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="solutions-list">
+                            <div class="solution-wrapper">
+                                <a href="{{ url('account/') }}">
+                                    <img src="{{ url('images/ermis-account-logo.png') }}" class="img-responsive solution-list-image">
+                                    <dl class="solution-list-details">
+                                        <p class="name">ERMIS ACC </p>
+                                        <p class="title">Phần mềm kế toán </p>
+                                    </dl>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="solutions-list">
+                            <div class="solution-wrapper">
+                                <a href="{{ url('hrm/') }}">
+                                    <img src="{{ url('images/ermis-hrm.png') }}" class="img-responsive solution-list-image">
+                                    <dl class="solution-list-details">
+                                        <p class="name">ERMIS HRM</p>
+                                        <p class="title">Phần mềm nhân sự </p>
+                                    </dl>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="solutions-list">
+                            <div class="solution-wrapper">
+                                <a href="{{ url('hotel/') }}">
+                                    <img src="{{ url('images/ermis-hotel.png') }}" class="img-responsive solution-list-image">
+                                    <dl class="solution-list-details">
+                                        <p class="name">ERMIS HOTEL</p>
+                                        <p class="title">Phần mềm khách sạn</p>
+                                    </dl>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div id="solutions-list">
+                            <div class="solution-wrapper">
+                                <a href="{{ url('edu/') }}">
+                                    <img src="{{ url('images/ermis-education.png') }}" class="img-responsive solution-list-image">
+                                    <dl class="solution-list-details">
+                                        <p class="name">ERMIS EDU</p>
+                                        <p class="title">Phần mềm giáo dục</p>
+                                    </dl>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="solution-details-wrapper" class="col col-xs-10">
+                        <div id="solution-details" class="row">
+                            <div id="tabstrip">
+                                <ul>
+                                    <li class="k-state-active">
+                                        Tính năng phần mềm bán hàng
+                                    </li>
+                                    <li>
+                                        Tính năng phần mềm kế toán
+                                    </li>
+                                    <li>
+                                        Tính năng phần mềm nhân sự
+                                    </li>
+                                    <li>
+                                        Tính năng phần mềm khách sạn
+                                    </li>
+                                    <li>
+                                        Tính năng phần mềm giáo dục
+                                    </li>
+                                </ul>
+                                <div>
+                                    <p>Chưa cập nhật</p>
+                                </div>
+                                <div>
+                                    <p>Chưa cập nhật</p>
+                                </div>
+                                <div>
+                                    <p>Chưa cập nhật</p>
+                                </div>
+                                <div>
+                                    <p>Chưa cập nhật</p>
+                                </div>
+                                <div>
+                                    <p>Chưa cập nhật</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--close main column-->
+        </div>
+        <!--close row-->
+    </div>
+    <!--close container-->
+    <script src="{{ url('scripts/addon/frontend/index.js') }}"></script>
+</body>
+
+</html>

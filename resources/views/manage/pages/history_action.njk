@@ -1,0 +1,62 @@
+
+{% extends 'manage.layouts.ermisform2' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('history_action.user') }}</label></td>
+            <td>
+            <select class="droplist large" data-position="1" data-title="{{ antl.get('history_action.user') }}" data-template="#= FormatDropList(user,'user') #" data-type="number" data-width="200px" name="user">
+                    <option readonly selected value="0">--Select--</option>
+                      {% for u in users %}
+                        <option value="{{ u.id }}">{{ u.code }} - {{ u.username }}</option>
+                       {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('history_action.menu') }}</label></td>
+            <td>
+            <select class="droplist large" data-position="2" data-title="{{ antl.get('history_action.menu') }}" data-template="#= FormatDropList(menu,'menu') #" data-type="number" data-width="200px" name="menu">
+                    <option readonly selected value="0">--Select--</option>
+                      {% for m in menu %}
+                        <option value="{{ m.id }}">{{ m.code }} - {{ shortif( lang == 'vn' , m.name , m.name_en )}}</option>
+                       {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('history_action.data') }}</label></td>
+            <td><textarea name="data" class="k-textbox large" data-type="string"  data-hidden="true" rows="10" cols="30"></textarea></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('history_action.created_at') }}</label></td>
+            <td><input type="text" class="k-datepicker date" data-position="4" data-title="{{ antl.get('history_action.created_at') }}" data-width="200px" data-type="date" data-template="#= kendo.toString(kendo.parseDate(created_at, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" name="created_at" /></td>
+        </tr>
+    </table>
+{% endblock %}
+{% block tabs %}
+<div id="tabstrip" style="display:none">
+    <ul>
+        <li data-search="0" class="k-state-active">{{ antl.get('history_action.tab1') }}</li>
+        <li data-search="1">{{ antl.get('history_action.tab2') }}</li>
+        <li data-search="2">{{ antl.get('history_action.tab3') }}</li>
+        <li data-search="3">{{ antl.get('history_action.tab4') }}</li>
+        <li data-search="4">{{ antl.get('history_action.tab5') }}</li>
+        <li data-search="5">{{ antl.get('history_action.tab6') }}</li>
+        <li data-search="6">{{ antl.get('history_action.tab7') }}</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block scripts_add %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.data = {{ data | json | safe }};
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.flag = 1;
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+{% endblock %}

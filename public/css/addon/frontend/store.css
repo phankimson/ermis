@@ -1,0 +1,155 @@
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.k-radio{
+  margin-left: 15px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+#time_shift{
+  color : white;
+  font-size:  20px ! important;
+  text-align: center;
+  line-height: 2;
+}
+#action_button{
+  margin-bottom: 10px;
+}
+#form-action{
+  margin-bottom: 10px;
+}
+
+.hidden {
+  display: none;
+}
+.md-input{
+  padding: 9px 4px ! important;
+}
+.uk-tab-responsive{
+  margin-top: -7px!important;
+}
+
+.row-label-responsive {
+    width: 100px;
+}
+.row-label {
+    width: 200px
+}
+input.disabled{
+  background: #f2f2f2
+}
+.k-textbox ,.droplist,.k-dropdown-wrap .k-input,.k-dropdown .k-state-default,.k-multiselect.k-header,.k-input{
+    border-color: darkgrey;
+}
+
+.xxsmall-responsive{
+    width : 20px!important;
+}
+.xsmall-responsive{
+    width : 50px!important;
+}
+.small-responsive{
+    width :100px!important;
+}
+.medium-responsive{
+    width : 200px!important;
+}
+.large-responsive{
+    width : 300px!important;
+}
+.xlarge-responsive{
+    width : 400px!important;
+}
+.xxlarge-responsive{
+    width : 500px!important;
+}
+.xxxlarge-responsive{
+    width : 900px!important;
+}
+.margin-left-5 {
+  margin-left: 5px;
+}
+#printbill p{
+  font-size: 12px;
+  margin-bottom: -8px;
+}
+.mobile_show{
+  display:none
+}
+
+@media screen and (max-width: 1400px) {
+  .title_hide {
+    display:none
+  }
+
+  .xxsmall-responsive{
+      width : 30px!important;
+  }
+  .xsmall-responsive{
+      width : 50px!important;
+  }
+  .small-responsive{
+      width :80px!important;
+  }
+  .medium-responsive{
+      width : 120px!important;
+  }
+  .large-responsive{
+      width : 180px!important;
+  }
+  .xlarge-responsive{
+      width : 220px!important;
+  }
+  .xxlarge-responsive{
+      width : 280px!important;
+  }
+  .xxxlarge-responsive{
+      width : 320px!important;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .main_logo_top{
+    min-width: 120px
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .title_hide {
+    display:none
+  }
+  .mobile_hidden{
+    display:none
+  }
+  .mobile_show{
+    display:block
+  }
+
+  .search-table{table-layout: fixed;}
+  .search-table, td, th{border-collapse:collapse;}
+  .search-table-outter { overflow-x: scroll; }
+
+}

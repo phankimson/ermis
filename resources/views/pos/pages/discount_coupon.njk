@@ -1,0 +1,46 @@
+
+{% extends 'manage.layouts.ermisform1' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.code') }} *</label></td>
+            <td><input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('user.code') }}" data-width="200px" data-type="string" name="code" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('global.name') }} *</label></td>
+            <td><input type="text" class="k-textbox large" data-position="2" data-title="{{ antl.get('global.name') }}" data-width="200px" data-null="true" data-type="string" name="name" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('coupon.discount') }}</label></td>
+            <td><input type="text" class="large number-price" data-position="3" data-title="{{ antl.get('coupon.discount') }}" data-width="200px" data-template="#= FormatNumber(discount) #" data-type="number" name="discount" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('coupon.discount_percent') }}</label></td>
+            <td><input type="text" class="large number-price" data-position="3" data-title="{{ antl.get('coupon.discount_percent') }}" data-width="200px" data-template="#= FormatNumber(discount_percent) #" data-type="number" name="discount_percent" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('coupon.times') }}</label></td>
+            <td><input type="text" class="large number-price" data-position="4" data-title="{{ antl.get('coupon.times') }}" data-width="200px" data-template="#= FormatNumber(times) #" data-type="number" name="times" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('coupon.number') }}</label></td>
+            <td><input type="text" class="large number-price" data-position="5" data-title="{{ antl.get('coupon.number') }}" data-width="200px" data-template="#= FormatNumber(number) #" data-type="number" name="number" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('action.active') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="6" data-value="1" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+        </tr>
+    </table>
+    {% endblock %}
+    {% block scripts_add %}
+        <script>
+        jQuery(document).ready(function () {
+            Ermis.data = {{ data | json | safe }};
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.flag = 1;
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+        });
+        </script>
+    {% endblock %}

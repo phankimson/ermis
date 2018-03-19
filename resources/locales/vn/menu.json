@@ -1,0 +1,18 @@
+{
+    "code": "Mã",
+    "name" : "Tên tiếng việt",
+    "name_en" : "Tên tiếng anh",
+    "tab1": "Quản lý",
+    "tab2": "Bán hàng",
+    "tab3": "Cửa hàng",
+    "tab4": "Giáo dục",
+    "tab5": "Nhân sự",
+    "tab6": "Kế toán",
+    "tab7": "Khách sạn",
+    "title": "Danh mục hệ thống",
+    "type": "Loại",
+    "parent" : "Danh mục cha",
+    "link" : "Đường dẫn",
+    "icon" : "Biểu tượng",
+    "position" : "Vị trí"
+}

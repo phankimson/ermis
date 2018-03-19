@@ -1,0 +1,72 @@
+
+{% extends 'manage.layouts.ermisform2' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('option.code') }}</label></td>
+            <td><input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('option.code') }}" data-width="200px" data-type="string" name="code" /></td>
+        </tr>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('option.title') }}</label></td>
+            <td><input type="text" class="k-textbox xxlarge" data-position="2" data-title="{{ antl.get('option.title') }}" data-width="200px" data-type="string" name="title" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('option.value') }} 1</label></td>
+            <td><input type="text" class="k-textbox large" data-position="3" data-title="{{ antl.get('option.value') }} 1" data-width="200px" data-type="string" name="value" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('option.value') }} 2</label></td>
+            <td><input type="text" class="k-textbox large" data-position="4" data-title="{{ antl.get('option.value') }} 2" data-width="200px" data-type="string" name="value1" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('option.value') }} 3</label></td>
+            <td><input type="text" class="k-textbox large" data-position="5" data-title="{{ antl.get('option.value') }} 3" data-width="200px" data-type="string" name="value2" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('option.value') }} 4</label></td>
+            <td><input type="text" class="k-textbox large" data-position="6" data-title="{{ antl.get('option.value') }} 4" data-width="200px" data-type="string" name="value3" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('option.value') }} 5</label></td>
+            <td><input type="text" class="k-textbox large" data-position="7" data-title="{{ antl.get('option.value') }} 5" data-width="200px" data-type="string" name="value4" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('option.value') }} 6</label></td>
+            <td><input type="text" class="k-textbox large" data-position="8" data-title="{{ antl.get('option.value') }} 6" data-width="200px" data-type="string" name="value5" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('option.date') }}</label></td>
+            <td><input type="text" class="k-datepicker date" data-position="9" data-title="{{ antl.get('option.date') }}" data-value="now" data-width="200px" data-type="date" data-template="#= kendo.toString(kendo.parseDate(date, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" name="date" /></td>
+        </tr>
+
+        <tr>
+            <td><label>{{ antl.get('action.active') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="10" data-value="1"  data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="boolean" data-template="#= FormatCheckBoxBoolean(active) #" name="active" /></td>
+        </tr>
+    </table>
+{% endblock %}
+{% block tabs %}
+<div id="tabstrip" style="display:none">
+    <ul>
+        <li data-search="1" class="k-state-active">{{ antl.get('option.tab1') }}</li>
+        <li data-search="2">{{ antl.get('option.tab2') }}</li>
+        <li data-search="3">{{ antl.get('option.tab3') }}</li>
+        <li data-search="4">{{ antl.get('option.tab4') }}</li>
+        <li data-search="5">{{ antl.get('option.tab5') }}</li>
+        <li data-search="6">{{ antl.get('option.tab6') }}</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block scripts_add %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.data = {{ data | json | safe }};
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.flag = 1;
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+{% endblock %}

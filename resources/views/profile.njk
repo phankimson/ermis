@@ -1,0 +1,429 @@
+{% set Entities = use('html-entities/lib/html4-entities') %}
+{% extends 'manage.layouts.default' %}
+{% block css %}
+<link href="{{ url('css/addon/customize.css') }}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<div id="page_content_inner">
+        <div class="uk-form-stacked" id="user_edit_form" style="display:none">
+            <div class="uk-grid" data-uk-grid-margin>
+                <div class="uk-width-large-7-10">
+                    <div class="md-card">
+                        <div class="user_heading" data-uk-sticky="{ top: 48, media: 960 }">
+                            <div class="user_heading_avatar fileinput fileinput-new" data-provides="fileinput">
+                              <form class="change-image" method="post"  role="form" enctype="multipart/form-data">
+                                <div class="fileinput-new thumbnail">
+                                    <img src="{{ shortif(currentUser.avatar != "", url(currentUser.avatar) , url('images/avatar.png') ) }}" alt="user avatar" />
+                                </div>
+                                <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                <div class="user_avatar_controls">
+                                    <span class="btn-file">
+                                        <span class="fileinput-new"><i class="material-icons">&#xE2C6;</i></span>
+                                        <span class="fileinput-exists"><i class="material-icons">&#xE86A;</i></span>
+                                        <input type="file" name="user_edit_avatar_control" id="user_edit_avatar_control">
+                                    </span>
+                                    <a href="#" class="btn-file fileinput-exists" data-dismiss="fileinput"><i class="material-icons">&#xE5CD;</i></a>
+                                </div>
+                                  </form>
+                            </div>
+                            <div class="user_heading_content">
+                                <h2 class="heading_b"><span class="uk-text-truncate" id="user_edit_uname">{{ currentUser.username }}</span><span class="sub-heading" id="user_edit_position">{{ currentUser.fullname }}</span></h2>
+                            </div>
+                            <div class="md-fab-wrapper">
+                                <div class="md-fab md-fab-toolbar md-fab-small md-fab-accent">
+                                    <i class="material-icons">&#xE8BE;</i>
+                                    <div class="md-fab-toolbar-actions">
+                                        <button type="submit" id="user_edit_save" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Save"><i class="material-icons md-color-white">&#xE161;</i></button>
+                                        <a id="user_edit_back" data-uk-tooltip="{cls:'uk-tooltip-small',pos:'bottom'}" title="Back"><i class="material-icons md-color-white">exit_to_app</i></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="user_content">
+                            <div id="notification"></div>
+                            <ul id="user_edit_tabs" class="uk-tab" data-uk-tab="{connect:'#user_edit_tabs_content'}">
+                                <li class="uk-active"><a href="#">{{ antl.get('index.change_info') }}</a></li>
+                                <li><a href="#">{{ antl.get('index.change_password') }}</a></li>
+                            </ul>
+                            <ul id="user_edit_tabs_content" class="uk-switcher uk-margin">
+                                <li id="user_edit_info_content">
+                                    <form class="profile-update" role="form" method="post">
+                                        <div class="uk-margin-top">
+                                            <div class="uk-grid" data-uk-grid-margin>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.fullname') }}</label>
+                                                    <input class="md-input" type="text" value="{{ currentUser.fullname }}" name="fullname" />
+                                                </div>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.identity_card') }}</label>
+                                                    <input class="md-input" type="text" value="{{ currentUser.identity_card }}" name="identity_card" />
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid" data-uk-grid-margin>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.firstname') }}</label>
+                                                    <input class="md-input" type="text" value="{{ currentUser.firstname }}" name="firstname" />
+                                                </div>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.lastname') }}</label>
+                                                    <input class="md-input" type="text" value="{{ currentUser.lastname }}" name="lastname" />
+                                                </div>
+                                            </div>
+
+                                            <div class="uk-grid" data-uk-grid-margin>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.birthday') }}</label>
+                                                    <input class="md-input" type="text" name="birthday" value="{{ currentUser.birthday }}" data-uk-datepicker="{format:'DD/MM/YYYY'}" />
+                                                </div>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.phone') }}</label>
+                                                    <input class="md-input" type="text" value="{{ currentUser.phone }}" name="phone" />
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid" data-uk-grid-margin>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.email') }}</label>
+                                                    <input class="md-input" type="email" value="{{ currentUser.email }}" name="email" />
+                                                </div>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.address') }}</label>
+                                                    <input class="md-input" type="text" value="{{ currentUser.address }}" name="address" />
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid" data-uk-grid-margin>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.city') }}</label>
+                                                    <input class="md-input" type="text" value="{{ currentUser.city }}" name="city" />
+                                                </div>
+                                                <div class="uk-width-medium-1-2">
+                                                    <label class="control-label">{{ antl.get('user.jobs') }}</label>
+                                                    <input class="md-input" type="text" value="{{ currentUser.jobs }}" name="jobs" />
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid" data-uk-grid-margin>
+                                                <div class="uk-width-medium-1-1">
+                                                    <select id="country" name="country" class="md-input">
+                                                        <option selected="{{ shortif( currentUser.country == "", "selected" ,"" ) }}" value="" disabled hidden>Select...</option>
+                                                        <option selected="{{ shortif( currentUser.country == "en", "selected" ,"" ) }}" value="GB">United Kingdom</option>
+                                                        <option selected="{{ shortif( currentUser.country  == "us", "selected" ,"" ) }}" value="US">United States</option>
+                                                        <option selected="{{ shortif( currentUser.country == "vn", "selected" ,"" ) }}" value="VN">Viet Nam</option>
+                                                    </select>
+                                                    <span class="uk-form-help-block control-label">{{ antl.get('user.country') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="uk-grid">
+                                                <div class="uk-width-1-1">
+                                                    <label class="control-label">{{ antl.get('user.about') }}</label>
+                                                    <textarea class="md-input" name="about" id="about" cols="30" rows="4">{{ currentUser.about }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </form>
+                                </li>
+                                <li id="user_edit_changepass_content">
+                                    <form class="change-password" role="form" method="post">
+                                        <div class="uk-grid" data-uk-grid-margin>
+                                            <div class="uk-width-medium-1-1">
+                                                <label class="control-label">{{ antl.get('global.password') }}</label>
+                                                <input class="md-input" type="password" name="password" />
+                                            </div>
+                                        </div>
+                                        <div class="uk-grid" data-uk-grid-margin>
+                                            <div class="uk-width-medium-1-1">
+                                                <label class="control-label">{{ antl.get('global.npassword') }}</label>
+                                                <input class="md-input" type="password" id="new_password" name="npassword" />
+                                            </div>
+                                        </div>
+                                        <div class="uk-grid" data-uk-grid-margin>
+                                            <div class="uk-width-medium-1-1">
+                                                <label class="control-label">{{ antl.get('global.rpassword') }}</label>
+                                                <input class="md-input" type="password" name="rpassword" />
+                                            </div>
+                                        </div>
+                                        </form>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-width-large-3-10">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <h3 class="heading_c uk-margin-medium-bottom">{{ antl.get('index.settings') }}</h3>
+                            <div class="uk-form-row">
+                                <input type="checkbox" readonly checked data-switchery id="user_edit_active" />
+                                <label for="user_edit_active" class="inline-label">{{ antl.get('index.active') }}</label>
+                            </div>
+                            <hr class="md-hr">
+                            <div class="uk-form-row">
+                                <label class="uk-form-label" for="user_edit_role">{{ antl.get('index.role') }}</label>
+                                <select data-md-selectize>
+                                    <option {{ shortif( currentUser.manage == "", "selected" ,"" ) }} value="0" disabled hidden >Select...</option>
+                                    <option {{ shortif( currentUser.manage == "1", "selected" ,"" ) }} value="1">Admin</option>
+                                    <option {{ shortif( currentUser.manage == "2", "selected" ,"" ) }} value="2">Manage</option>
+                                    <option {{ shortif( currentUser.manage == "3", "selected" ,"" ) }} value="3">User</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="uk-grid" data-uk-grid-margin data-uk-grid-match id="user_profile">
+        <div class="uk-width-large-7-10">
+            <div class="md-card">
+                <div class="user_heading">
+                    <div class="user_heading_menu hidden-print">
+                        <div class="uk-display-inline-block" data-uk-dropdown="{pos:'left-top'}">
+                            <i class="md-icon material-icons md-icon-light">&#xE5D4;</i>
+                            <div class="uk-dropdown uk-dropdown-small">
+                                <ul class="uk-nav">
+                                    <li><a href="#">Action 1</a></li>
+                                    <li><a href="#">Action 2</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="uk-display-inline-block"><i class="md-icon md-icon-light material-icons" id="page_print">&#xE8ad;</i></div>
+                    </div>
+                    <div class="user_heading_avatar">
+                        <div class="thumbnail">
+                            <img src="{{ shortif(currentUser.avatar != "", url(currentUser.avatar) , url('images/avatar.png') ) }}" alt="user avatar" />
+                        </div>
+                    </div>
+                    <div class="user_heading_content">
+                        <h2 class="heading_b uk-margin-bottom"><span class="uk-text-truncate">{{ currentUser.username }}</span><span class="sub-heading">{{ currentUser.fullname }}</span></h2>
+
+                    </div>
+                    <a class="md-fab md-fab-small md-fab-accent hidden-print" id="change_user_edit" href="javascript:;">
+                        <i class="material-icons">&#xE150;</i>
+                    </a>
+                </div>
+                <div class="user_content">
+                    <ul id="user_profile_tabs" class="uk-tab" data-uk-tab="{connect:'#user_profile_tabs_content', animation:'slide-horizontal'}" data-uk-sticky="{ top: 48, media: 960 }">
+                        <li class="uk-active"><a href="#">{{ antl.get('index.infomation') }}</a></li>
+                        <li><a href="#">{{ antl.get('index.history') }}</a></li>
+                    </ul>
+                    <ul id="user_profile_tabs_content" class="uk-switcher uk-margin">
+                        <li>
+                            {{ Entities.decode(currentUser.about) }}
+                              <div class="uk-grid uk-margin-medium-top uk-margin-large-bottom" data-uk-grid-margin>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom">{{ antl.get('index.contact_info') }}</h4>
+                                    <ul class="md-list md-list-addon">
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <i class="md-list-addon-icon material-icons">&#xE158;</i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{ currentUser.email }}</span>
+                                                <span class="uk-text-small uk-text-muted">{{ antl.get('user.email') }}</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <i class="md-list-addon-icon material-icons">&#xE0CD;</i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{ currentUser.phone }}</span>
+                                                <span class="uk-text-small uk-text-muted">{{ antl.get('user.phone') }}</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <i class="md-list-addon-icon material-icons">home</i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{ currentUser.address }}</span>
+                                                <span class="uk-text-small uk-text-muted">{{ antl.get('user.address') }}</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-addon-element">
+                                                <i class="md-list-addon-icon material-icons">work</i>
+                                            </div>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{ currentUser.jobs }}</span>
+                                                <span class="uk-text-small uk-text-muted">{{ antl.get('user.jobs') }}</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="uk-width-large-1-2">
+                                    <h4 class="heading_c uk-margin-small-bottom">{{ antl.get('index.other') }}</h4>
+                                    <ul class="md-list">
+                                        <li>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{ currentUser.birthday }}</span>
+                                                <span class="uk-text-small uk-text-muted">{{ antl.get('user.birthday') }}</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{ currentUser.identity_card }}</span>
+                                                <span class="uk-text-small uk-text-muted">{{ antl.get('user.identity_card') }}</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{ currentUser.city }}</span>
+                                                <span class="uk-text-small uk-text-muted">{{ antl.get('user.city') }}</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="md-list-content">
+                                                <span class="md-list-heading">{{ currentUser.country }}</span>
+                                                <span class="uk-text-small uk-text-muted">{{ antl.get('user.country') }}</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <ul class="md-list">
+                                <!--@for (int l = 1; l < Math.Ceiling((decimal)history.Count()/ 10); l++)
+                                {
+                                <div class="page-content" id="page-content-@l">
+                                    @foreach (var i in history.OrderByDescending(x => x.date_created).Skip(((l - 1) * 10)).Take(10))
+                                    {
+                                    <li>
+                                        <div class="md-list-content">
+                                            @if (@i.menu != null)
+                                            {
+                                                if (@i.action == "2")
+                                                {
+                                                <span class="md-list-heading"><a href="#">@action.edit - @menu.Where(a => a.id.Equals(i.menu)).FirstOrDefault().name</a></span>
+                                                }
+                                                else if (@i.action == "1")
+                                                {
+                                                <span class="md-list-heading"><a href="#">@action.add - @menu.Where(a => a.id.Equals(i.menu)).FirstOrDefault().name</a></span>
+                                                }
+                                                else if (@i.action == "3")
+                                                {
+                                                <span class="md-list-heading"><a href="#">@action.delete - @menu.Where(a => a.id.Equals(i.menu)).FirstOrDefault().name</a></span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                            <span class="md-list-heading"><a href="#">@global.sign_in - @global.login</a></span>
+                                            }
+                                            <div class="uk-margin-small-top">
+                                                <span class="uk-margin-right">
+                                                    <i class="material-icons">&#xE192;</i> <span class="uk-text-muted uk-text-small">@WebApp.Filters.ConvertDateTime.TimeAgo(i.date_created)</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    }
+                                </div>
+                                }-->
+                              </ul>
+
+                            <div id="pagination-demo"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="uk-width-large-3-10 hidden-print">
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-margin-medium-bottom">
+                        <h3 class="heading_c uk-margin-bottom">{{ antl.get('index.history') }}</h3>
+                        <ul class="md-list md-list-addon">
+
+                        <!--@if (ViewBag.history != null) {
+                        foreach (var h in history.Take(10))
+                        {
+                        <li>
+                            <div class="md-list-addon-element">
+                            @if(@h.action == "2"){
+                                <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                            }else if(@h.action == "1"){
+                                <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                            }else if(@h.action == "3"){
+                                <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                }
+                            </div>
+                            <div class="md-list-content">
+                                @if (h.menu != null)
+                                {
+                                if (@h.action == "2")
+                                {
+                                <span class="md-list-heading">@action.edit</span>
+                                }
+                                else if (@h.action == "1")
+                                {
+                                <span class="md-list-heading">@action.add</span>
+                                }
+                                else if (@h.action == "3")
+                                {
+                                <span class="md-list-heading">@action.delete</span>
+                                }
+                                <span class="uk-text-small uk-text-muted uk-text-truncate">@menu.Where(a => a.id.Equals(h.menu)).FirstOrDefault().name</span>
+                                }
+                                else
+                                {
+                                <span class="md-list-heading">@global.sign_in</span>
+                                <span class="uk-text-small uk-text-muted uk-text-truncate">@global.login</span>
+                                }
+                            </div>
+                        </li>
+                        }
+                        }-->
+                            <!--@*<li>
+                                <div class="md-list-addon-element">
+                                    <i class="md-list-addon-icon material-icons uk-text-warning">&#xE8B2;</i>
+                                </div>
+                                <div class="md-list-content">
+                                    <span class="md-list-heading">Delectus modi.</span>
+                                    <span class="uk-text-small uk-text-muted uk-text-truncate">Est ut ut et velit.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-list-addon-element">
+                                    <i class="md-list-addon-icon material-icons uk-text-success">&#xE88F;</i>
+                                </div>
+                                <div class="md-list-content">
+                                    <span class="md-list-heading">Libero et.</span>
+                                    <span class="uk-text-small uk-text-muted uk-text-truncate">Incidunt repellendus ipsum neque aspernatur.</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="md-list-addon-element">
+                                    <i class="md-list-addon-icon material-icons uk-text-danger">&#xE001;</i>
+                                </div>
+                                <div class="md-list-content">
+                                    <span class="md-list-heading">Facere ex.</span>
+                                    <span class="uk-text-small uk-text-muted uk-text-truncate">Doloremque voluptatem voluptas accusamus rerum.</span>
+                                </div>
+                            </li>*@-->
+                        </ul>
+                    </div>
+                    <a class="md-btn md-btn-flat md-btn-flat-primary" href="#">{{ antl.get('action.view') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url('library/esimakin-twbs-pagination/jquery.twbsPagination.min.js') }}"></script>
+<script src="{{ url('library/jquery-validation/js/jquery.validate.min.js') }}"></script>
+<script src="{{ url('scripts/custom/uikit_fileinput.min.js') }}"></script>
+<script src="{{ url('scripts/addon/backend/profile.js') }}"></script>
+    <!--<script>
+        jQuery(document).ready(function () {
+        $('#pagination-demo').twbsPagination({
+            totalPages: @(history.Count() / 10) ,
+            visiblePages: 7,
+            onPageClick: function (event, page) {
+                $(".page-content").hide();
+                $('#page-content-' + page).show();
+            }
+        });
+        });
+    </script>-->
+{% endblock %}

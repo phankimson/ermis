@@ -1,0 +1,42 @@
+
+{% extends 'manage.layouts.ermisform1' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('goods_warning.description') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="1 data-title="{{ antl.get('goods_warning.description') }}" data-width="200px" data-null="true" data-type="string" name="description" /></td>
+        </tr>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('goods_warning.description_en') }}</label></td>
+            <td><input type="text" class="k-textbox large" data-position="1 data-title="{{ antl.get('goods_warning.description_en') }}" data-width="200px" data-null="true" data-type="string" name="description_en" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('goods_warning.balance') }} </label></td>
+            <td><input type="number" class="k-textbox large" data-position="2" data-title="{{ antl.get('goods_warning.balance') }}" data-width="200px" data-null="true" data-type="string" name="balance" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('goods_warning.quantity') }}</label></td>
+            <td><input type="number" class="k-textbox large" data-position="3" data-title="{{ antl.get('goods_warning.quantity') }}" data-width="200px" data-type="string" name="quantity" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('goods_warning.color') }}</label></td>
+            <td><input type="text" class="k-textbox large color" data-position="3" data-title="{{ antl.get('goods_warning.color') }}" data-width="200px" data-type="string" name="color" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('action.active') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="4" data-value="1" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+        </tr>
+    </table>
+    {% endblock %}
+    {% block scripts_add %}
+        <script>
+        jQuery(document).ready(function () {
+            Ermis.data = {{ data | json | safe }};
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.flag = 1;
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+        });
+        </script>
+    {% endblock %}

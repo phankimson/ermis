@@ -1,0 +1,8 @@
+{
+    "title": "Cảnh báo hàng hóa",
+    "quantity" : "SL bán",
+    "balance" : "SL Tồn",
+    "color" : "Màu",
+    "description" : "Ghi chú",
+    "description_en" : "Ghi chú TA"
+}

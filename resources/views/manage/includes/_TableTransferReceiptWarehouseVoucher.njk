@@ -1,0 +1,43 @@
+<table>
+    <tr>
+        <td class="row-label-responsive"><label>{{ antl.get('inventory_voucher.inventory_issue') }}</label></td>
+        <td><input type="text" class="k-textbox xlarge"  readonly disabled name="inventory_issue" /></td>
+        <td></td>
+        <td class="row-label-responsive"></td>
+        <td><label>{{ antl.get('inventory_voucher.date_voucher') }}</label></td>
+        <td colspan="2"><input type="text" data-type="date" class="k-textbox date-picker"  readonly disabled name="date_voucher" /></td>
+    </tr>
+    <tr>
+        <td><label>{{ antl.get('inventory_voucher.receiver') }}</label></td>
+        <td colspan="2"><input type="text" class="k-textbox xxlarge" name="traders" /></td>
+
+        <td class="row-label-responsive"></td>
+        <td><label>{{ antl.get('inventory_voucher.voucher') }}</label></td>
+        <td colspan="2"><input type="text" class="k-textbox medium voucher" readonly disabled name="voucher" /></td>
+    </tr>
+    <tr>
+        <td><label>{{ antl.get('inventory_voucher.description') }}</label></td>
+        <td colspan="2"><input type="text" class="k-textbox xxlarge" readonly disabled name="description" /></td>
+    </tr>
+    <tr>
+        <td><label>{{ antl.get('inventory_voucher.barcode_item') }}</label></td>
+        <td colspan="2">
+            <span class="k-textbox k-space-right xxlarge">
+                <input type="text" id="barcode" name="barcode" />
+            </span>
+        </td>
+    </tr>
+    <!--<tr>
+        <td><label>{{ antl.get('inventory_voucher.attach') }}</label></td>
+        <td colspan="2"><input type="text" class="k-textbox xxlarge" name="attach" /></td>
+    </tr>
+    <tr>
+        <td><label>{{ antl.get('inventory_voucher.reference') }}</label></td>
+        <td colspan="2">
+            <span class="k-textbox k-space-right xxlarge">
+                <input type="text" name="reference" readonly />
+                <a href="javascript:;"  class="k-icon k-i-search reference">&nbsp;</a>
+            </span>
+        </td>
+    </tr>-->
+</table>

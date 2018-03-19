@@ -1,0 +1,22 @@
+ <!doctype html>
+<!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
+
+<head>
+{% include 'manage.includes.head' %}
+{% block css %}{% endblock %}
+ </head>
+ {% include 'manage.includes.header' %}
+  <body class=" sidebar_main_open sidebar_main_swipe">
+  {% include 'manage.includes.menu' %}
+
+ <div id="page_content">
+ <div id="page_content_inner">
+  {% block content %}{% endblock %}
+   </div>
+    </div>
+  {% include 'manage.includes.footer' %}
+  {% block scripts %}{% endblock %}
+  {% include 'language' %}  
+</body>
+</html>

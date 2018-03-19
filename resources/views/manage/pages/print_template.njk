@@ -1,0 +1,72 @@
+
+
+{% extends 'manage.layouts.ermisform5' %}
+{% block content_add %}
+    <div class="uk-grid uk-margin-left-10 uk-grid-medium">
+        <ul class="uk-tab" data-uk-tab="{connect:'#tabs_anim', animation:'slide-left', swiping: false}">
+            <li class="uk-active"><a href="javascript:;">{{ antl.get('print_template.info') }}</a></li>
+            <li><a href="javascript:;">{{ antl.get('global.expand') }}</a></li>
+        </ul>
+        <ul id="tabs_anim" class="uk-switcher uk-margin">
+            <li>
+                <table>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('print_template.code') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('print_template.code') }}" data-width="200px" data-type="string" name="code" /></td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('print_template.name') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="2" data-title="{{ antl.get('print_template.name') }}" data-width="200px" data-type="string" name="name" /></td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('global.name_en') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="2" data-title="{{ antl.get('global.name_en') }}" data-width="200px" data-type="string" name="name_en" /></td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('print_template.menu') }}</label></td>
+                        <td>
+                            <select class="droplist large" data-position="5" data-title="{{ antl.get('print_template.menu') }}" data-template="#= FormatDropList(menu,'menu') #" data-type="number" data-width="200px" name="menu">
+                                <option readonly selected value="0">--Select--</option>
+                                {% for m in menu %}
+                                  <option value="{{ m.id }}">{{ shortif( lang == 'vn' , m.code + ' - ' + m.name ,m.code + ' - ' +  m.name_en )}}</option>
+                                 {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('print_template.date') }}</label></td>
+                        <td><input type="text" class="k-datepicker date" data-position="8" data-title="{{ antl.get('print_template.date') }}" data-width="200px" data-type="date" data-value="now" data-template="#= kendo.toString(kendo.parseDate(date, 'yyyy-MM-dd'), 'dd/MM/yyyy') #"  name="date" /></td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('print_template.text') }}</label></td>
+                        <td class="row-height"><textarea class="editor" name="text" style="width : 900px" data-position="8" data-hidden="true" rows="10" cols="30"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('action.active') }}</label></td>
+                        <td class="row-height"><input type="checkbox" data-md-icheck="" data-value="1" data-position="18" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+                    </tr>
+                </table>
+            </li>
+
+            <li>
+
+            </li>
+        </ul>
+    </div>
+    <div class="uk-margin" style="float : right">
+      <a href="javascript:;" class="k-button k-primary save" data-uk-tooltip title="{{ antl.get('action.save') }} (Alt+Ctrl+S)"><i class="md-18 material-icons md-color-white">save</i>{{ antl.get('action.save') }}</a>
+      <a href="javascript:;" class="k-button k-primary cancel" data-uk-tooltip title="{{ antl.get('action.cancel') }} (Alt+Ctrl+C)"><i class="md-18 material-icons md-color-white">cancel</i>{{ antl.get('action.cancel') }}</a>
+    </div>
+    {% endblock %}
+
+    {% block scripts_add %}
+        <script>
+        jQuery(document).ready(function () {
+            Ermis.data = {{ data | json | safe }};
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.flag = 1;
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+        });
+        </script>
+    {% endblock %}

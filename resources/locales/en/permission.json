@@ -1,0 +1,10 @@
+{
+    "name": "Name",
+    "view": "View",
+    "add" :"Add",
+    "edit" : "Edit",
+    "delete" : "Delete",
+    "priority" : "Priority",
+    "special" : "Special",
+    "all" : "All"
+}

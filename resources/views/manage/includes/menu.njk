@@ -1,0 +1,68 @@
+<!-- main sidebar -->
+<aside id="sidebar_main">
+
+    <div class="sidebar_main_header">
+        <div class="sidebar_logo">
+            <a href="{{ url('/') }}" class="sSidebar_hide sidebar_logo_large">
+                <img class="logo_regular" src="{{ url('images/logo-small-blue.png') }}" alt="" height="15" width="71" />
+                <img class="logo_light" src="{{ url('images/logo-small-white.png') }}" alt="" height="15" width="71" />
+            </a>
+            <a href="{{ url('/') }}" class="sSidebar_show sidebar_logo_small">
+                <img class="logo_regular" src="{{ url('images/logo-small-blue.png') }}" alt="" height="32" width="32" />
+                <img class="logo_light" src="{{ url('images/logo-small-white.png') }}" alt="" height="32" width="32" />
+            </a>
+        </div>
+        <div class="sidebar_actions">
+            <select id="lang_switcher" name="lang_switcher">
+            {% if lang == 'vn' %}
+            <option value="vn" selected>Vietnamese</option>
+            {% else %}
+            <option value="gb" selected>English</option>
+            {% endif %}
+            </select>
+        </div>
+    </div>
+
+        <div class="menu_section">
+        <ul>
+        {% set Menu = use('App/Model/Menu') %}
+        {% yield menu = Menu.query().where('active','1').where('type',type).where('parent_id','0').fetch() %}
+        {% yield count = Menu.query().where('active','1').where('type',type).count('* as total') %}
+
+        {% if count[0].total > 0 %}
+        {% for m1 in menu.toJSON() %}
+            {% if m1.link == "" %}
+                <h4>{{  shortif( lang == 'vn' , m1.name , m1.name_en ) }}</h4>
+                 {% yield menu1 = Menu.query().where('active','1').where('type',type).where('parent_id',m1.id).fetch() %}
+                 {% for m2 in menu1.toJSON() %}
+                 <li class="{{ currentUrl(m2.link,'current_section') }}" title="{{ m2.code }}">
+                  <a href="{{ shortif(m2.link != "", url(m2.link) , "javascript:;" ) }}">
+                  <span class="menu_icon"><i class="material-icons">{{ m2.icon }}</i></span>
+                    <span class="menu_title">{{ shortif( lang == 'vn' , m2.name , m2.name_en )}}</span>
+                   </a>
+                    {% yield count1 = Menu.query().where('active','1').where('type',type).where('parent_id',m2.id).count('* as total') %}
+                    {% if count1[0].total >0 %}
+                     <ul>
+                     {% yield menu2 = Menu.query().where('active','1').where('type',type).where('parent_id',m2.id).fetch() %}
+                      {% for m3 in menu2.toJSON() %}
+                      <li class="{{ currentUrl(m3.link,'act_item') }}" title="{{ m3.code }}">
+                      <a href="{{ shortif(m3.link != "", url(m3.link) , "javascript:;" ) }}">{{ shortif( lang == 'vn' , m3.name , m3.name_en ) }}</a>
+                        </li>
+                      {% endfor %}
+                     </ul>
+                    {% endif %}
+                    </li>
+                 {% endfor %}
+            {% else %}
+                <li class="{{ currentUrl(m1.link,'current_section') }}" title="{{ m1.code }}">
+                    <a href="{{ shortif(m1.link != "", url(m1.link) , "javascript:;" ) }}">
+                        <span class="menu_icon"><i class="material-icons">{{ m1.icon }}</i></span>
+                        <span class="menu_title">{{ shortif( lang == 'vn' , m1.name , m1.name_en ) }}</span>
+                    </a>
+                 </li>
+            {% endif %}
+        {% endfor %}
+        {% endif %}
+        </ul>
+        </div>
+        </aside><!-- main sidebar end -->

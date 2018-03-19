@@ -1,0 +1,163 @@
+{% extends 'manage.layouts.ermisform8' %}
+{% block css_add %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+{% endblock %}
+
+{% block content_add %}
+<div class="uk-grid" id="form-search">
+    <div class="uk-width-medium-1-4">
+
+    </div>
+    <div class="width-large">
+    <table>
+        <tr>
+        <td><span class="row-padding-right-small">{{ antl.get('global.start_date') }} :</span></td>
+        <td>
+        <input type="text" data-type="date" id="start" name="start_date" value="{{ start_date }}" />
+        <span class="row-padding-right-small"></span>
+
+        <span class="row-padding-right-small">{{ antl.get('global.end_date') }}:</span>
+        <input type="text" data-type="date" id="end" name="end_date" value="{{ end_date }}" />
+         </td>
+        </tr>
+        <tr>
+        <td><label class="row-padding-right-medium">{{ antl.get('inventory_voucher.inventory') }}:</label></td>
+        <td>
+        <select class="droplist xlarge" name="inventory">
+          <option readonly selected value="">--Select--</option>
+            {% for x in stock %}
+            <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+            {% endfor %}
+        </select>
+        </td>
+        </tr>
+
+        <tr>
+        <td><label class="row-padding-right-small">{{ antl.get('inventory_voucher.item_name') }}</label></td>
+        <td>
+        <select class="droplist xlarge" id="item" name="item">
+            <option readonly selected value="">--Select--</option>
+        </select>
+        </td>
+        </tr>
+
+        <tr>
+        <td> <label class="row-padding-right-small">{{ antl.get('global.recorded') }}</label></td>
+        <td>
+        <input type="checkbox" data-md-icheck="" checked name="active" />
+        </td>
+        </tr>
+
+        <tr>
+        <td></td>
+        <td>
+            {% if type == 1 or type == 2 %}
+            <input type="radio" data-md-icheck=""  name="price" id="purchase_price" value="purchase_amount" checked>
+            <label for="purchase_amount">{{ antl.get('inventory_voucher.purchase_price') }}</label>
+            <input type="radio" data-md-icheck=""  name="price" value="amount" id="price">
+            <label for="price">{{ antl.get('inventory_voucher.price') }}</label>
+            {% else %}
+            <input type="radio" data-md-icheck=""  name="price" value="amount" id="price" checked>
+            <label for="price">{{ antl.get('inventory_voucher.price') }}</label>
+            {% endif %}
+        </td>
+        </tr>
+
+    </table>
+
+        <div class="row-padding-bottom-small"></div>
+        <div>
+            <a href="javascript:;" class="k-button uk-alert-success row-padding-bottom-small get_report" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_note</i>{{ antl.get('global.report') }}</a>
+            <a href="javascript:;" class="k-button k-primary row-padding-bottom-small get_data" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_available</i>{{ antl.get('global.get_data') }}</a>
+            <a href="javascript:;" class="k-button uk-alert-warning btn-hide" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">exit_to_app</i>{{ antl.get('global.hidden_condition') }}</a>
+        </div>
+
+    </div>
+    <div class="uk-width-medium-1-4">
+
+    </div>
+
+</div>
+    <div class="uk-grid">
+        <div class="uk-width-medium-4-4">
+            <div id="grid" style="display:none"></div>
+        </div>
+    </div>
+<div class="uk-grid">
+    <div class="uk-width-medium-4-4">
+        <div id="report" style="display:none">
+            <div class="row">
+                <h3 id="title" class="text-center"></h3>
+                <table id="table"
+                       data-toggle="table"
+                       data-show-export="true"
+                       data-pagination="true"
+                       data-click-to-select="true"
+                       data-toolbar="#toolbar"
+                       data-search="true"
+                       data-show-footer="true"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-show-print="true"
+                       data-show-columns="true">
+                    <thead>
+                        <tr>
+                            <th data-formatter="runningFormatter" rowspan="2" colspan="1">#</th>
+                            <th data-field="date_voucher" data-formatter="DateFormatter" data-sortable="true" data-rowspan="2" data-colspan="1">{{ antl.get('inventory_voucher.date_voucher') }}</th>
+                            <th data-field="voucher" data-sortable="true" data-rowspan="2" data-colspan="1">{{ antl.get('inventory_voucher.voucher') }}</th>
+                            <th data-field="description" data-sortable="true" data-footer-formatter="totalTextFormatter" data-rowspan="2" data-colspan="1">{{ antl.get('inventory_voucher.description') }}</th>
+                            <th data-field="price" data-sortable="true" data-formatter="priceFomatter" data-rowspan="2" data-colspan="1">{{ antl.get('inventory_voucher.price') }}</th>
+                            <th data-rowspan="1" data-align="center" data-colspan="2">{{ antl.get('report_inventory.receipt_warehouse') }}</th>
+                            <th data-rowspan="1" data-align="center" data-colspan="2">{{ antl.get('report_inventory.issue_warehouse') }}</th>
+                            <th data-rowspan="1" data-align="center" data-colspan="2">{{ antl.get('report_inventory.closing_balance') }}</th>
+                        </tr>
+                        <tr>
+                            <th data-field="quantity_receipt" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.quantity') }}</th>
+                            <th data-field="amount_receipt" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.amount') }}</th>
+                            <th data-field="quantity_issue" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.quantity') }}</th>
+                            <th data-field="amount_issue" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.amount') }}</th>
+                            <th data-field="quantity_balance" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.quantity') }}</th>
+                            <th data-field="amount_balance" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.amount') }}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts_add %}
+    <script>
+        jQuery(document).ready(function () {
+          Ermis.per = JSON.parse('{{ permission | safe }}');
+          Ermis.link = "{{ key }}";
+          Ermis.room = "{{ room }}";
+          Ermis.item = {{ item | json | safe }};
+            Ermis.field = {
+                quantity_receipt :   {type:"number"},
+                quantity_issue:    {type:"number" },
+                quantity_balance:    {type:"number" },
+                price:    {type:"number" },
+                amount_receipt :   {type:"number"},
+                amount_issue:    {type:"number" },
+                amount_balance:    {type:"number" },
+            };
+              Ermis.columns    =   [{ "field" : "id",hidden: true },
+                                  { "field" : "date_voucher","title" :"{{ antl.get('inventory_voucher.date_voucher') }}" ,"width" : "150px", type:"date" ,template: '#= FormatDate(date_voucher) #' },
+                                  { "field" : "voucher","title" :"{{ antl.get('inventory_voucher.voucher') }}" ,"width" : "150px",aggregates: ['count'], footerTemplate: "<p>Total Count: #=count#</p>"},
+                                  { "field" : "description","title" :"{{ antl.get('inventory_voucher.description') }}" ,"width" : "250px" },
+                                  { "field" : "price","title" :"{{ antl.get('inventory_voucher.price') }}" ,"width" : "150px", format: "{0:n0}" ,decimals: 0},
+                                  {"title" : "{{ antl.get('report_inventory.receipt_warehouse') }}",  columns: [ {"field":"quantity_receipt","title": "{{ antl.get('inventory_voucher.quantity') }}","width": "150px",aggregates: ['sum'], format: "{0:n0}" ,decimals: 0 ,footerTemplate: "#=FormatNumber(sum)#" },
+                                  {"field":"amount_receipt","title": "{{ antl.get('inventory_voucher.amount') }}","width": "150px",aggregates: ['sum'], format: "{0:n0}" ,decimals: 0 ,footerTemplate: "#=FormatNumber(sum)#"  }],"width" : "300px"},
+                                  {"title" : "{{ antl.get('report_inventory.issue_warehouse') }}",  columns: [ {"field":"quantity_issue","title": "{{ antl.get('inventory_voucher.quantity') }}","width": "150px",aggregates: ['sum'], format: "{0:n0}" ,decimals: 0 ,footerTemplate: "#=FormatNumber(sum)#" },
+                                  {"field":"amount_issue","title": "{{ antl.get('inventory_voucher.amount') }}","width": "150px",aggregates: ['sum'], format: "{0:n0}" ,decimals: 0 ,footerTemplate: "#=FormatNumber(sum)#"  }],"width" : "300px"},
+                                  {"title" :"{{ antl.get('report_inventory.closing_balance') }}" ,"width" : "300px",  columns: [ {"field":"quantity_balance","title": "{{ antl.get('inventory_voucher.quantity') }}", format: "{0:n0}" ,decimals: 0,"width": "150px" },
+                                  {"field":"amount_balance","title": "{{ antl.get('inventory_voucher.amount') }}", format: "{0:n0}" ,decimals: 0,"width": "150px" }]}];
+            Ermis.aggregate = [ { field: "voucher", aggregate: "count" },
+                                { field: "quantity_receipt", aggregate: "sum" },
+                                { field: "quantity_issue", aggregate: "sum" },
+                                { field: "amount_receipt", aggregate: "sum" },
+                                { field: "amount_issue", aggregate: "sum" }];
+        });
+    </script>
+    {% endblock %}

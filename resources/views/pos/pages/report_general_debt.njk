@@ -1,0 +1,133 @@
+{% extends 'manage.layouts.ermisform8' %}
+{% block css_add %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+{% endblock %}
+
+{% block content_add %}
+    <div class="uk-grid" id="form-search">
+        <div class="uk-width-medium-1-4">
+
+        </div>
+        <div class="width-large">
+        <table>
+            <tr>
+            <td><span class="row-padding-right-small">{{ antl.get('global.start_date') }} :</span></td>
+            <td>
+            <input type="text" data-type="date" id="start" name="start_date" value="{{ start_date }}" />
+            <span class="row-padding-right-small"></span>
+
+            <span class="row-padding-right-small">{{ antl.get('global.end_date') }}:</span>
+            <input type="text" data-type="date" id="end" name="end_date" value="{{ end_date }}" />
+             </td>
+            </tr>
+
+            <tr>
+            <td><label class="row-padding-right-small">{{ antl.get('report_detail_debt.customer') }}</label></td>
+            <td>
+            <select class="droplist xlarge" name="subject">
+              <option readonly selected value="">--Select--</option>
+                {% for x in subject %}
+                <option value="{{ x.id }}">{{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+                {% endfor %}
+            </select>
+            </td>
+            </tr>
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('global.recorded') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="active" />
+            </td>
+            </tr>
+
+        </table>
+
+            <div class="row-padding-bottom-small"></div>
+            <div>
+                <a href="javascript:;" class="k-button uk-alert-success row-padding-bottom-small get_report" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_note</i>{{ antl.get('global.report') }}</a>
+                <a href="javascript:;" class="k-button k-primary row-padding-bottom-small get_data" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_available</i>{{ antl.get('global.get_data') }}</a>
+                <a href="javascript:;" class="k-button uk-alert-warning btn-hide" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">exit_to_app</i>{{ antl.get('global.hidden_condition') }}</a>
+            </div>
+
+        </div>
+        <div class="uk-width-medium-1-4">
+
+        </div>
+
+    </div>
+    <div class="uk-grid">
+        <div class="uk-width-medium-4-4">
+            <div id="grid" style="display:none"></div>
+        </div>
+    </div>
+<div class="uk-grid">
+    <div class="uk-width-medium-4-4">
+        <div id="report" style="display:none">
+            <div class="row">
+                <h3 id="title" class="text-center"></h3>
+                <table id="table"
+                       data-toggle="table"
+                       data-show-export="true"
+                       data-pagination="true"
+                       data-click-to-select="true"
+                       data-toolbar="#toolbar"
+                       data-search="true"
+                       data-show-footer="true"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-show-print="true"
+                       data-show-columns="true">
+                    <thead>
+                    <tr>
+                        <th data-formatter="runningFormatter" rowspan="2" colspan="1">#</th>
+                        <th data-field="code" data-rowspan="2" data-colspan="1">{{ antl.get('customer.code') }}</th>
+                        <th data-field="name" data-footer-formatter="totalTextFormatter" data-sortable="true" data-rowspan="2" data-colspan="1">{{ antl.get('customer.name') }}</th>
+                        <th data-rowspan="1" data-align="center" data-colspan="1">{{ antl.get('report_inventory.opening_balance') }}</th>
+                        <th data-rowspan="1" data-align="center" data-colspan="1">{{ antl.get('report_detail_debt.debt') }}</th>
+                        <th data-rowspan="1" data-align="center" data-colspan="1">{{ antl.get('report_detail_debt.credit') }}</th>
+                        <th data-rowspan="1" data-align="center" data-colspan="1">{{ antl.get('report_detail_debt.closing') }}</th>
+                    </tr>
+                    <tr>
+                        <th data-field="amount_opening" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.amount') }}</th>
+                        <th data-field="amount_receipt" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.amount') }}</th>
+                        <th data-field="amount_issue" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.amount') }}</th>
+                        <th data-field="amount_closing" data-footer-formatter="sumFormatter" data-formatter="priceFomatter" data-sortable="true" data-filter-control="input" data-align="right">{{ antl.get('inventory_voucher.amount') }}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block scripts_add %}
+    <script>
+        jQuery(document).ready(function () {
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+            Ermis.field = {
+                quantity_opening :   {type:"number"},
+                quantity_receipt :   {type:"number"},
+                quantity_issue:    {type:"number" },
+                quantity_closing:    {type:"number" },
+            };
+            Ermis.columns    =   [ { "field" : "code","title" :"{{ antl.get('customer.code') }}" ,"width" : "150px"},
+                                  { "field" : "name","title" :"{{ antl.get('customer.name') }}" ,"width" : "150px",aggregates: ['count'], footerTemplate: "<p>Total Count: #=count#</p>"},
+                                   {"title" :"{{ antl.get('report_inventory.opening_balance') }}",
+                                    columns: [ {"field":"amount_opening","title": "{{ antl.get('inventory_voucher.amount') }}","width": "150px",aggregates: ['sum'], format: "{0:n0}" ,decimals: 0 ,footerTemplate: "#=FormatNumber(sum)#" }], "width" : "300px"},
+                                    {"title" :"{{ antl.get('report_detail_debt.debt') }}",
+                                     columns: [ {"field":"amount_receipt","title": "{{ antl.get('inventory_voucher.amount') }}","width": "150px",aggregates: ['sum'], format: "{0:n0}" ,decimals: 0 ,footerTemplate: "#=FormatNumber(sum)#" }],"width" : "300px"},
+                                    {"title" : "{{ antl.get('report_detail_debt.credit') }}",
+                                    columns: [ {"field":"amount_issue","title": "{{ antl.get('inventory_voucher.amount') }}","width": "150px",aggregates: ['sum'], format: "{0:n0}" ,decimals: 0 ,footerTemplate: "#=FormatNumber(sum)#" }],"width" : "300px"},
+                                    {"title" :"{{ antl.get('report_detail_debt.closing') }}",
+                                    columns: [ {"field":"amount_closing","title": "{{ antl.get('inventory_voucher.amount') }}","width": "150px",aggregates: ['sum'], format: "{0:n0}" ,decimals: 0 ,footerTemplate: "#=FormatNumber(sum)#" }],"width" : "300px"},
+            ];
+            Ermis.aggregate = [ { field: "name", aggregate: "count" },
+                             { field: "amount_opening", aggregate: "sum" },
+                             { field: "amount_receipt", aggregate: "sum" },
+                             { field: "amount_issue", aggregate: "sum" },
+                             { field: "amount_closing", aggregate: "sum" }];
+        });
+    </script>
+    {% endblock %}

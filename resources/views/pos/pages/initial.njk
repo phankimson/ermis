@@ -1,0 +1,144 @@
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('css/addon/backend/permission.css') }}">
+    <link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+{% endblock %}
+{% block content %}
+<div id="import"></div>
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+            <a class="save"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.save') }}">save</i></a>
+            <a class="cancel"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.cancel') }}">cancel</i></a>
+            <a class="import"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.import') }}">archive</i></a>
+        </div>
+        <div class="md-card-toolbar-actions">
+        <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+        <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+            <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expanded="false">
+                <i class="md-icon material-icons"></i>
+                <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                    <ul class="uk-nav">
+                        <li><a href="javascript:;" class="save">{{ antl.get('action.save') }}</a></li>
+                        <li><a href="javascript:;" class="cancel">{{ antl.get('action.cancel') }}</a></li>
+                        <li><a href="javascript:;" class="import">{{ antl.get('action.import') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-card-content">
+        <div id="notification"></div>
+        <ul id="tabs-strip" class="uk-tab" data-uk-tab="{connect:'#tabs_anim', animation:'slide-left', swiping: false}">
+            <!-- ACCOUNT -->
+            <!--<li data-type="5"><a href="javascript:;">@initialbalance.account_init_balance</a></li>
+            <li data-type="4"><a href="javascript:;">@initialbalance.account_bank_init_balance</a></li>-->
+            <!-- CUSTOMER -->
+            <li data-type="3"><a href="javascript:;">{{ antl.get('initial.debt_customer_init_balance') }}</a></li>
+            <!-- SUPLIER -->
+            <li data-type="2"><a href="javascript:;">{{ antl.get('initial.debt_suplier_init_balance') }}</a></li>
+            <!-- GOODS -->
+            <li  class="uk-active" data-type="1"><a href="javascript:;">{{ antl.get('initial.stock_init_balance') }}</a></li>
+        </ul>
+
+        <ul id="tabs_anim" class="uk-switcher uk-margin">
+            <!--<li>
+               <div id="grid"></div>
+            </li>
+            <li>
+               <div id="grid1"></div>
+            </li>-->
+            <li>
+               <div id="grid2"></div>
+            </li>
+            <li>
+               <div id="grid3"></div>
+            </li>
+            <li>
+                <div class="uk-margin-bottom uk-margin-left-30"><label>{{ antl.get('inventory.title') }} </label>
+                <select class="droplist large" data-position="6" data-hidden="true" name="stock">
+                {% for x in stock %}
+                {% if x.id == inventory.id %}
+                    <option value="{{ x.id }}" selected>{{ x.code }} - {{ shortif( lang == 'vn' , x.name ,x.name_en )}}</option>
+                {% else %}
+                    <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name ,x.name_en )}}</option>
+                {% endif %}
+                {% endfor %}
+            </select></div>
+               <div id="grid4"></div>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    jQuery(document).ready(function () {
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+        Ermis.data2 = {{ data2 | json | safe }};
+        Ermis.columns2 = [{"field" :"id", hidden : true},
+        { "field" : "code","title" : "{{ antl.get('customer.code') }}" ,"width" : "120px"},
+         { "field" : "name","title" : "{{ antl.get('customer.name') }}" ,"width" : "200px"},
+         { "field" : "address","title" : "{{ antl.get('customer.address') }}" ,"width" : "150px"},
+         { "field" : "tax_code","title" : "{{ antl.get('customer.tax_code') }}" ,"width" : "150px"},
+         { "field" : "debt_account","title" : "{{ antl.get('initial.debt_account') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px" },
+         { "field" : "credit_account","title" : "{{ antl.get('initial.credit_account') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px"},]
+        Ermis.field2 = {
+            id : {field :"id" , editable : false },
+            code : {field :"code",editable : false},
+            name : {field :"name",editable : false},
+            address : { field : "address" ,editable : false},
+            tax_code : {field : "tax_code" , editable : false },
+            debt_account : {field : "debt_account" , type:"number" , validation: { min: 0}},
+            credit_account : {field : "credit_account" , type:"number" , validation: { min: 0}},
+        };
+        Ermis.data3 = {{ data3 | json | safe }};
+        Ermis.columns3 = [{"field" :"id", hidden : true},
+        { "field" : "code","title" : "{{ antl.get('customer.code') }}" ,"width" : "120px"},
+        { "field" : "name","title" : "{{ antl.get('customer.name') }}" ,"width" : "200px"},
+        { "field" : "address","title" : "{{ antl.get('customer.address') }}" ,"width" : "150px"},
+        { "field" : "tax_code","title" : "{{ antl.get('customer.tax_code') }}" ,"width" : "150px"},
+        { "field" : "debt_account","title" : "{{ antl.get('initial.debt_account') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px" },
+        { "field" : "credit_account","title" : "{{ antl.get('initial.credit_account') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px"},]
+        Ermis.field3 = {
+            id : {field :"id" , editable : false },
+            code : {field :"code",editable : false},
+            name : {field :"name",editable : false},
+            address : { field : "address" ,editable : false},
+            tax_code : {field : "tax_code" , editable : false },
+            debt_account : {field : "debt_account" , type:"number" , validation: { min: 0}},
+            credit_account : {field : "credit_account" , type:"number" , validation: { min: 0}},
+        };
+        Ermis.data4 = {{ data4 | json | safe }};
+        Ermis.brands = [
+        { id: 1, code: "{{ antl.get('marial_goods.material_goods') }}" },
+        { id: 2, code: "{{ antl.get('marial_goods.finished') }}" }
+    ];
+        Ermis.columns4 = [{"field" :"id", hidden : true},
+         { "field" : "barcode","title" : "{{ antl.get('marial_goods.barcode') }}" ,"width" : "150px"},
+         { "field" : "name","title" : "{{ antl.get('global.name') }}"  ,"width" : "200px"},
+         { "field" : "nature","title" : "{{ antl.get('marial_goods.nature') }}",template : "#=getItemName(nature,'Ermis.brands','nature')#","width" : "150px"},
+         { "field" : "unit","title" : "{{ antl.get('marial_goods.unit') }}" ,"width" : "150px"},
+         { "field" : "size","title" : "{{ antl.get('marial_goods.size') }}" ,"width" : "150px"},
+         { "field" : "quantity","title" : "{{ antl.get('inventory_voucher.quantity') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px" },
+         { "field" : "amount","title" : "{{ antl.get('inventory_voucher.amount') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px"},]
+        Ermis.field4 = {
+            id : {field :"id" , editable : false },
+            barcode : {field :"barcode",editable : false},
+            name : {field :"name",editable : false},
+            nature : { field : "nature"  , editable : false},
+            unit : {field : "unit" , editable : false },
+            size : {field : "size" , editable : false },
+            quantity : {field : "quantity" , type:"number" , validation: { min: 0}},
+            amount : {field : "amount" , type:"number" , validation: { min: 0}},
+        };
+    });
+</script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/initbalance.js') }}"></script>
+{% endblock %}

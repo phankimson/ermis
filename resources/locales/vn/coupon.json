@@ -1,0 +1,11 @@
+{
+    "title": "Thẻ quà tặng",
+    "value" : "Giá trị",
+    "discount" : "Giảm giá",
+    "discount_percent" : "Giảm giá %",
+    "times" : "Số lần giảm",
+    "number" : "Số lần đã giảm",
+    "cumulative" : "Tích lũy",
+    "none" : "Không",
+    "code" : "Mã thẻ"
+}

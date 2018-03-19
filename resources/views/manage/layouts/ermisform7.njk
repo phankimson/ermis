@@ -1,0 +1,110 @@
+{% extends 'manage.layouts.default' %}
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+  <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.common-material.min.css') }}" />
+  <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.min.css') }}" />
+  <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.mobile.min.css') }}" />
+  <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+  <link rel="stylesheet" href="{{ url('css/addwidthdroplist.css') }}" />
+  {% block css_add %}{% endblock %}
+{% endblock %}
+{% block content %}
+<div id="print"></div>
+<div id="form-window-filter" style="display:none">
+    {% block content_filter %}{% endblock %}
+</div>
+<div id="form-window-reference" style="display:none">
+    {% block content_reference %}{% endblock %}
+</div>
+<div id="form-window-advance-employee" style="display:none">
+    {% block content_advance_employee %}{% endblock %}
+</div>
+<div id="form-window-advance-teacher" style="display:none">
+      {% block content_advance_teacher %}{% endblock %}
+</div>
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+              {{ title }}
+        </div>
+        <div class="md-card-toolbar-actions">
+        <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+        <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+            <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expanded="false">
+                <i class="md-icon material-icons"></i>
+                <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                    <ul class="uk-nav">
+                        <li><a class="add" href="javascript:;">{{ antl.get('action.add') }}</a></li>
+                        <li><a class="edit" href="javascript:;">{{ antl.get('action.edit') }}</a></li>
+                        <li><a class="save" href="javascript:;">{{ antl.get('action.save') }}</a></li>
+                        <li><a class="cancel" href="javascript:;">{{ antl.get('action.cancel') }}</a></li>
+                        <li><a class="delete" href="javascript:;">{{ antl.get('action.delete') }}</a></li>
+                        <li><a class="back" href="javascript:;">{{ antl.get('action.back') }}</a></li>
+                        <li><a class="forward" href="javascript:;">{{ antl.get('action.forward') }}</a></li>
+                        <li><a class="print" href="javascript:;">{{ antl.get('action.print') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-card-content">
+            <div id="form-action">
+                {% block content_add %}{% endblock %}
+            </div>
+        </div>
+        <div class="md-card-content">
+                {% block tabs %}{% endblock %}
+        </div>
+    </div>
+<ul id="context-menu" style="display:none">
+    <li>
+        <a class="add"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.add') }} (Alt+A)">note_add</i>{{ antl.get('action.add') }}</a>
+    </li>
+    <li>
+        <a class="edit"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.edit') }} (Alt+E)">edit</i>{{ antl.get('action.edit') }}</a>
+    </li>
+    <li>
+        <a class="save"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.save') }} (Alt+S)">save</i>{{ antl.get('action.save') }}</a>
+    </li>
+    <li>
+        <a class="cancel"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.cancel') }} (Alt+C)">cancel</i>{{ antl.get('action.cancel') }}</a>
+    </li>
+    <li>
+        <a class="delete"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.delete') }} (Alt+E)">delete</i>{{ antl.get('action.delete') }}</a>
+    </li>
+    <li>
+        <a class="back"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.back') }} (Alt+>)">arrow_back</i>{{ antl.get('action.back') }}</a>
+    </li>
+    <li>
+        <a class="forward"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.forward') }} (Alt+>)">arrow_forward</i>{{ antl.get('action.forward') }}</a>
+    </li>
+    <li>
+        <a class="print"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.print') }} (Alt+P)">local_printshop</i>{{ antl.get('action.print') }}</a>
+    </li>
+</ul>
+
+<ul id="context-menu-grid" style="display:none">
+    <li>
+        <a class="new_row"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.new_row') }} (Enter)">playlist_add</i>{{ antl.get('action.new_row') }}</a>
+    </li>
+    <li>
+        <a class="close_row"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.close_row') }} (Esc)">playlist_play</i>{{ antl.get('action.close_row') }}</a>
+    </li>
+    <li>
+        <a class="remove_row"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.remove_row') }}">line_style</i>{{ antl.get('action.remove_row') }}</a>
+    </li>
+    <li>
+        <a class="remove_all_row"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.remove_all_row') }} (Alt+R)">clear_all</i>{{ antl.get('action.remove_all_row') }}</a>
+    </li>
+</ul>
+{% endblock %}
+{% block scripts %}
+    {% block scripts_add %}{% endblock %}
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/jszip.min.js') }}"></script>
+    <script src="{{ url('library/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url('library/jquery.print/jQuery.print.js') }}"></script>
+    <script src="{{ url('scripts/shortcuts.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/ermis-form-6.js') }}"></script>
+      {% block scripts_end %}{% endblock %}
+{% endblock %}

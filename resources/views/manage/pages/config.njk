@@ -1,0 +1,311 @@
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('css/addon/backend/permission.css') }}">
+    <link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+{% endblock %}
+{% block content %}
+<div id="import"></div>
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+            <a class="save"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.save') }}">save</i></a>
+            <a class="cancel"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.cancel') }}">cancel</i></a>
+            <!-- <a class="import"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.import') }}">archive</i></a>-->
+        </div>
+        <div class="md-card-toolbar-actions">
+        <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+        <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+            <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expored="false">
+                <i class="md-icon material-icons"></i>
+                <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                    <ul class="uk-nav">
+                        <li><a href="javascript:;" class="save">{{ antl.get('action.save') }}</a></li>
+                        <li><a href="javascript:;" class="cancel">{{ antl.get('action.cancel') }}</a></li>
+                        <li><a href="javascript:;" class="import">{{ antl.get('action.import') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-card-content">
+        <div id="notification"></div>
+        <ul id="tabs-strip" class="uk-tab" data-uk-tab="{connect:'#tabs_anim', animation:'slide-left', swiping: false}">
+            <li data-type="6"><a href="javascript:;">{{ antl.get('option.tab6') }}</a></li>
+            <li data-type="5"><a href="javascript:;">{{ antl.get('option.tab5') }}</a></li>
+            <li data-type="4"><a href="javascript:;">{{ antl.get('option.tab4') }}</a></li>
+            <li data-type="3"><a href="javascript:;">{{ antl.get('option.tab3') }}</a></li>
+            <li data-type="2"><a href="javascript:;">{{ antl.get('option.tab2') }}</a></li>
+            <li  class="uk-active" data-type="1"><a href="javascript:;">{{ antl.get('option.tab1') }}</a></li>
+        </ul>
+
+        <ul id="tabs_anim" class="uk-switcher uk-margin">
+        <li>
+        <table>
+        {% for u in data %}
+        {% if u.type == 6 %}
+        <tr>
+          <td class="row-label"><label>{{u.title}} 1</label></td>
+          <td><input type="text" class="k-textbox large" value="{{u.value}}" name="{{u.code}}-1" /></td>
+        </tr>
+        {% if u.value1 != "" and u.value1 != 0 %}
+        <tr>
+          <td class="row-label"><label>{{u.title}} 2</label></td>
+          <td><input type="text" class="k-textbox large" value="{{u.value1}}" name="{{u.code}}-2" /></td>
+        </tr>
+        {% endif %}
+        {% if u.value2 != "" and u.value2 != 0 %}
+        <tr>
+          <td class="row-label"><label>{{u.title}} 3</label></td>
+          <td><input type="text" class="k-textbox large" value="{{u.value2}}" name="{{u.code}}-3" /></td>
+        </tr>
+        {% endif %}
+        {% if u.value3 != "" and u.value3 != 0 %}
+        <tr>
+          <td class="row-label"><label>{{u.title}} 4</label></td>
+          <td><input type="text" class="k-textbox large" value="{{u.value3}}" name="{{u.code}}-4" /></td>
+        </tr>
+        {% endif %}
+        {% if u.value4 != "" and u.value4 != 0 %}
+        <tr>
+          <td class="row-label"><label>{{u.title}} 5</label></td>
+          <td><input type="text" class="k-textbox large" value="{{u.value4}}" name="{{u.code}}-5" /></td>
+        </tr>
+        {% endif %}
+        {% if u.value5 != "" and u.value5 != 0 %}
+        <tr>
+          <td class="row-label"><label>{{u.title}} 6</label></td>
+          <td><input type="text" class="k-textbox large" value="{{u.value5}}" name="{{u.code}}-6" /></td>
+        </tr>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        </table>
+        </li>
+        <li>
+          <table>
+          {% for u in data %}
+          {% if u.type == 5 %}
+          <tr>
+            <td class="row-label"><label>{{u.title}} 1</label></td>
+            <td><input type="text" class="k-textbox large" value="{{u.value}}" name="{{u.code}}-1" /></td>
+          </tr>
+          {% if u.value1 != "" and u.value1 != 0 %}
+          <tr>
+            <td class="row-label"><label>{{u.title}} 2</label></td>
+            <td><input type="text" class="k-textbox large" value="{{u.value1}}" name="{{u.code}}-2" /></td>
+          </tr>
+          {% endif %}
+          {% if u.value2 != "" and u.value2 != 0 %}
+          <tr>
+            <td class="row-label"><label>{{u.title}} 3</label></td>
+            <td><input type="text" class="k-textbox large" value="{{u.value2}}" name="{{u.code}}-3" /></td>
+          </tr>
+          {% endif %}
+          {% if u.value3 != "" and u.value3 != 0 %}
+          <tr>
+            <td class="row-label"><label>{{u.title}} 4</label></td>
+            <td><input type="text" class="k-textbox large" value="{{u.value3}}" name="{{u.code}}-4" /></td>
+          </tr>
+          {% endif %}
+          {% if u.value4 != "" and u.value4 != 0 %}
+          <tr>
+            <td class="row-label"><label>{{u.title}} 5</label></td>
+            <td><input type="text" class="k-textbox large" value="{{u.value4}}" name="{{u.code}}-5" /></td>
+          </tr>
+          {% endif %}
+          {% if u.value5 != "" and u.value5 != 0 %}
+          <tr>
+            <td class="row-label"><label>{{u.title}} 6</label></td>
+            <td><input type="text" class="k-textbox large" value="{{u.value5}}" name="{{u.code}}-6" /></td>
+          </tr>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+          </table>
+        </li>
+            <li>
+              <table>
+              {% for u in data %}
+              {% if u.type == 4 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 1</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value}}" name="{{u.code}}-1" /></td>
+              </tr>
+              {% if u.value1 != "" and u.value1 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 2</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value1}}" name="{{u.code}}-2" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value2 != "" and u.value2 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 3</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value2}}" name="{{u.code}}-3" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value3 != "" and u.value3 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 4</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value3}}" name="{{u.code}}-4" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value4 != "" and u.value4 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 5</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value4}}" name="{{u.code}}-5" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value5 != "" and u.value5 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 6</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value5}}" name="{{u.code}}-6" /></td>
+              </tr>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+              </table>
+            </li>
+            <li>
+              <table>
+              {% for u in data %}
+              {% if u.type == 3 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 1</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value}}" name="{{u.code}}-1" /></td>
+              </tr>
+              {% if u.value1 != "" and u.value1 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 2</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value1}}" name="{{u.code}}-2" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value2 != "" and u.value2 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 3</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value2}}" name="{{u.code}}-3" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value3 != "" and u.value3 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 4</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value3}}" name="{{u.code}}-4" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value4 != "" and u.value4 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 5</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value4}}" name="{{u.code}}-5" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value5 != "" and u.value5 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 6</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value5}}" name="{{u.code}}-6" /></td>
+              </tr>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+              </table>
+            </li>
+            <li>
+              <table>
+              {% for u in data %}
+              {% if u.type == 2 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 1</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value}}" name="{{u.code}}-1" /></td>
+              </tr>
+              {% if u.value1 != "" and u.value1 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 2</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value1}}" name="{{u.code}}-2" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value2 != "" and u.value2 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 3</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value2}}" name="{{u.code}}-3" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value3 != "" and u.value3 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 4</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value3}}" name="{{u.code}}-4" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value4 != "" and u.value4 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 5</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value4}}" name="{{u.code}}-5" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value5 != "" and u.value5 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 6</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value5}}" name="{{u.code}}-6" /></td>
+              </tr>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+              </table>
+            </li>
+            <li>
+              <table>
+              {% for u in data %}
+              {% if u.type == 1 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 1</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value}}" name="{{u.code}}-1" /></td>
+              </tr>
+              {% if u.value1 != "" and u.value1 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 2</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value1}}" name="{{u.code}}-2" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value2 != "" and u.value2 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 3</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value2}}" name="{{u.code}}-3" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value3 != "" and u.value3 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 4</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value3}}" name="{{u.code}}-4" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value4 != "" and u.value4 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 5</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value4}}" name="{{u.code}}-5" /></td>
+              </tr>
+              {% endif %}
+              {% if u.value5 != "" and u.value5 != 0 %}
+              <tr>
+                <td class="row-label"><label>{{u.title}} 6</label></td>
+                <td><input type="text" class="k-textbox large" value="{{u.value5}}" name="{{u.code}}-6" /></td>
+              </tr>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+              </table>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    jQuery(document).ready(function () {
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+</script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/config.js') }}"></script>
+{% endblock %}

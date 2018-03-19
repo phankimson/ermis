@@ -1,0 +1,74 @@
+
+{% extends 'manage.layouts.ermisform1-big' %}
+{% block content_add %}
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('marial_goods.barcode') }} *</label></td>
+            <td>
+              <input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('marial_goods.barcode') }}" data-width="200px" data-null="true" data-type="string" name="barcode">
+            </td>
+        </tr>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.name') }} </label></td>
+            <td>
+              <input type="text" class="k-textbox medium" data-position="1" data-title="{{ antl.get('global.name') }}" data-width="200px" data-null="true" data-type="string" name="name">
+            </td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('marial_goods.material_goods') }} *</label></td>
+            <td>
+                <select class="droplist large" data-title="{{ antl.get('marial_goods.material_goods') }}" data-position="6" data-template="#= FormatDropList(goods,'goods') #" data-width="200px" data-type="number" name="goods">
+                    <option readonly selected value="0">--Select--</option>
+                    {% for x in goods %}
+                    <option value="{{ x.id }}">{{ x.barcode }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('marial_goods.size') }} * </label></td>
+            <td>
+                <select class="droplist large" data-title="{{ antl.get('marial_goods.size') }}" data-position="6" data-template="#= FormatDropList(size,'size') #" data-width="200px" data-type="number" name="size">
+                    <option readonly selected value="0">--Select--</option>
+                    {% for x in size %}
+                    <option value="{{ x.id }}">{{ x.code }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('marial_goods.price') }} *</label></td>
+            <td>    <input type="text" class="number-price medium" data-null="true" data-position="5" data-title="{{ antl.get('marial_goods.price') }}" data-width="200px" data-type="number" data-template="#= FormatNumber(purchase_price) #" name="price" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('marial_goods.purchase_price') }} *</label></td>
+            <td>    <input type="text" class="number-price medium" data-null="true" data-position="5" data-title="{{ antl.get('marial_goods.purchase_price') }}" data-width="200px" data-type="number" data-template="#= FormatNumber(purchase_price) #" name="purchase_price" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('marial_goods.maximum_stock') }}</label></td>
+            <td>  <input type="number" class="k-textbox large" data-position="5" data-title="{{ antl.get('marial_goods.maximum_stock') }}" data-width="200px" data-type="number" name="maximum_stock" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('marial_goods.minimum_stock') }}</label></td>
+            <td>  <input type="number" class="k-textbox large" data-position="5" data-title="{{ antl.get('marial_goods.minimum_stock') }}" data-width="200px" data-type="number" name="minimum_stock" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('action.active') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="8" data-value="1" data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+        </tr>
+    </table>
+    {% endblock %}
+    {% block scripts_add %}
+        <script>
+        jQuery(document).ready(function () {
+            Ermis.data = {{ data | json | safe }};
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.flag = 1;
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+        });
+        </script>
+    {% endblock %}
+    {% block scripts_end %}
+         <script src="{{ url('scripts/addon/backend/ermis-add-3.js') }}"></script>
+    {% endblock %}

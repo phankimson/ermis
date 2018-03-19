@@ -1,0 +1,20 @@
+{
+  "sales_invoice" : "Hóa đơn bán hàng",
+  "product" : "Sản phẩm",
+  "add" :"Thêm",
+  "reduce" : "Giảm",
+  "carts" : "Giỏ",
+  "payment" : "Thanh toán",
+  "can_not_skip" : "Còn 1 phiếu không thể bỏ qua",
+  "payment_method" : "Hình thức thanh toán",
+  "refund" : "Trả tiền thừa",
+  "exchange" : "Loại tiền đổi",
+  "rate" : "Tỷ giá",
+  "total_exchange" : "Tổng thành tiền quy đổi",
+  "sell_daily" : "Bán hàng ngày ",
+  "quantity_return" : "SL nhập đổi",
+  "shift" : "Ca làm việc",
+  "total_discount" : "TC giảm giá",
+  "total_payment" : "TC thanh toán",
+  "coupon" : "Giá trị thẻ"
+}

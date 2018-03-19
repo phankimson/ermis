@@ -1,0 +1,40 @@
+
+{% extends 'manage.layouts.ermisform2' %}
+{% block content_add %}
+    <div id="notification"></div>
+    <table>
+    <tr>
+        <td class="row-label"><label>{{ antl.get('exchange_rate.rate') }}</label></td>
+        <td><input type="text" class="number-price medium" data-null="true" data-position="1" data-title="{{ antl.get('exchange_rate.rate') }}" data-width="200px" data-type="number" data-template="#= FormatNumber(rate) #" name="rate" /></td>
+    </tr>
+    <tr>
+        <td><label>{{ antl.get('option.date') }}</label></td>
+        <td><input type="text" class="k-datepicker date" data-position="2" data-title="{{ antl.get('option.date') }}" data-value="now" data-width="200px" data-type="date" data-template="#= kendo.toString(kendo.parseDate(date, 'yyyy-MM-dd'), 'dd/MM/yyyy') #" name="date" /></td>
+    </tr>
+
+    <tr>
+        <td><label>{{ antl.get('action.active') }}</label></td>
+        <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="10" data-value="1"  data-title="{{ antl.get('action.active') }}" data-width="100px" data-type="boolean" data-template="#= FormatCheckBoxBoolean(active) #" name="active" /></td>
+    </tr>
+    </table>
+{% endblock %}
+{% block tabs %}
+<div id="tabstrip" style="display:none">
+    <ul>
+        <li data-search="1" class="k-state-active">USD</li>
+        <li data-search="2">EUR</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block scripts_add %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.data = {{ data | json | safe }};
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.flag = 1;
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% set moment = use('moment/moment') %}
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('css/addon/backend/permission.css') }}">
+    <link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+{% endblock %}
+{% block content %}
+<div id="import"></div>
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+            <a class="new"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.new_page') }}">insert_drive_file</i></a>
+            <a class="view"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.view') }}">remove_red_eye</i></a>
+            <a class="delete"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.delete') }}">clear</i></a>
+        </div>
+        <div class="md-card-toolbar-actions">
+        <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+        <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+            <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expanded="false">
+                <i class="md-icon material-icons"></i>
+                <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                    <ul class="uk-nav">
+                        <li><a href="javascript:;" class="new">{{ antl.get('action.new') }}</a></li>
+                        <li><a href="javascript:;" class="delete">{{ antl.get('action.delete') }}</a></li>
+                        <li><a href="javascript:;" class="view">{{ antl.get('action.view') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-card-content">
+        <div id="notification"></div>
+            <div id="grid"></div>
+        </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    jQuery(document).ready(function () {
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+        Ermis.data = {{ data | json | safe }};
+        Ermis.action = {"new":"check-goods","view":"check-goods"}
+        Ermis.columns = [{"field" :"id", hidden : true},
+         { "field" : "date","title" : "{{ antl.get('inventory_voucher.date_voucher') }}" ,template: "#=FormatDate(date)#","width" : "120px"},
+         { "field" : "voucher","title" : "{{ antl.get('inventory_voucher.voucher') }}" ,"width" : "150px"},
+         { "field" : "total_balance","title" : "{{ antl.get('check_goods.balance') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px",},
+         { "field" : "total_balance_amount","title" : "{{ antl.get('check_goods.amount') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px", template: "#=FormatNumber(total_balance_amount)#"},
+         { "field" : "total_check","title" : "{{ antl.get('check_goods.check') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px" },
+         { "field" : "total_check_amount","title" : "{{ antl.get('check_goods.amount') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px" , template: "#=FormatNumber(total_check_amount)#"},
+         { "field" : "total_difference","title" : "{{ antl.get('check_goods.difference') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px" },
+         { "field" : "total_difference_amount","title" : "{{ antl.get('check_goods.amount') }}",format: "{0:n0}" ,decimals: 0 ,"width" : "150px", template: "#=FormatNumber(total_difference_amount)#"},
+         ];
+    });
+</script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/check_goods_general.js') }}"></script>
+{% endblock %}

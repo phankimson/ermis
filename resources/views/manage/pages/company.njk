@@ -1,0 +1,187 @@
+{% extends 'manage.layouts.ermisform4' %}
+{% block content_add %}
+    <div class="uk-grid uk-margin-left-10 uk-grid-medium">
+        <ul class="uk-tab" data-uk-tab="{connect:'#tabs_anim', animation:'slide-left', swiping: false}">
+            <li class="uk-active"><a href="javascript:;">{{ antl.get('company.info') }}</a></li>
+            <li><a href="javascript:;">{{ antl.get('company.contact') }}</a></li>
+            <li><a href="javascript:;">{{ antl.get('company.statistics') }}</a></li>
+            <li><a href="javascript:;">{{ antl.get('global.expand') }}</a></li>
+        </ul>
+        <ul id="tabs_anim" class="uk-switcher uk-margin">
+            <li>
+                <table>
+                    <tr>
+                        <td><label>{{ antl.get('company.group') }}</label></td>
+                        <td class="row-height">
+                            <select class="droplist large" data-title="{{ antl.get('company.group') }}" data-position="1" data-template="#= FormatDropList(group,'group') #" data-hidden="true" data-width="200px" data-type="number" name="group">
+                                <option readonly selected value="0">--Select--</option>
+                                    {% for x in group %}
+                                    <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                                    {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.level') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="2" data-title="{{ antl.get('company.level') }}" data-hidden="true" data-width="200px" data-type="string" name="level" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.code') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="3" data-title="{{ antl.get('company.code') }}" data-width="200px" data-type="string" name="code" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.name') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="4" data-title="{{ antl.get('company.name') }}" data-width="200px" data-type="string" name="name" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.name_en') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="5" data-title="{{ antl.get('company.name_en') }}" data-width="200px" data-type="string" name="name_en" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.address') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="6" data-title="{{ antl.get('company.address') }}" data-width="200px" data-type="string" name="address" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.tax_code') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="7" data-title="{{ antl.get('company.tax_code') }}" data-width="200px" data-type="string" name="tax_code" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.phone') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="8" data-title="{{ antl.get('company.phone') }}" data-width="200px" data-type="string" name="phone" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.fax') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="8" data-title="{{ antl.get('company.fax') }}" data-width="200px" data-type="string" name="fax" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.email') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="8" data-title="{{ antl.get('company.email') }}" data-width="200px" data-type="string" name="email" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.website') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="8" data-title="{{ antl.get('company.website') }}" data-width="200px" data-type="string" name="website" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.bank_account') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="8" data-title="{{ antl.get('company.bank_account') }}" data-width="200px" data-type="string" name="bank_account" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.bank_name') }}</label></td>
+                        <td><input type="text" class="k-textbox large" data-position="8" data-title="{{ antl.get('company.bank_name') }}" data-width="200px" data-type="string" name="bank_name" /></td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('action.active') }}</label></td>
+                        <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="10" data-title="{{ antl.get('action.active') }}" data-value="1" data-width="100px" data-type="string" data-template="#= FormatCheckBox(active) #" name="active" /></td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                <table>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.full_name_contact') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="8" data-title="{{ antl.get('action.full_name_contact') }}" data-hidden="true" data-width="200px" data-type="string" name="full_name_contact" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.address_contact') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="8" data-title="{{ antl.get('action.address_contact') }}" data-hidden="true" data-width="200px" data-type="string" name="address_contact" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.title_contact') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="8" data-title="{{ antl.get('action.title_contact') }}" data-hidden="true" data-width="200px" data-type="string" name="title_contact" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.email_contact') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="8" data-title="{{ antl.get('action.email_contact') }}" data-hidden="true" data-width="200px" data-type="string" name="email_contact" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.telephone1_contact') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="8" data-title="{{ antl.get('action.telephone1_contact') }}" data-hidden="true" data-width="200px" data-type="string" name="telephone1_contact" /></td>
+                    </tr>
+                    <tr>
+                        <td class="row-label"><label>{{ antl.get('company.telephone2_contact') }}</label></td>
+                        <td><input type="text" class="k-textbox medium" data-position="8" data-title="{{ antl.get('action.telephone2_contact') }}" data-hidden="true" data-width="200px" data-type="string" name="telephone2_contact" /></td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+                <table>
+                    <tr>
+                        <td><label>{{ antl.get('company.country') }}</label></td>
+                        <td>
+                            <select class="droplist large" data-position="3" data-title="{{ antl.get('company.country') }}" data-template="#= FormatDropList(country,'country') #" data-hidden="true" data-type="number" data-width="200px" name="country">
+                                <option readonly selected value="0">--Select--</option>
+                                {% for x in country %}
+                                <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('company.regions') }}</label></td>
+                        <td>
+                            <select class="droplist large" data-position="3" data-title="{{ antl.get('company.regions') }}" data-template="#= FormatDropList(regions,'regions') #" data-hidden="true" data-type="number" data-width="200px" name="regions">
+                                <option readonly selected value="0">--Select--</option>
+                                {% for x in regions %}
+                                <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('company.area') }}</label></td>
+                        <td>
+                            <select class="droplist large" data-position="3" data-title="{{ antl.get('company.area') }}" data-template="#= FormatDropList(area,'area') #" data-hidden="true" data-type="number" data-width="200px" name="area">
+                              <option readonly selected value="0">--Select--</option>
+                              {% for x in area %}
+                              <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                              {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('company.distric') }}</label></td>
+                        <td>
+                            <select class="droplist large" data-position="3" data-title="{{ antl.get('company.distric') }}" data-template="#= FormatDropList(distric,'distric') #" data-hidden="true" data-type="number" data-width="200px" name="distric">
+                            <option readonly selected value="0">--Select--</option>
+                                {% for x in distric %}
+                                <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('company.marketing') }}</label></td>
+                        <td>
+                            <input type="text" class="k-textbox large" data-position="8" data-title="{{ antl.get('company.marketing') }}" data-hidden="true" data-width="200px" data-type="string" name="marketing" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>{{ antl.get('company.company_size') }}</label></td>
+                        <td>
+                            <input type="text" class="k-textbox large" data-position="8" data-title="{{ antl.get('company.company_size') }}" data-hidden="true" data-width="200px" data-type="string" name="company_size" />
+                        </td>
+                    </tr>
+                </table>
+            </li>
+            <li>
+
+            </li>
+        </ul>
+    </div>
+    <div class="uk-margin" style="float : right">
+        <a href="javascript:;" class="k-button k-primary save" data-uk-tooltip title="{{ antl.get('action.save') }} (Alt+Ctrl+S)"><i class="md-18 material-icons md-color-white">save</i>{{ antl.get('action.save') }}</a>
+        <a href="javascript:;" class="k-button k-primary cancel" data-uk-tooltip title="{{ antl.get('action.cancel') }} (Alt+Ctrl+C)"><i class="md-18 material-icons md-color-white">cancel</i>{{ antl.get('action.cancel') }}</a>
+    </div>
+{% endblock %}
+
+{% block scripts_add %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.data = {{ data | json | safe }};
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.flag = 1;
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+{% endblock %}

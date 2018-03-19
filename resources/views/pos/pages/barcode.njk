@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="labels.css" rel="stylesheet" type="text/css" >
+
+
+</head>
+<style>
+section {
+    width: 4.2in;
+    margin: 0in .1875in;
+    }
+.label{
+    /* Avery 5160 labels -- CSS and HTML by MM at Boulder Information Services */
+    width: 1.1in; /* plus .6 inches from padding */
+    height: 1.5in; /* plus .125 inches from padding */
+    padding: .1in .05in 0;
+    /*margin-right: .125in; /* the gutter */
+    margin-bottom:  .125in;
+    float: left;
+
+    text-align: center;
+    overflow: hidden;
+
+    outline: 0.2px dotted; /* outline doesn't occupy space like border does */
+    }
+  .label p {
+    margin-top: -7px;
+  }
+  .barcode{
+    margin-top: -20px;
+    text-align: center;
+    width : 100px;
+  }
+.page-break  {
+    clear: left;
+    display:block;
+    page-break-after:always;
+    }
+    .child{
+      font-size: 10px;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+    .logo-img {
+      width : 100px;
+      height : 16px;
+      padding-bottom: 5px;
+    }
+    .style,.size,.color{
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 7px;
+      text-align:left;
+    }
+    .color{
+      margin-bottom: 8px;
+    }
+    .company{
+      font-size: 7px;
+      text-align:left;
+      font-weight: bold;
+    }
+    .price{
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: -5px;
+    }
+</style>
+<section>
+<div class="label">
+  <p class="child">childrenswear</p>
+  <img class="logo-img" src="{{ url('images/logo-intem.png') }}">
+  <p class="style">Style : <span>DASY </span></p>
+  <p class="size">Size : <span>12-18M </span></p>
+  <p class="color">Color : <span>Navy </span></p>
+  <p class="company">Công ty TNHH G&G Lô 10, 86B Trần Phú - NT.Tel : 058.3526079</p>
+  <p class="price">299.000 VNĐ</p>
+  <svg class="barcode" jsbarcode-format="CODE128"  jsbarcode-value="1234567890"  jsbarcode-height="45" jsbarcode-fontsize="25" jsbarcode-textPosition="bottom" jsbarcode-fontoptions="bold">
+  </svg>
+</div>
+
+<div class="label">
+  <p class="child">childrenswear</p>
+  <img class="logo-img" src="{{ url('images/logo-intem.png') }}">
+  <p class="style">Style : <span>DASY </span></p>
+  <p class="size">Size : <span>12-18M </span></p>
+  <p class="color">Color : <span>Navy </span></p>
+  <p class="company">Công ty TNHH G&G Lô 10, 86B Trần Phú - NT.Tel : 058.3526079</p>
+  <p class="price">299.000 VNĐ</p>
+  <svg class="barcode" jsbarcode-format="CODE128"  jsbarcode-value="1234567890"  jsbarcode-height="45" jsbarcode-fontsize="25" jsbarcode-textPosition="bottom" jsbarcode-fontoptions="bold">
+  </svg>
+</div>
+
+<div class="label">
+  <p class="child">childrenswear</p>
+  <img class="logo-img" src="{{ url('images/logo-intem.png') }}">
+  <p class="style">Style : <span>DASY </span></p>
+  <p class="size">Size : <span>12-18M </span></p>
+  <p class="color">Color : <span>Navy </span></p>
+  <p class="company">Công ty TNHH G&G Lô 10, 86B Trần Phú - NT.Tel : 058.3526079</p>
+  <p class="price">299.000 VNĐ</p>
+  <svg class="barcode" jsbarcode-format="CODE128"  jsbarcode-value="1234567890"  jsbarcode-height="45" jsbarcode-fontsize="25" jsbarcode-textPosition="bottom" jsbarcode-fontoptions="bold">
+  </svg>
+</div>
+
+<div class="label">(Repeat 30 times)</div>
+<div class="page-break"></div>
+
+</section>
+<script src="{{ url('scripts/JsBarcode.all.min.js') }}"></script>
+<script> JsBarcode(".barcode").init();</script>
+</html>

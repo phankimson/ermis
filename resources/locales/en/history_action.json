@@ -1,0 +1,15 @@
+{
+  "menu": "Menu",
+  "user": "User",
+  "tab1": "Logout",
+  "tab2": "Sign In",
+  "tab3": "Add",
+  "tab4": "Copy",
+  "tab5": "Edit",
+  "tab6": "Delete",
+  "tab7": "Import",
+  "title": "History Action",
+  "type": "Type",
+  "data": "Data",
+  "created_at" : "Ngày giờ"
+}

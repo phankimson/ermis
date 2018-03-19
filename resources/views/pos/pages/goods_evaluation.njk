@@ -1,0 +1,140 @@
+{% set moment = use('moment/moment') %}
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+    <link rel="stylesheet" href="{{ url('css/addon/approved.css') }}" />
+{% endblock %}
+{% block content %}
+        <div id="page_content_inner">
+
+            <div class="md-card">
+                <div class="md-card-content" >
+                    <div class="uk-grid" data-uk-grid-margin="" id="form-action">
+                    <div class="uk-width-medium-3-10">
+                        <div class="uk-margin-small-top">
+                            <select name="item_search" id="item_search" data-md-selectize multiple data-md-selectize-bottom>
+                                <option readonly selected value="">--Select--</option>
+                                  {% asyncAll x in item %}
+                                  <option value="{{x.id}}">{{x.name}}</option>
+                                  {% endall %}
+                            </select>
+                        </div>
+                    </div>
+                        <div class="uk-width-medium-3-10">
+                            <div class="uk-margin-small-top">
+                                <select name="inventory_search" id="inventory_search" data-md-selectize data-md-selectize-bottom>
+                                  {% if type == 1 or type == 2 %}
+                                  {% for x in stock %}
+                                  {% if x.id == inventory.id %}
+                                  <option value="{{ x.id }}" selected>{{ x.code }} - {{x.name}}</option>
+                                  {% else %}
+                                  <option value="{{ x.id }}" >{{ x.code }} - {{x.name}}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                                  {% else %}
+                                  <option value="{{ inventory.id }}" selected>{{ inventory.code }} - {{inventory.name}}</option>
+                                  {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-2-10 uk-text-center">
+                            <a href="javascript:;" id="filter" class="md-btn md-btn-primary uk-margin-small-top">{{ antl.get('action.filter') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md-card">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-1-1">
+                            <div class="uk-overflow-container">
+                                <table class="uk-table uk-table-align-vertical">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ antl.get('inventory_voucher.item_code') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.item_name') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.unit') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.size') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.price') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.purchase_price') }}</th>
+                                            <th>{{ antl.get('goods_evaluation.balance') }}</th>
+                                            <th>{{ antl.get('goods_evaluation.retail') }}</th>
+                                            <th>{{ antl.get('goods_evaluation.wholesale') }}</th>
+                                            <th>{{ antl.get('inventory_voucher.status') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="load hidden">
+                                        <td></td>
+                                        <td class="uk-text-large uk-text-nowrap"><a href="javascript:;"></a></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="uk-text-nowrap"></td>
+                                        <td class="uk-text-nowrap"></td>
+                                        <td class="uk-text-nowrap"></td>
+                                        <td class="uk-text-nowrap"><span class="uk-badge uk-badge-success"></span></td>
+                                    </tr>
+                                    {% for d in data.data %}
+                                        {% for x in warning %}
+                                          {% if d.retail > x.quantity and d.quantity > x.balance and loop.first%}
+                                          {% if loop.first%}
+                                           <tr style="background-color:{{x.color}} ; color :white">
+                                           <td>{{ d.barcode }}</td>
+                                           <td class="uk-text-large uk-text-nowrap"><a href="javascript:;">{{d.name}}</a></td>
+                                           <td>{{d.unit}}</td>
+                                           <td>{{d.size}}</td>
+                                           <td>{{antl.formatNumber(d.price)}}</td>
+                                           <td>{{antl.formatNumber(d.purchase_price)}}</td>
+                                           <td class="uk-text-nowrap">{{d.quantity}}</td>
+                                           <td class="uk-text-nowrap">{{d.retail}}</td>
+                                           <td class="uk-text-nowrap">{{d.wholesale}}</td>
+                                           <td>{{x.description}}</td>
+                                            </tr>
+                                           {% endif %}
+                                           {% elif loop.first %}
+                                           <tr>
+                                           <td>{{ d.barcode }}</td>
+                                           <td class="uk-text-large uk-text-nowrap"><a href="javascript:;">{{d.name}}</a></td>
+                                           <td>{{d.unit}}</td>
+                                           <td>{{d.size}}</td>
+                                           <td>{{antl.formatNumber(d.price)}}</td>
+                                           <td>{{antl.formatNumber(d.purchase_price)}}</td>
+                                           <td class="uk-text-nowrap">{{d.quantity}}</td>
+                                           <td class="uk-text-nowrap">{{d.retail}}</td>
+                                           <td class="uk-text-nowrap">{{d.wholesale}}</td>
+                                           <td></td>
+                                            </tr>
+                                           {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                              <ul class="uk-pagination  uk-margin-medium-top uk-margin-medium-bottom" data-uk-pagination="{pages: {{data.page}} ,lblPrev : '<' ,lblNext : '>'}"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        {% endblock %}
+        {% block scripts %}
+        <script>
+        jQuery(document).ready(function () {
+            Ermis.per = JSON.parse('{{ permission | safe }}');
+            Ermis.link = "{{ key }}";
+            Ermis.room = "{{ room }}";
+            Ermis.item = {{ item | json | safe }};
+        });
+        </script>
+        <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+        <script src="{{ url('scripts/uikit.min.js') }}"></script>
+        <script src="{{ url('scripts/ukit_pagination.js') }}"></script>
+        <script src="{{ url('scripts/addon/backend/evaluation.js') }}"></script>
+        {% endblock %}

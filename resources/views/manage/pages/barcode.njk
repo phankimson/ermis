@@ -1,0 +1,58 @@
+
+{% extends 'manage.layouts.ermisform1' %}
+{% block content_add %}
+<div class="demo-section k-content">
+    <div id="barcode"></div>
+</div>
+
+    <div id="notification"></div>
+
+    <table>
+        <tr>
+            <td class="row-label"><label>{{ antl.get('global.code') }}</label></td>
+            <td>
+            <select class="droplist large" data-title="{{ antl.get('global.code') }}" data-width="250px" data-position="1" data-type="string" name="code"  data-template="#= FormatDropList(code,'code') #"  >
+            <option readonly selected value="0">--Select--</option>
+            <option value="EAN8">EAN8</option>
+            <option value="EAN13">EAN13</option>
+            <option value="UPCE">UPCE</option>
+            <option value="UPCA">UPCA</option>
+            <option value="Code11">Code11</option>
+            <option value="Code39">Code39</option>
+            <option value="Code39Extended">Code39Extended</option>
+            <option value="Code128">Code128</option>
+            <option value="Code93">Code93</option>
+            <option value="Code93Extended">Code93Extended</option>
+            <option value="Code128A">Code128A</option>
+            <option value="Code128B">Code128B</option>
+            <option value="Code128C">Code128C</option>
+            <option value="MSImod10">MSImod10</option>
+            <option value="MSImod11">MSImod11</option>
+            <option value="MSImod1010">MSImod1010</option>
+            <option value="MSImod1110">MSImod1110</option>
+            <option value="GS1-128">GS1-128</option>
+        </select>
+        </td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('barcode.show_code') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="5" data-value="1" data-title="{{ antl.get('barcode.show_code') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(show_code) #" name="show_code" /></td>
+        </tr>
+        <tr>
+            <td><label>{{ antl.get('barcode.show_checksum') }}</label></td>
+            <td class="row-height"><input type="checkbox" data-md-icheck="" data-position="5" data-title="{{ antl.get('barcode.show_checksum') }}" data-width="100px" data-type="string" data-template="#= FormatCheckBox(show_checksum) #" name="show_checksum" /></td>
+        </tr>
+    </table>
+    {% endblock %}
+    {% block scripts_add %}
+    <script>
+    jQuery(document).ready(function () {
+        Ermis.data = {{ data | json | safe }};
+        Ermis.per = JSON.parse('{{ permission | safe }}');
+        Ermis.flag = 1;
+        Ermis.link = "{{ key }}";
+        Ermis.room = "{{ room }}";
+    });
+    </script>
+    <script src="{{ url('scripts/addon/backend/barcode.js') }}"></script>
+    {% endblock %}

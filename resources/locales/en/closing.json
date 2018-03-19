@@ -1,0 +1,9 @@
+{
+    "title": "Lock period",
+    "date" : "Date",
+    "name" : "Name Lock period",
+    "name_en" : "Name english Lock period",
+    "date_created" : "Date created",
+    "start" : "Start lock period",
+    "delete" : "Open period"
+}

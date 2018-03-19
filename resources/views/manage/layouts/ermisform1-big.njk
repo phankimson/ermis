@@ -1,0 +1,80 @@
+{% extends 'manage.layouts.default' %}
+{% block css %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.common-material.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('library/kendoui/styles/kendo.material.mobile.min.css') }}" />
+    <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+    {% block css_add %}{% endblock %}
+{% endblock %}
+{% block content %}
+<div id="export"></div>
+
+    <div id="import"></div>
+
+    <div class="md-card uk-margin-medium-bottom">
+        <div class="md-card-toolbar">
+            <div class="md-card-toolbar-heading-text">
+                {{ title }}
+            </div>
+            <div class="md-card-toolbar-actions">
+                <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+                <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('global.refesh') }}"></i>
+                <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expanded="false">
+                    <i class="md-icon material-icons"></i>
+                    <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                        <ul class="uk-nav">
+                            <li><a class="add" href="javascript:;">{{ antl.get('action.add') }}</a></li>
+                            <li><a class="copy" href="javascript:;">{{ antl.get('action.copy') }}</a></li>
+                            <li><a class="edit" href="javascript:;">{{ antl.get('action.edit') }}</a></li>
+                            <li><a class="save" href="javascript:;">{{ antl.get('action.save') }}</a></li>
+                            <li><a class="cancel" href="javascript:;">{{ antl.get('action.cancel') }}</a></li>
+                            <li><a class="import" href="javascript:;">{{ antl.get('action.import') }}</a></li>
+                            <li><a class="export" href="javascript:;">{{ antl.get('action.export') }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="md-card-content">
+            <div class="uk-grid">
+                <div class="uk-width-medium-2-4">
+                    <div id="grid"></div>
+                </div>
+                <div class="uk-width-medium-2-4">
+                    <div id="form-action">
+                          {% block content_add %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ul id="context-menu" style="display:none">
+        <li>
+            <a class="add"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.add') }} (Alt+A)">add</i>{{ antl.get('action.add') }}</a>
+        </li>
+        <li>
+            <a class="copy"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.copy') }} (Alt+X)">content_copy</i>{{ antl.get('action.copy') }}</a>
+        </li>
+        <li>
+            <a class="edit"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.edit') }} (Alt+E)">edit</i>{{ antl.get('action.edit') }}</a>
+        </li>
+        <li>
+            <a class="save"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.save') }} (Alt+S)">save</i>{{ antl.get('action.save') }}</a>
+        </li>
+        <li>
+            <a class="cancel"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.cancel') }} (Alt+C)">cancel</i>{{ antl.get('action.cancel') }}</a>
+        </li>
+        <li>
+            <a class="delete"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.delete') }} (Alt+D)">delete</i>{{ antl.get('action.delete') }}</a>
+        </li>
+    </ul>
+{% endblock %}
+{% block scripts %}
+        {% block scripts_add %}{% endblock %}
+        <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+        <script src="{{ url('library/kendoui/js/jszip.min.js') }}"></script>
+        <script src="{{ url('scripts/shortcuts.js') }}"></script>
+        <script src="{{ url('scripts/addon/backend/ermis-form-1-big.js') }}"></script>
+        {% block scripts_end %}{% endblock %}
+{% endblock %}

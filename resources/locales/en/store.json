@@ -1,0 +1,20 @@
+{
+  "sales_invoice" : "Sales invoice",
+  "product" : "Product",
+  "add" :"Add",
+  "reduce" : "Reduce",
+  "carts" : "Carts",
+  "payment" : "Payment",
+  "can_not_skip" : "Voucher Can't cancel",
+  "payment_method" : "Payment method",
+  "refund" : "Refund",
+  "exchange" : "Type exchange",
+  "rate" : "Rate",
+  "total_exchange" : "Total exchange",
+  "sell_daily" : "Sell daily ",
+  "quantity_return" : "Qty return",
+  "shift" : "Shift",
+  "total_discount" : "Total discount",
+  "total_payment" : "Total payment",
+  "coupon" : "Coupon value"
+}

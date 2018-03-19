@@ -1,0 +1,8 @@
+{
+    "debt_customer_init_balance": "Số dư công nợ khách hàng",
+    "debt_suplier_init_balance": "Số dư công nợ nhà cung cấp",
+    "stock_init_balance" : "Số dư tồn kho",
+    "debt_account" : "Nợ",
+    "credit_account" : "Có",
+    "title" : "Số dư đầu kỳ"
+}
