@@ -128,7 +128,7 @@
                       PrintForm(jQuery('#print'), decoded);
                       jQuery('#print').html("");
                   }else if (result.download){
-                      window.open('/'+Ermis.link+'-downloadExcel');
+                      window.open(Ermis.link+'-downloadExcel');
                   }
                 }else{
                   kendo.alert(result.message);

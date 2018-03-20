@@ -43,6 +43,7 @@
         shortcut.remove(key + "D");
         shortcut.remove(key + "I");
         shortcut.remove(key + "Q");
+        shortcut.remove(key + "L");
         jQuery('.add,.copy,.cancel,.edit,.save,.delete,.import,.export,.load').off('click');
         if (flag === 1) {//DEFAULT
             jQuery('#add-top-menu').show();
@@ -65,6 +66,7 @@
             shortcut.add(key + "D", function (e) { initDelete(e); });
             shortcut.add(key + "I", function (e) { initImport(e); });
             shortcut.add(key + "Q", function (e) { initExport(e); });
+            shortcut.add(key + "L", function (e) { altair_main_header.search_show();});
         } else if (flag === 2) {//ADD
             myWindow.data("kendoWindow").open();
             $kGrid.addClass('disabled');
@@ -169,6 +171,7 @@
             shortcut.add(key + "D", function (e) { initDelete(e); });
             shortcut.add(key + "I", function (e) { initImport(e); });
             shortcut.add(key + "Q", function (e) { initExport(e); });
+            shortcut.add(key + "L", function (e) { altair_main_header.search_show();});
         }
     };
 
@@ -328,13 +331,13 @@
             $searchValue = $(this).val();
             if ($searchValue) {
                 $.each(data.columns, function (key, column) {
-                    if (column.hidden === false) {
+                    if (column.hidden === false && column.key != 'checkbox') {
                         if (column.type === 'number') {
                             filter.filters.push({ field: column.field, operator: "eq", value: $searchValue });
                         } else if (column.type === 'boolean') {
                             filter.filters.push({ field: column.field, operator: "eq", value: $searchValue });
                         } else if (column.type === 'date') {
-                            filter.filters.push({ field: column.field, operator: "gt", value: $searchValue });
+                            filter.filters.push({ field: column.field, operator: "eq", value: $searchValue });
                         } else {
                             filter.filters.push({ field: column.field, operator: "contains", value: $searchValue });
                         }

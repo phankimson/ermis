@@ -15,7 +15,7 @@ class ObjectGroupController{
     }
   * show (request, response){
       const title = Antl.formatMessage('object_group.title')  // EDIT
-      const data = yield Data.query().orderBy('id', 'desc').fetch()
+      const data = yield Data.query().where('type',this.type).orderBy('id', 'desc').fetch()
       const show = yield response.view('pos/pages/object_group', {key : this.key ,title: title , data: data.toJSON()})  // EDIT
       response.send(show)
   }
