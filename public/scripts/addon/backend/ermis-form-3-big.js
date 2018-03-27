@@ -189,7 +189,7 @@
             RequestURLWaiting(Ermis.link+'-get', 'json', postdata, function (result) {
                 if (result.status === true) {
                     var grid = $kGrid.data("kendoGrid");
-                    var ds = new kendo.data.DataSource({ data: result.data });
+                    var ds = new kendo.data.DataSource({ data: result.data , pageSize : result.data.length});
                     grid.setDataSource(ds);
                     grid.dataSource.page(1);
                 }else{

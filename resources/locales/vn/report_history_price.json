@@ -1,0 +1,6 @@
+{
+    "title": "Báo cáo lịch sử giá",
+    "type" : "Loại giá",
+    "price" : "Giá",
+    "created_at" : "Ngày áp dụng giá"
+}

@@ -1,0 +1,6 @@
+{
+    "title": "Report history price",
+    "type" : "Type price",
+    "price" : "Price",
+    "created_at" : "Created at"
+}

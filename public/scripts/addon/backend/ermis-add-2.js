@@ -42,12 +42,9 @@ var ErmisAdd2 = function () {
           jQuery("input[name='code']").val(item_value)
         });
 
-        if( style_value != '' && model_value != ''){
-        jQuery("input[name='name'],input[name='name_en']").val(model_name[1]+' - '+style_name[1])
-        }else if(model_value == ''){
-          model_name =  jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",2);
-          jQuery("input[name='name'],input[name='name_en']").val(model_name[1]+' - '+style_name[1])
-        }
+        var model_c =  jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",2);
+        var style_c = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",2);
+        jQuery("input[name='name'],input[name='name_en']").val(model_c[1]+' - '+style_c[1])
 
         if(group_value != '' && style_value != '' && model_value != ''){
           jQuery("input[name='barcode']").val(group_value+model_value+style_value)
@@ -70,9 +67,11 @@ var ErmisAdd2 = function () {
           item_value = (initBarcodeMasker(result.data));
           jQuery("input[name='code']").val(item_value);
           });
-        if( style_value != '' && model_value != ''){
-        jQuery("input[name='name'],input[name='name_en']").val(model_name[1]+' - '+style_name[1])
-        }
+
+          var model_c =  jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",2);
+          var style_c = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",2);
+          jQuery("input[name='name'],input[name='name_en']").val(model_c[1]+' - '+style_c[1])
+
         if(group_value != '' && style_value != '' && model_value != ''){
           jQuery("input[name='barcode']").val(group_value+model_value+style_value)
         }else{

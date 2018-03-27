@@ -16,6 +16,7 @@ const Detail = use('App/Model/PosDetail')  // EDIT
 const Bitmask = use('App/Classes/bitmask-ermis')
 const Menu = use('App/Model/Menu')  // EDIT
 const HistoryAction = use('App/Classes/HistoryAction')  // EDIT
+const HistoryWarning = use('App/Model/HistoryWarning')  // EDIT
 const GoodsInventory = use('App/Model/GoodsInventory')  // EDIT
 const DiscountCoupon = use('App/Model/DiscountCoupon')  // EDIT
 const Antl = use('Antl')
@@ -225,7 +226,7 @@ class PosShopHomeController{
           general.total_amount = data.total_amount
           general.discount_percent = data.discount_percent
           general.discount = data.discount
-          general.total_discount = (data.total_amount / (100-data.discount_percent)*100 + data.discount) - data.total_amount
+          general.total_discount = Math.ceil(data.total_amount / (100-data.discount_percent)*100 + data.discount,1) - data.total_amount
           general.user = user.id
           general.status = 1
           general.active = 1
@@ -260,6 +261,13 @@ class PosShopHomeController{
               balance.quantity = balance.quantity - d.quantity
               balance.retail = balance.retail + d.quantity
               yield balance.save()
+              if(balance.quantity <=0){
+                const hisw = new HistoryWarning()
+                hisw.inventory = inventory
+                hisw.date = moment().format('YYYY-MM-DD')
+                hisw.content   = "Mã "+d.item_name+"-"+goods.barcode+" đang hết số tồn (Code is running out) "+"/"+balance.quantity+"/"
+                yield hisw.save()
+              }
             }else{
               const balance = new GoodsInventory()
               balance.goods_size = d.item_id
@@ -267,7 +275,15 @@ class PosShopHomeController{
               balance.retail = d.quantity
               balance.inventory = inventory
               yield balance.save()
+              if(balance.quantity <=0){
+                const hisw = new HistoryWarning()
+                hisw.inventory = inventory
+                hisw.date = moment().format('YYYY-MM-DD')
+                hisw.content   = "Mã "+d.item_name+"-"+goods.barcode+" đang hết số tồn (Code is running out) "+"/"+balance.quantity+"/"
+                yield hisw.save()
+              }
             }
+
             // End
           }
           // Lưu payment
@@ -276,7 +292,7 @@ class PosShopHomeController{
           payment.payment_method = data.payment_method
           payment.discount = data.discount_special
           payment.discount_percent = data.discount_percent_special
-          payment.total_discount = (data.total_amount_payment / (100-data.discount_percent_special)*100 + parseInt(data.discount_special)) - parseInt(data.total_amount_payment)
+          payment.total_discount = Math.ceil(data.total_amount_payment / (100-data.discount_percent_special)*100 + data.discount_special,1) - data.total_amount_payment
           payment.total_amount =  data.total_amount_payment
           payment.payment = data.payment
           payment.refund = data.refund

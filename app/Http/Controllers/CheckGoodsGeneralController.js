@@ -32,31 +32,38 @@ class CheckGoodsGeneralController{
           if(data){
             const action = 5
             const arr = yield CheckGoodsGeneral.find(data)
-            const arr1 = yield General.query().where('subject',data).where('subject_key','check_goods_general').first()
             const closing = yield Closing.query().where('date',moment(arr.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).count('* as total')
             if(closing[0].total == 0){
+            const arr1 = yield General.query().where('subject',data).where('subject_key','check_goods_general').fetch()
             const detail = yield CheckGoods.query().where('general',data).fetch()
-            const detail1 = yield Detail.query().where('general_id',arr1.id).fetch()
+
             // Lưu lịch sử
             const menu = yield Menu.query().where('code',this.menu).first()
             let hs = new HistoryAction()
             var rs = hs.insertRecord(action,request.currentUser.id,menu.id,JSON.stringify(arr)+'@'+JSON.stringify(detail))
             yield rs.save()
             //
+
             yield arr.delete()
-            yield arr1.delete()
+            for(let g of arr1){
+              const detail1 = yield Detail.query().where('general_id',g.id).fetch()
+                  for(let d of detail1){
+                    // Lưu số tồn
+                    const balance = yield GoodsInventory.query().where('inventory',g.inventory_id).where('goods_size',d.item_id).first()
+                    if(balance && g.type == 10){
+                      balance.quantity = balance.quantity - d.quantity
+                      yield balance.save()
+                    }else if(balance && g.type == 11){
+                      balance.quantity = balance.quantity + d.quantity
+                      yield balance.save()
+                    }
+                    // End
+                    yield d.delete()
+                  }
+              yield g.delete()
+            }
             // DETAIL
               for(let d of detail){
-                yield d.delete()
-              }
-              for(let d of detail1){
-                // Lưu số tồn
-                const balance = yield GoodsInventory.query().where('inventory',arr1.inventory_id).where('goods_size',d.item_id).first()
-                if(balance){
-                  balance.quantity = balance.quantity - d.quantity
-                  yield balance.save()
-                }
-                // End
                 yield d.delete()
               }
 
@@ -68,7 +75,7 @@ class CheckGoodsGeneralController{
             response.json({ status: false ,message: Antl.formatMessage('messages.delete_fail')  })
           }
     } catch (e) {
-      response.json({ status: false , message: Antl.formatMessage('messages.delete_error')})
+      response.json({ status: false , message: Antl.formatMessage('messages.delete_error')+' '+ e.message})
     }
   }
 }

@@ -1,0 +1,151 @@
+{% extends 'manage.layouts.ermisform8' %}
+{% block css_add %}
+<title>{{  shortif( inventory , inventory.name + ' - ' + company.name , antl.get('index.title') ) }}</title>
+{% endblock %}
+
+{% block content_add %}
+<div class="uk-grid" id="form-search">
+    <div class="uk-width-medium-1-4">
+
+    </div>
+    <div class="width-large">
+    <table>
+        <tr>
+        <td><span class="row-padding-right-small">{{ antl.get('global.start_date') }} :</span></td>
+        <td>
+        <input type="text" data-type="date" id="start" name="start_date" value="{{ start_date }}" />
+        <span class="row-padding-right-small"></span>
+
+        <span class="row-padding-right-small">{{ antl.get('global.end_date') }}:</span>
+        <input type="text" data-type="date" id="end" name="end_date" value="{{ end_date }}" />
+         </td>
+        </tr>
+
+        <tr>
+        <td><label class="row-padding-right-small">{{ antl.get('inventory_voucher.item_name') }}</label></td>
+        <td>
+            <input type="text" class="hidden disabled" readonly name="item"/>
+            <input type="text" class="k-textbox xlarge disabled" readonly id="icon-right" name="item_name"/>
+              <a href="javascript:;" class="search_item"><i class="md-icon material-icons">search</i></a>
+        </td>
+        </tr>
+
+        <tr>
+        <td></td>
+        <td>
+            {% if type == 1 or type == 2 %}
+            <input type="radio" data-md-icheck=""  name="price" id="purchase_price" value="1" checked>
+            <label for="purchase_price">{{ antl.get('inventory_voucher.purchase_price') }}</label>
+            <input type="radio" data-md-icheck=""  name="price" value="2" id="price">
+            <label for="price">{{ antl.get('inventory_voucher.price') }}</label>
+            {% else %}
+            <input type="radio" data-md-icheck=""  name="price" value="2" id="price" checked>
+            <label for="price">{{ antl.get('inventory_voucher.price') }}</label>
+            {% endif %}
+        </td>
+        </tr>
+
+    </table>
+
+        <div class="row-padding-bottom-small"></div>
+        <div>
+            <a href="javascript:;" class="k-button uk-alert-success row-padding-bottom-small get_report" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_note</i>{{ antl.get('global.report') }}</a>
+            <a href="javascript:;" class="k-button k-primary row-padding-bottom-small get_data" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_available</i>{{ antl.get('global.get_data') }}</a>
+            <a href="javascript:;" class="k-button uk-alert-warning btn-hide" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">exit_to_app</i>{{ antl.get('global.hidden_condition') }}</a>
+        </div>
+
+    </div>
+    <div class="uk-width-medium-1-4">
+
+    </div>
+
+</div>
+<div id="form-window-item" style="display:none">
+<div class="uk-width-medium-4-4">
+    <input type="radio" name="filter_nature" id="1" value="1" class="k-radio" checked="checked">
+    <label class="k-radio-label" for="1">{{ antl.get('marial_goods.material_goods') }}</label>
+</div>
+<div class="uk-margin-medium-top"></div>
+
+<select class="droplist" name="filter_field">
+    <option readonly selected value="">--Select--</option>
+    <option value="barcode">{{ antl.get('marial_goods.barcode') }}</option>
+    <option value="code">{{ antl.get('global.code') }}</option>
+    <option value="name">{{ antl.get('global.name') }}</option>
+    <option value="name_en">{{ antl.get('global.name_en') }}</option>
+    <option value="price">{{ antl.get('marial_goods.price') }}</option>
+</select>
+<input type="text" name="filter_value" class="k-textbox">
+<a href="javascript:;" class="uk-margin-left-30 k-button k-primary" id="search_item" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">search</i>{{ antl.get('action.search') }}</a>
+
+<div class="uk-margin-medium-top"></div>
+
+<div id="grid_item"></div>
+
+<div class="uk-margin" style="float : right">
+    <a href="javascript:;" class="k-button k-primary choose" data-uk-tooltip title="{{ antl.get('action.choose') }}"><i class="md-18 material-icons md-color-white">done</i>{{ antl.get('action.choose') }}</a>
+    <a href="javascript:;" class="k-button k-primary cancel-window" data-uk-tooltip title="{{ antl.get('action.close') }}"><i class="md-18 material-icons md-color-white">not_interested</i>{{ antl.get('action.close') }}</a>
+</div>
+</div>
+    <div class="uk-grid">
+        <div class="uk-width-medium-4-4">
+            <div id="grid" style="display:none"></div>
+        </div>
+    </div>
+<div class="uk-grid">
+    <div class="uk-width-medium-4-4">
+        <div id="report" style="display:none">
+            <div class="row">
+                <h3 id="title" class="text-center"></h3>
+                <table id="table"
+                       data-toggle="table"
+                       data-show-export="true"
+                       data-pagination="true"
+                       data-click-to-select="true"
+                       data-toolbar="#toolbar"
+                       data-search="true"
+                       data-show-footer="true"
+                       data-show-refresh="true"
+                       data-show-toggle="true"
+                       data-show-print="true"
+                       data-show-columns="true">
+                    <thead>
+                        <tr>
+                            <th data-formatter="runningFormatter">#</th>
+                            <th data-field="created_at" data-formatter="DateFormatter" data-sortable="true">{{ antl.get('report_history_price.created_at') }}</th>
+                            <th data-field="type" data-sortable="true" >{{ antl.get('report_history_price.type') }}</th>
+                            <th data-field="price" data-sortable="true" data-formatter="priceFomatter" >{{ antl.get('report_history_price.price') }}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts_add %}
+    <script>
+        jQuery(document).ready(function () {
+          Ermis.per = JSON.parse('{{ permission | safe }}');
+          Ermis.link = "{{ key }}";
+          Ermis.room = "{{ room }}";
+            Ermis.field = {
+                created_at :   {type : "date"},
+                price:    {type:"number" }
+            };
+            Ermis.columns_item = [     {"field" : "code","title" : "{{ antl.get('global.code') }}" },
+                                       {"field" : "name","title" : "{{ antl.get('global.name') }}" },
+                                       {"field" : "unit","title" : "{{ antl.get('marial_goods.unit') }}" },
+                                       {"field" : "size","title" :  "{{ antl.get('marial_goods.size') }}" },
+                                       {"field" : "price","title" :  "{{ antl.get('marial_goods.price') }}" ,format: "{0:n0}" ,decimals: 0 }]
+
+              Ermis.columns    =   [{ "field" : "id",hidden: true },
+                                  { "field" : "created_at","title" :"{{ antl.get('report_history_price.created_at') }}" ,"width" : "150px", type:"date" ,template: '#= FormatDate(created_at) #' },
+                                  { "field" : "type","title" :"{{ antl.get('report_history_price.type') }}",template: '#= FormatRadio(type,"price") #' ,"width" : "150px",aggregates: ['count'], footerTemplate: "<p>Total Count: #=count#</p>"},
+                                  { "field" : "price","title" :"{{ antl.get('report_history_price.price') }}" ,"width" : "150px", format: "{0:n0}" ,decimals: 0},
+                                 ];
+            Ermis.aggregate = [ { field: "type", aggregate: "count" },
+                                { field: "price", aggregate: "average" }];
+        });
+    </script>
+    {% endblock %}

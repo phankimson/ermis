@@ -489,6 +489,12 @@ Route.post('/receipt-cash-voucher-voucher-print', 'ReceiptCashGeneralController.
   // Report Detail Inventory
   Route.get('/report-detail-inventory', 'ReportDetailInventoryController.show')
   Route.post('/report-detail-inventory-get', 'ReportDetailInventoryController.get')
+  Route.post('/report-detail-inventory-load', 'ReceiptInventoryVoucherController.load')
+
+  // History Price
+  Route.get('/report-history-price', 'ReportHistoryPriceController.show')
+  Route.post('/report-history-price-get', 'ReportHistoryPriceController.get')
+  Route.post('/report-history-price-load', 'ReceiptInventoryVoucherController.load')
 
   // Report General Revenue
   Route.get('/report-general-revenue', 'ReportGeneralRevenueController.show')
@@ -498,6 +504,10 @@ Route.post('/receipt-cash-voucher-voucher-print', 'ReceiptCashGeneralController.
   Route.get('/report-detail-revenue', 'ReportDetailRevenueController.show')
   Route.post('/report-detail-revenue-get', 'ReportDetailRevenueController.get')
 
+  // Report Customer Revenue
+  Route.get('/report-customer-revenue', 'ReportCustomerRevenueController.show')
+  Route.post('/report-customer-revenue-get', 'ReportCustomerRevenueController.get')
+
   // Report Shift Revenue
   Route.get('/report-shift-revenue', 'ReportShiftRevenueController.show')
   Route.post('/report-shift-revenue-get', 'ReportShiftRevenueController.get')
@@ -506,6 +516,10 @@ Route.post('/receipt-cash-voucher-voucher-print', 'ReceiptCashGeneralController.
   Route.get('/report-cost-revenue', 'ReportCostRevenueController.show')
   Route.post('/report-cost-revenue-get', 'ReportCostRevenueController.get')
 
+
+  // History Warning
+  Route.get('/history-warning', 'HistoryWarningController.show')
+  Route.post('/history-warning-get', 'HistoryWarningController.get')
 
   Route.get('/barcode', 'PosBarcodeController.show')
   Route.get('/barcode0', 'PosBarcodeController.show0')

@@ -19,9 +19,9 @@
             <td>
                 <select class="droplist large" data-title="{{ antl.get('marial_goods.material_goods') }}" data-position="6" data-template="#= FormatDropList(goods,'goods') #" data-width="200px" data-type="number" name="goods">
                     <option readonly selected value="0">--Select--</option>
-                    {% for x in goods %}
+                    {% asyncAll x in goods %}
                     <option value="{{ x.id }}">{{ x.barcode }} - {{ shortif( lang == 'vn' , x.name , x.name_en )}}</option>
-                    {% endfor %}
+                    {% endall %}
                 </select>
             </td>
         </tr>

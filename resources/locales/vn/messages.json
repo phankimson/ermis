@@ -73,5 +73,7 @@
     "already_paid" : "Bill đã thanh toán",
     "please_tick_barcode" : "Xin vui lòng tick barcode phân quyền",
     "incurred_receipt" : "Đã phát sinh nhập kho ! Không thể thực hiện thao tác này",
-    "not_closed_period" : "Chưa khóa kỳ "
+    "not_closed_period" : "Chưa khóa kỳ ",
+    "total_code_imported" : "Tổng số : {count_sucess} mã đã import !",
+    "total_code_error" : "Tổng số : {count_error} mã lỗi !"
 }

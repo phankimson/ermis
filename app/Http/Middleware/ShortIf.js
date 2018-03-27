@@ -6,7 +6,7 @@ class ShortIf {
 
   * handle (request, response, next) {
 
-    View.global('shortif', (con,t,f) => {
+    response.viewInstance.global('shortif', (con,t,f) => {
      if(eval(con)){
        return t
      }else{

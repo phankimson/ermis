@@ -9,7 +9,7 @@ class ViewUrl {
     let baseUrl = request.secure()? 'https://' : 'http://'
     baseUrl += request.headers().host + '/'
 
-    View.global('url', (path) => {
+    response.viewInstance.global('url', (path) => {
       if(typeof path != 'undefined') {
         path = (path.substring(0, 1) == '/')
           ? path.substring(1)

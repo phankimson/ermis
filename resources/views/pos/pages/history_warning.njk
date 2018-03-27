@@ -1,0 +1,61 @@
+
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{ antl.get('index.title') }}</title>
+<link rel="stylesheet" href="{{ url('css/addon/backend/permission.css') }}">
+<link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+{% endblock %}
+
+{% block content %}
+<h3 class="heading_a uk-margin-bottom">{{title}}</h3>
+
+<ul id="filter" class="uk-subnav uk-subnav-pill">
+    <li class="uk-active" data-uk-filter=""><a href="#">All</a></li>
+    <div class="uk-button-dropdown" data-uk-dropdown>
+        <button class="md-btn">{{ antl.get('action.choose') }}<i class="material-icons">&#xE313;</i></button>
+        <div class="uk-dropdown uk-dropdown-large uk-dropdown-scrollable">
+            <ul class="uk-nav uk-nav-dropdown">
+            {% for x in stock %}
+            <li data-uk-filter="filter-{{x.id}}"><a href="#">{{ shortif( lang == 'vn' , x.name , x.name_en )}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <li><input type="text" class="k-textbox date" value="{{date}}" name="date" /></li>
+</ul>
+
+<div class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-margin-large-bottom hierarchical_show" data-uk-grid="{gutter: 20, controls: '#filter'}">
+<div data-uk-filter="filter" class="item hidden">
+    <div class="md-card">
+        <div class="md-card-content">
+            <h4 class="heading_c uk-margin-bottom"></h4>
+            <p class="content"></p>
+        </div>
+    </div>
+</div>
+{% for x in data %}
+<div data-uk-filter="filter-{{x.inventory}}" class="item">
+    <div class="md-card">
+        <div class="md-card-content">
+            <h4 class="heading_c uk-margin-bottom">{{x.inventory_name}}</h4>
+            <p class="content"> {{x.content}}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+</div>
+{% endblock %}
+{% block scripts %}
+    <script>
+            jQuery(document).ready(function () {
+                Warning.per = JSON.parse('{{ permission | safe }}')
+                Warning.link = "{{ key }}";
+            });
+    </script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('library/kendoui/js/jszip.min.js') }}"></script>
+    <script src="{{ url('library/uniform/dist/js/jquery.uniform.standalone.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/warning.js ') }}"></script>
+{% endblock %}

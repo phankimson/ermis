@@ -76,6 +76,13 @@ var Ermis = function () {
 
   var changeCoupon = function(){
     jQuery('input[type=radio][name=coupon_type]').on('change',function(){
+      jQuery('input[name=coupon_code]').val("");
+      jQuery('input[name=coupon]').val(0);
+      jQuery("input[name='payment']").data("kendoNumericTextBox").value(jQuery("#amount_total").text());
+      jQuery('input[name=discount_percent_special]').data("kendoNumericTextBox").value(0);
+      jQuery("input[name=discount_percent_special]").data("kendoNumericTextBox").enable(true);
+      jQuery("input[name=discount_special]").data("kendoNumericTextBox").enable(true);
+      jQuery("input[name=discount_special]").data("kendoNumericTextBox").value(0);
       var v = jQuery(this).val()
       if(v == ''){
         jQuery("input[name=discount_percent_special]").data("kendoNumericTextBox").enable();

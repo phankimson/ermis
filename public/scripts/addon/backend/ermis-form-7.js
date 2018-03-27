@@ -1,6 +1,9 @@
 ﻿var Ermis = function () {
     var $kGrid = jQuery('#grid');
     var $kGridList = jQuery('#list');
+    var $kGridItem = jQuery('#grid_item');
+    var myWindow = jQuery("#form-window-item");
+    var $kWindow = '';
     var end; var start;
     var data = [];
     var dataSource = '';
@@ -22,7 +25,146 @@
             jQuery('#form-search').show(1000);
         });
     };
+    var initStatus = function(){
+      jQuery('.choose').on('click', initChoose);
+      jQuery('.cancel-window').on('click', initClose);
+      jQuery('.search_item').on('click',initFilterForm);
+      jQuery('#search_item').on('click',initGetDataItem);
+    }
 
+    var initClose = function (e) {
+        var jQuerylink = jQuery(e.target);
+        e.preventDefault();
+        if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
+            if ($kWindow.element.is(":hidden") === false) {
+                $kWindow.close();
+            }
+        }
+        jQuerylink.data('lockedAt', +new Date());
+    };
+
+    var initGetDataItem = function () {
+          var obj = {};
+          var filter = GetAllDataForm('#form-window-item', 2);
+          jQuery.each(filter.columns, function (k, col) {
+              if (col.key === 'text' || col.key === 'password' || col.key === 'number') {
+                  obj[col.field] = myWindow.find('input[name="' + col.field + '"]').val().trim();
+              } else if (col.key === 'select' && myWindow.find('select[name = ' + col.field + ']').hasClass("droplist")) {
+                  obj[col.field] = myWindow.find('.droplist[name="' + col.field + '"]').data('kendoDropDownList').value();
+              } else if (col.key === 'select' && myWindow.find('select[name = ' + col.field + ']').hasClass("multiselect")) {
+                  var arr = myWindow.find('.multiselect[name="' + col.field + '"]').data('kendoMultiSelect').value();
+                  obj[col.field] = arr.join();
+              } else if (col.key === 'textarea') {
+                  obj[col.field] = myWindow.find('textarea[name="' + col.field + '"]').val();
+              }  else if (col.key === 'checkbox') {
+                  if (myWindow.find('input[name="' + col.field + '"]').parent().hasClass('checked')) {
+                      if (col.type === 'boolean') {
+                          obj[col.field] = true;
+                      } else if (col.type === 'number'){
+                          obj[col.field] = 1;
+                      }else {
+                          obj[col.field] = '1';
+                      }
+                  } else {
+                      if (col.type === 'boolean') {
+                          obj[col.field] = false;
+                      }else if (col.type === 'number'){
+                          obj[col.field] =  0;
+                      } else {
+                          obj[col.field] = '0';
+                      }
+                  }
+              } else if (col.key === 'radio') {
+                  obj[col.field] = myWindow.find('input[name="' + col.field + '"]:checked').val();
+              }
+          });
+          var postdata = { data: JSON.stringify(obj) };
+          RequestURLWaiting(Ermis.link+'-load', 'json', postdata, function (result) {
+              if (result.status === true) {
+                  var grid = $kGridItem.data("kendoGrid");
+                  var ds = new kendo.data.DataSource({ data: result.data , pageSize: 6 });
+                  grid.setDataSource(ds);
+                  grid.dataSource.page(1);
+              }else{
+                kendo.alert(result.message);
+              }
+          }, true);
+    };
+
+    var initKendoUiDialog = function () {
+      if(myWindow.length>0){
+        $kWindow = myWindow.kendoWindow({
+            width: "600px",
+            title: "",
+            visible: false,
+            actions: [
+                "Pin",
+                "Minimize",
+                "Maximize",
+                "Close"
+            ],
+            modal: true
+        }).data("kendoWindow").center();
+
+        $kWindow.title("Tìm kiếm hàng hóa");
+      }
+    };
+    var initFilterForm = function () {
+        $kWindow.open();
+    };
+
+
+    var initKendoGridItem = function () {
+      if($kGridItem.length>0){
+        var grid = $kGridItem.kendoGrid({
+              dataSource: {
+                  data: []
+              },
+              selectable: "row",
+              height: jQuery(window).height() * 0.5,
+              sortable: true,
+              pageable: true,
+              filterable: true,
+              columns: Ermis.columns_item,
+              dataBound: function () {
+                  var rows = this.items();
+                  $(rows).each(function () {
+                      var index = $(this).index() + 1;
+                      var rowLabel = $(this).find(".row-number");
+                      $(rowLabel).html(index);
+                  });
+              }
+          });
+          grid.data("kendoGrid").thead.kendoTooltip({
+            filter: "th",
+            content: function (e) {
+                var target = e.target; // element for which the tooltip is shown
+                return $(target).text();
+            }
+        });
+          $kGridItem.dblclick(function (e) {
+              initChoose(e);
+          });
+      }
+
+    };
+
+    var initChoose = function (e) {
+        var jQuerylink = jQuery(e.target);
+        e.preventDefault();
+        if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
+            if ($kGridItem.find('tr.k-state-selected').length > 0) {
+                var grid = $kGridItem.data("kendoGrid");
+                var dataItem = grid.dataItem($kGridItem.find('tr.k-state-selected'));
+                $kWindow.close();
+                jQuery('input[name=item_name]').val(dataItem.code+' | '+ dataItem.name + ' | '+dataItem.size )
+                jQuery('input[name=item]').val(dataItem.id)
+            } else {
+                kendo.alert(transText.please_select_line_choose);
+            }
+        }
+        jQuerylink.data('lockedAt', +new Date());
+    };
 
     var initKendoGrid = function () {
         dataSource = {
@@ -311,7 +453,7 @@
             serverPaging: true,
             serverFiltering: true
         },
-          filter: "contains"
+          filter: "startswith"
       });
 
 
@@ -365,6 +507,8 @@
     return {
 
         init: function () {
+            initKendoUiDialog();
+            initStatus();
             initKendoGrid();
             initGridList();
             initKendoUiContextMenu();
@@ -372,11 +516,13 @@
             initKendoEndDatePicker();
             initKendoUiDropList();
             initKendoItemDropList();
+            initKendoGridItem();
             initGetColunm();
             initHideShow();
             initSearchData();
             initReport();
             initTable();
+
         }
 
     };

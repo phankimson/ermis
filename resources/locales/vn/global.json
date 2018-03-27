@@ -25,6 +25,7 @@
     "name_en" : "Tên tiếng anh",
     "description" : "Mô tả",
     "accountant" : "Kế toán",
+    "today" : "Hôm nay",
     "this_week" : "Tuần này",
     "this_month" : "Tháng này",
     "this_quarter" : "Quý này",
@@ -54,6 +55,7 @@
     "suffixed" : "Hậu tố",
     "action" : "Hoạt động",
     "type" : "Loại",
+    "refesh" : "Làm mới",
     "start_time" : "Thời gian kết thúc",
     "end_time" : "Thời gian kết thúc"
 }

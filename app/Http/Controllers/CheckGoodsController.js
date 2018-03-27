@@ -78,6 +78,8 @@ class CheckGoodsController{
         .select('goods_size.*','unit.name as unit').fetch()
         var goodsize = goodsize1.toJSON().concat(goodsize2.toJSON())
         for(var d of goodsize){
+        var check = arr.filter(x => x.id == d.id)
+        if(check.length == 0){
         const closing_balance = yield ClosingBalance.query().where('date',lastMonth).where('inventory',data.stock).where('goods_size',d.id).first()
         const initial = yield Initial.query().where('inventory',data.stock).where('item',d.id).where('type',1).first()
         var a = 0
@@ -104,19 +106,20 @@ class CheckGoodsController{
       .TypeWhereNot('pos_general.inventory_issue',data.stock).where('pos_general.active',1).whereIn('pos_general.status',[1,2])
       .whereBetween('pos_general.date_voucher',[moment(startDate , "YYYY-MM-DD").format('YYYY-MM-DD'),moment(endDate, "YYYY-MM-DD").format('YYYY-MM-DD') ])
       .sum('pos_detail.quantity as q').sum('pos_detail.amount as a')
-      arr.push({id : d.id ,
-                goods : d.id ,
-                barcode : d.barcode ,
-                item : d.name ,
-                unit : d.unit ,
-                price : d.price ,
-                balance : a + c + receipt_inventory[0].q - issue_inventory[0].q,
-                balance_amount : b + e + receipt_inventory[0].a  - issue_inventory[0].a ,
-                check : 0 ,
-                check_amount: 0 ,
-                difference:  0,
-                difference_amount : 0
-        })
+          arr.push({id : d.id ,
+                    goods : d.id ,
+                    barcode : d.barcode ,
+                    item : d.name ,
+                    unit : d.unit ,
+                    price : d.price ,
+                    balance : a + c + receipt_inventory[0].q - issue_inventory[0].q,
+                    balance_amount : b + e + receipt_inventory[0].a  - issue_inventory[0].a ,
+                    check : 0 ,
+                    check_amount: 0 ,
+                    difference:  0,
+                    difference_amount : 0
+            })
+          }
       }
         response.json({ status: true  , data : arr})
       }else{
@@ -167,7 +170,7 @@ class CheckGoodsController{
           general_c.inventory_id = data.stock
           general_c.type = 10
           general_c.voucher = v
-          general_c.description = 'Điều chỉnh sau kiểm kê ngày '+ data.date
+          general_c.description = 'Điều chỉnh tăng sau kiểm kê ngày '+ data.date
           general_c.date_voucher = moment(data.date , "DD/MM/YYYY").format('YYYY-MM-DD')
           general_c.subject = general.id
           general_c.subject_key = 'check_goods_general'
@@ -176,6 +179,20 @@ class CheckGoodsController{
           general_c.status = 1
           general_c.active = 1
           yield general_c.save()
+          // Tạo phiếu XK
+          const general_k = new General()
+          general_k.inventory_id = data.stock
+          general_k.type = 11
+          general_k.voucher = v
+          general_k.description = 'Điều chỉnh giảm sau kiểm kê ngày '+ data.date
+          general_k.date_voucher = moment(data.date , "DD/MM/YYYY").format('YYYY-MM-DD')
+          general_k.subject = general.id
+          general_k.subject_key = 'check_goods_general'
+          general_k.inventory_issue = data.stock
+          general_k.user = user.id
+          general_k.status = 1
+          general_k.active = 1
+          yield general_k.save()
           for(var d of data.detail){
             const goods = yield GoodsSize.query().where('goods_size.id',d.goods)
                           .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
@@ -194,16 +211,27 @@ class CheckGoodsController{
             yield detail.save()
             if(detail.difference != 0 || detail.difference_amount != 0){
             const detail_r = new Detail()
-            detail_r.general_id = general_c.id
+            if(detail.difference>0){
+              detail_r.general_id = general_c.id
+              detail_r.quantity = detail.difference
+              detail_r.amount = detail.difference_amount
+              detail_r.purchase_amount = goods.purchase_price * detail.difference
+            }else{
+              detail_r.quantity = 0-detail.difference
+              if(detail.difference_amount>0){
+                detail_r.amount = detail.difference_amount
+              }else{
+                detail_r.amount = 0-detail.difference_amount
+              }
+              detail_r.purchase_amount = 0-(goods.purchase_price * detail.difference)
+              detail_r.general_id = general_k.id
+            }
             detail_r.item_id = d.goods
             detail_r.item_name = goods.name
             detail_r.barcode = goods.barcode
             detail_r.unit = goods.unit
-            detail_r.quantity = detail.difference
             detail_r.price = goods.price
-            detail_r.amount = detail.difference_amount
             detail_r.purchase_price = goods.purchase_price
-            detail_r.purchase_amount = goods.purchase_price * detail.difference
             detail_r.status = 1
             detail_r.active = 1
             yield detail_r.save()
@@ -238,7 +266,7 @@ class CheckGoodsController{
        response.json({ status: false , message: Antl.formatMessage('messages.you_not_permission') })
      }
     } catch (e) {
-    response.json({ status: false , message: Antl.formatMessage('messages.update_error')})
+    response.json({ status: false , message: Antl.formatMessage('messages.update_error')+' '+e.message})
     }
   }
 
@@ -257,6 +285,9 @@ class CheckGoodsController{
     var sheet_name_list = workbook.SheetNames
     const arr = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
     var data = []
+    var message = ''
+    var s = 0
+    var e = 0
     if(arr){
       for(let d of arr){
       const goodsize = yield GoodsSize.query()
@@ -264,29 +295,35 @@ class CheckGoodsController{
       .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
       .innerJoin('unit', 'unit.id', 'marial_goods.unit')
       .select('goods_size.*','unit.name as unit').first()
-      var index = -1;
-      if(data.filter(x => x.id === goodsize.id).length > 0){
-      var filteredObj = data.find(function(item, i){
-      if(item.id === goodsize.id){
-        index = i;
-        return i;
-      }
-      });
-        data[index].check = data[index].check + 1
+      if(goodsize){
+        var index = -1;
+        if(data.filter(x => x.id === goodsize.id).length > 0){
+        var filteredObj = data.find(function(item, i){
+        if(item.id === goodsize.id){
+          index = i;
+          return i;
+        }
+        });
+          data[index].check = data[index].check + 1
+        }else{
+          data.push({id : goodsize.id ,
+                    barcode : goodsize.barcode ,
+                    item : goodsize.name ,
+                    unit : goodsize.unit ,
+                    price : goodsize.price ,
+                    balance : 0,
+                    balance_amount : 0,
+                    check : 1
+            })
+        }
+        s = s +1
       }else{
-        data.push({id : goodsize.id ,
-                  barcode : goodsize.barcode ,
-                  item : goodsize.name ,
-                  unit : goodsize.unit ,
-                  price : goodsize.price ,
-                  balance : 0,
-                  balance_amount : 0,
-                  check : 1
-          })
+        message += d.barcode+','
+        e = e +1
       }
 
     }
-      response.json({ status: true , message: Antl.formatMessage('messages.success_import') , data : data})
+response.json({ status: true , message: Antl.formatMessage('messages.total_code_imported',{count_sucess : s })+' '+Antl.formatMessage('messages.total_code_error',{count_error : e })+' '+message , data : data})
     }else{
       response.json({ status: false , message: Antl.formatMessage('messages.failed_import')})
     }

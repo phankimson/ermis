@@ -6,6 +6,8 @@ const HistoryAction = use('App/Classes/HistoryAction')
 const Menu = use('App/Model/Menu')
 const MarialGoods = use('App/Model/MarialGoods')
 const Size = use('App/Model/Size')
+const HistoryPrice = use('App/Classes/HistoryPrice')
+const HistoryPriceModel = use('App/Model/HistoryPrice')
 
 class GoodsSizeController{
   constructor () {
@@ -53,6 +55,22 @@ class GoodsSizeController{
           result.purchase_price = data.purchase_price
           result.active = data.active
           yield result.save()
+
+          //Lưu lịch sử giá bán
+          const his1 = yield HistoryPriceModel.query().where('type',1).where('price',data.price).first()
+          if(!his1){
+            let hs = new HistoryPrice()
+            var rs = hs.insertRecord(result.id,1,result.price)
+            yield rs.save()
+          }
+          //Lưu lịch sử giá mua
+          const his2 = yield HistoryPriceModel.query().where('type',2).where('price',data.purchase_price).first()
+          if(!his2){
+            let hs = new HistoryPrice()
+            var rs = hs.insertRecord(result.id,2,result.purchase_price)
+            yield rs.save()
+          }
+
           // Lưu lịch sử
           const menu = yield Menu.query().where('code',this.menu).first()
           let hs = new HistoryAction()
@@ -127,6 +145,22 @@ class GoodsSizeController{
         result.active = data.active
         yield result.save()
         arr_push.push(result)
+
+        //Lưu lịch sử giá bán
+        const his1 = yield HistoryPriceModel.query().where('type',1).where('price',data.price).first()
+        if(!his1){
+          let hs = new HistoryPrice()
+          var rs = hs.insertRecord(result.id,1,result.price)
+          yield rs.save()
+          }
+          //Lưu lịch sử giá mua
+          const his2 = yield HistoryPriceModel.query().where('type',2).where('price',data.purchase_price).first()
+          if(!his2){
+          let hs = new HistoryPrice()
+          var rs = hs.insertRecord(result.id,2,result.purchase_price)
+          yield rs.save()
+          }
+
       }
       // Lưu lịch sử
       const menu = yield Menu.query().where('code',this.menu).first()

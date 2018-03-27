@@ -4,6 +4,7 @@ const Antl = use('Antl')
 const Helpers = use('Helpers')
 const fs = require('fs')
 const HistoryAction = use('App/Classes/HistoryAction')
+const HistoryPrice = use('App/Classes/HistoryPrice')
 const Menu = use('App/Model/Menu')
 const Size = use('App/Model/Size')
 const Gender = use('App/Model/Gender')
@@ -18,6 +19,7 @@ const Option = use('App/Model/Option')
 const GoodsSize = use('App/Model/GoodsSize')
 const Model = use('App/Model/Model')
 const Discount = use('App/Model/Discount')
+const HistoryPriceModel = use('App/Model/HistoryPrice')
 
 class MarialGoodsController{
   constructor () {
@@ -60,8 +62,8 @@ class MarialGoodsController{
   }
   * save (request, response){
     try {
-     const data = JSON.parse(request.input('data'))
-     const permission = JSON.parse(yield request.session.get('permission'))
+    const data = JSON.parse(request.input('data'))
+    const permission = JSON.parse(yield request.session.get('permission'))
     const image = request.file('image', {
       maxSize: '2mb',
       allowedExtensions: ['jpg', 'png', 'jpeg']
@@ -192,6 +194,20 @@ class MarialGoodsController{
                   goods.active = data.active
                   yield goods.save()
                 }
+                //Lưu lịch sử giá bán
+                const his1 = yield HistoryPriceModel.query().where('type',1).where('price',data.price).first()
+                if(!his1){
+                  let hs = new HistoryPrice()
+                  var rs = hs.insertRecord(goods.id,1,goods.price)
+                  yield rs.save()
+                }
+                //Lưu lịch sử giá mua
+                const his2 = yield HistoryPriceModel.query().where('type',2).where('price',data.purchase_price).first()
+                if(!his2){
+                  let hs = new HistoryPrice()
+                  var rs = hs.insertRecord(goods.id,2,goods.purchase_price)
+                  yield rs.save()
+                }
               }
             }else{
                 for(let s of size){
@@ -206,6 +222,21 @@ class MarialGoodsController{
                   goods.purchase_price = data.purchase_price
                   goods.active = data.active
                   yield goods.save()
+                  //Lưu lịch sử giá bán
+                  const his1 = yield HistoryPriceModel.query().where('type',1).where('price',data.price).first()
+                  if(!his1){
+                    let hs = new HistoryPrice()
+                    var rs = hs.insertRecord(goods.id,1,goods.price)
+                    yield rs.save()
+                  }
+                  //Lưu lịch sử giá mua
+                  const his2 = yield HistoryPriceModel.query().where('type',2).where('price',data.purchase_price).first()
+                  if(!his2){
+                    let hs = new HistoryPrice()
+                    var rs = hs.insertRecord(goods.id,2,goods.purchase_price)
+                    yield rs.save()
+                  }
+
                 }
             }
           }
@@ -220,7 +251,7 @@ class MarialGoodsController{
          response.json({ status: false , message: Antl.formatMessage('messages.no_data') })
          }
       } catch (e) {
-       response.json({ status: false , message: Antl.formatMessage('messages.update_fail')})
+       response.json({ status: false , message: Antl.formatMessage('messages.update_fail')+' '+e.message })
        }
      }
   * delete (request, response){
@@ -286,6 +317,7 @@ class MarialGoodsController{
         result.origin = data.origin
         result.type = data.type
         result.style = data.style
+        result.model = data.model
         result.gender = data.gender
         result.size = data.size
         result.discount = data.discount
@@ -331,6 +363,21 @@ class MarialGoodsController{
               goods.purchase_price = data.purchase_price
               goods.active = data.active
               yield goods.save()
+
+              //Lưu lịch sử giá bán
+              const his1 = yield HistoryPriceModel.query().where('type',1).where('price',data.price).first()
+              if(!his1){
+                let hs = new HistoryPrice()
+                var rs = hs.insertRecord(goods.id,1,goods.price)
+                yield rs.save()
+              }
+              //Lưu lịch sử giá mua
+              const his2 = yield HistoryPriceModel.query().where('type',2).where('price',data.purchase_price).first()
+              if(!his2){
+                let hs = new HistoryPrice()
+                var rs = hs.insertRecord(goods.id,2,goods.purchase_price)
+                yield rs.save()
+              }
             }
         }
 
@@ -352,7 +399,7 @@ class MarialGoodsController{
     response.json({ status: false , message: Antl.formatMessage('messages.you_are_not_permission_add')})
   }
   }catch(e){
-  response.json({ status: false , message: Antl.formatMessage('messages.failed_import')})
+  response.json({ status: false , message: Antl.formatMessage('messages.failed_import')}+' '+e.message)
   }
   }
 }

@@ -23,11 +23,11 @@ class ReportDetailInventoryController{
       const end_date = moment().format('DD/MM/YYYY')
       const start_date = moment().subtract((date_range.value - 1), 'days').format('DD/MM/YYYY')
       const stock = yield Inventory.query().where('active',1).orderBy('id', 'desc').fetch()
-      const item = yield GoodsSize.query().where('goods_size.active',1).orderBy('goods_size.id', 'desc')
-      .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
-      .innerJoin('size', 'size.id', 'goods_size.size').select('goods_size.id','goods_size.barcode','marial_goods.name as name','size.name as size')
-      .fetch()
-      const show = yield response.view('pos/pages/report_detail_inventory', {key : this.key ,title: title , end_date:end_date , start_date :start_date , item : item.toJSON() , stock : stock.toJSON()})  // EDIT
+      //const item = yield GoodsSize.query().where('goods_size.active',1).orderBy('goods_size.id', 'desc')
+      //.innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
+      //.innerJoin('size', 'size.id', 'goods_size.size').select('goods_size.id','goods_size.barcode','marial_goods.name as name','size.name as size')
+      //.fetch()
+      const show = yield response.view('pos/pages/report_detail_inventory', {key : this.key ,title: title , end_date:end_date , start_date :start_date , stock : stock.toJSON()})  // EDIT
       response.send(show)
   }
   * get (request, response) {
@@ -72,7 +72,7 @@ class ReportDetailInventoryController{
                 var a = (d.inventory_receipt == data.inventory)? d.quantity : 0
                 var b = (d.inventory_receipt == data.inventory)? eval('d.'+data.price) : 0
                 var c = (d.inventory_issue == data.inventory)? d.quantity : 0
-                var d = (d.inventory_issue == data.inventory)? (data.price == "amount") ? eval('d.'+data.price) : eval('d.'+data.price) + d.total_discount : 0
+                var e = (d.inventory_issue == data.inventory)? (data.price == "amount") ? eval('d.'+data.price) : eval('d.'+data.price) + d.total_discount : 0
                   arr.push({
                     id : d.id,
                     date_voucher : d.date_voucher,
@@ -82,14 +82,14 @@ class ReportDetailInventoryController{
                     quantity_receipt : a,
                     amount_receipt :  b,
                     quantity_issue : c,
-                    amount_issue :  d,
+                    amount_issue :  e,
                     quantity_balance : 0,
                     amount_balance : 0,
                   })
                   quantity_receipt += a
                   amount_receipt += b
                   quantity_issue += c
-                  amount_issue += d
+                  amount_issue += e
                 //
               }
 

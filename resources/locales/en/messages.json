@@ -70,5 +70,7 @@
   "already_paid" : "Already paid",
   "please_tick_barcode" : "Please tick barcode permission",
   "incurred_receipt" : "Incurred receipt inventory ! This operation can not be performed",
-  "not_closed_period" : "Not close period "
+  "not_closed_period" : "Not close period ",
+  "total_code_imported" : "Total {count_sucess} barcode imported !",
+  "total_code_error" : "Total {count_error} barcode error !"
 }

@@ -8,6 +8,9 @@ function KendoUiConfirm(message, title) {
         resizable: false,
         modal: true,
         visible: false,
+        activate: function(){
+          kendoWindow.find(".cancel-kendoui").focus();
+        },
         close: function (e) {
         this.destroy();
         dfd.resolve(result);

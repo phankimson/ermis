@@ -27,7 +27,7 @@ class PosUserController {
     }
     response.json({ status: false , message: Antl.formatMessage('messages.login_fail')})
     } catch (e) {
-    response.json({ status: false , message: Antl.formatMessage('messages.error')+' ' + e.message})
+    response.json({ status: false , message: Antl.formatMessage('messages.login_fail')})
     }
   }
 }

@@ -6,7 +6,7 @@ class currentUrl {
 
   * handle (request, response, next) {
 
-    View.global('currentUrl', (url,active) => {
+    response.viewInstance.global('currentUrl', (url,active) => {
       var link = request.url().substr(1)
       return url == link ? active : ''
     })
