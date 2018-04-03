@@ -10,6 +10,7 @@ var Ermis = function () {
   var tabs_count = 1;
   var room = [];
   var search = false;
+  var key = 'Alt+';
 
   var initWsConnectRoom = function(){
     var client = Client.connect('data')
@@ -125,6 +126,10 @@ var Ermis = function () {
   }
 
   var initOpenPayment = function(){
+    shortcut.remove(key + "S");
+    shortcut.remove(key + "C");
+    shortcut.add(key + "S", function (e) { initAgreePayment(e); });
+    shortcut.add(key + "C", function (e) { initClose(e); });
     jQuery("input[name=discount_percent_special]").data("kendoNumericTextBox").enable();
     jQuery("input[name=discount_special]").data("kendoNumericTextBox").enable();
     jQuery("input[name='total_amount']").val(jQuery("#amount_total").text());
@@ -150,6 +155,9 @@ var Ermis = function () {
     })
   }
   var initStatus = function(status){
+    shortcut.remove(key + "S");
+    shortcut.remove(key + "C");
+    shortcut.remove(key + "P");
     if(status == 0){
     //jQuery("#barcode").on("blur",initScanBarcode)
     jQuery(".add_item").on("click",initScanBarcode)
@@ -165,6 +173,8 @@ var Ermis = function () {
     jQuery('#exchange').data("kendoDropDownList").bind('change',initChangeExChange);
     jQuery("#print").addClass('disabled').attr("readonly","readonly");
     jQuery("#print").off('click');
+    shortcut.add(key + "S", function (e) { initPaymentForm(e); });
+    shortcut.add(key + "C", function (e) { initCloseTabs(e); });
     }else if(status == 1){ // Add new carts
       jQuery("#print").off('click');
       jQuery("#print").addClass('disabled').attr("readonly");
@@ -178,6 +188,8 @@ var Ermis = function () {
       jQuery('input[name="description"]').val(transText.sell_daily+' - '+moment().format('DD/MM/YYYY'));
       var grid = $kGrid.data('kendoGrid');
       grid.dataSource.data([]);
+      shortcut.add(key + "S", function (e) { initPaymentForm(e); });
+      shortcut.add(key + "C", function (e) { initCloseTabs(e); });
     }else if(status == 2){ // Payment success
       jQuery('#payment').off('click');
       jQuery('#close_tabs').off('click');
@@ -186,6 +198,7 @@ var Ermis = function () {
       jQuery("#print").removeClass('disabled').removeAttr("readonly");
       jQuery("#print").on('click',initPrint);
       jQuery("#form-action").find('input','select').addClass('disabled').attr("readonly","readonly");
+      shortcut.add(key + "P", function (e) { initPrint(e); });
     }else if(status == 3){ // Change
       jQuery("#print").off('click');
       jQuery("#print").addClass('disabled').attr("readonly");
@@ -195,6 +208,8 @@ var Ermis = function () {
       jQuery("#payment").removeClass('disabled').removeAttr("readonly");
       jQuery("#close_tabs").removeClass('disabled').removeAttr("readonly");
       jQuery("#form-action").find('input','select').not('input[name="discount_percent"],input[name="discount"],input[name="voucher"]').removeClass('disabled').removeAttr("readonly");
+      shortcut.add(key + "S", function (e) { initPaymentForm(e); });
+      shortcut.add(key + "C", function (e) { initCloseTabs(e); });
     }else if(status == 4){
       // Payment complete
        jQuery('select[name="payment_method"]').data('kendoDropDownList').value(1);
@@ -203,6 +218,7 @@ var Ermis = function () {
        jQuery('input[name="rate"]').val(0);
        jQuery('input[name="total_exchange"]').val(0);
        jQuery('#exchange').data('kendoDropDownList').value(0);
+       shortcut.add(key + "P", function (e) { initPrint(e); });
     }
   }
   var getId = function(){

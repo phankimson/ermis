@@ -68,14 +68,14 @@
                     <td><input type="checkbox" class="all" name="s"/></td>
                 </tr>
                 {% set Menu = use('App/Model/Menu') %}
-                {% yield menu = Menu.query().whereIn('type',[type,3]).where('parent_id','0').fetch() %}
+                {% yield menu = Menu.query().whereIn('type',[type,3]).where('parent_id','0').orderBy('type').fetch() %}
                 {% yield count = Menu.query().whereIn('type',[type,3]).count('* as total') %}
 
                 {% if count[0].total > 0 %}
                   {% for m1 in menu.toJSON() %}
                     {% if m1.link == "" %}
                         <tr><td colspan="7" style="text-align:center; text-transform: uppercase;font-weight:bold">{{  shortif( lang == 'vn' , m1.name , m1.name_en ) }}</td></tr>
-                        {% yield menu1 = Menu.query().where('parent_id',m1.id).fetch() %}
+                        {% yield menu1 = Menu.query().where('parent_id',m1.id).orderBy('type').fetch() %}
                         {% for m2 in menu1.toJSON() %}
                         {% yield count1 = Menu.query().where('parent_id',m2.id).count('* as total') %}
                         {% if count1[0].total >0 %}
@@ -88,7 +88,7 @@
                                     <td><input type="checkbox" class="checkbox-group" name="p-{{ m2.id }}" /></td>
                                     <td><input type="checkbox" class="checkbox-group" name="s-{{ m2.id }}" /></td>
                                 </tr>
-                                {% yield menu2 = Menu.query().where('parent_id',m2.id).fetch() %}
+                                {% yield menu2 = Menu.query().where('parent_id',m2.id).orderBy('type').fetch() %}
                                  {% for m3 in menu2.toJSON() %}
                                     <tr class="item" data-group="{{ m3.parent_id }}" data-id="{{ m3.id }}">
                                         <td>{{  shortif( lang == 'vn' , m3.name , m3.name_en ) }}</td>

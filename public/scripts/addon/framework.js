@@ -1,7 +1,7 @@
 function KendoUiConfirm(message, title) {
     var dfd = new jQuery.Deferred();
     var result = false;
-    var kendoContent = '<p class="confirm-message">' + message + '</p><br/><button class="confirm-kendoui k-button">' + transText.yes + '</button><button class="cancel-kendoui k-button uk-margin-small-left">' + transText.no + '</button>';
+    var kendoContent = '<p class="confirm-message">' + message + '</p><br/><button tabindex="2" class="confirm-kendoui k-button">' + transText.yes + '</button><button tabindex="1" class="cancel-kendoui k-button uk-margin-small-left">' + transText.no + '</button>';
     var kendoWindow = $("<div />").kendoWindow({
         width: "400px",
         title: title,

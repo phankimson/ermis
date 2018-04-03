@@ -12,6 +12,8 @@ var Ermis = function () {
 
   var initStatus = function (status){
     var action =  jQuery("#form-action");
+    shortcut.add(key + "S", function (e) { initCancel(e); });
+    shortcut.add(key + "C", function (e) { initReturnPayment(e); });
     if(status == 0){
      action.find('input[name="voucher"]').val(voucher);
      action.find('input[name="date_voucher"]').val(moment().format('DD/MM/YYYY'));

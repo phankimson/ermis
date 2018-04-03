@@ -306,9 +306,20 @@
             window.open(url);
         }
         function onExcel(e) {
+          grid.setOptions({
+              excel: {
+                  allPages: true
+              }
+            })
             grid.saveAsExcel();
         }
         function onPDF(e) {
+          grid.setOptions({
+            pdf: {
+                 allPages: true,
+                 repeatHeaders: true
+             },
+           });
             grid.saveAsPDF();
         }
 

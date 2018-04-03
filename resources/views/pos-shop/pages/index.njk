@@ -32,15 +32,15 @@
                         </div>
                         <div class="md-card-content">
                         <div id="action_button">
-                        <a class="md-btn md-btn-primary md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" id="payment" href="javascript:void(0)">
+                        <a class="md-btn md-btn-primary md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" data-uk-tooltip title="{{ antl.get('store.payment') }} (Alt + S)"  id="payment" href="javascript:void(0)">
                             <i class="material-icons">attach_money</i>
                             {{ antl.get('store.payment') }}
                         </a>
-                        <a class="md-btn md-btn-warning md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" id="print" href="javascript:void(0)">
+                        <a class="md-btn md-btn-warning md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" data-uk-tooltip title="{{ antl.get('action.print') }} (Alt + P)" id="print" href="javascript:void(0)">
                             <i class="material-icons">print</i>
                             {{ antl.get('action.print') }}
                         </a>
-                        <a class="md-btn md-btn-danger md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" id="close_tabs" href="javascript:void(0)">
+                        <a class="md-btn md-btn-danger md-btn-small md-btn-wave-light md-btn-icon waves-effect waves-button waves-light" data-uk-tooltip title="{{ antl.get('action.cancel') }} (Alt + C)" id="close_tabs" href="javascript:void(0)">
                             <i class="material-icons">block</i>
                             {{ antl.get('action.cancel') }}
                         </a>
@@ -362,6 +362,7 @@ jQuery(document).ready(function () {
 </script>
 <script src="{{ url('scripts/uikit.min.js') }}"></script>
 <script src="{{ url('scripts/ukit_pagination.js') }}"></script>
+<script src="{{ url('scripts/shortcuts.js') }}"></script>
 <script src="{{ url('library/jquery.print/jQuery.print.js') }}"></script>
 <script src="{{ url('scripts/addon/frontend/store_sale.js') }}"></script>
 {% endblock %}

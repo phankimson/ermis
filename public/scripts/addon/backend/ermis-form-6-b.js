@@ -664,7 +664,7 @@
     };
 
     var initKendoUiDropListDate = function () {
-        jQuery(".droplist-date").kendoDropDownList({
+        jQuery("#fast_date").kendoDropDownList({
             filter: "contains",
             select: onSelect
         });

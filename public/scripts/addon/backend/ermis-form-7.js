@@ -235,12 +235,8 @@
         $table.bootstrapTable({
             data: Ermis.data,
         });
-        jQuery(function () {
-            jQuery('#toolbar').find('select').change(function () {
-                $table.bootstrapTable('destroy').bootstrapTable({
-                    exportDataType: jQuery(this).val(),
-                });
-            });
+        $table.bootstrapTable('destroy').bootstrapTable({
+            exportDataType: 'all',
         });
     };
 
