@@ -18,7 +18,9 @@ class ChatController {
       currentAllSocket[index].reconnect = true
       socket.toEveryone().emit('server-check-online', { 'current_user' : this.socket.currentUser , 'user_all' : currentAllSocket , 'reconnect' : true})
     }else{
+      if(this.socket.currentUser.id ){
       currentAllSocket.push({"user": this.socket.currentUser.id ,"socket": this.socket.id , "reconnect" : false})
+      }
       // Kiểm tra session user Báo kết nối tới server
       //console.log(currentAllSocket)
       socket.toEveryone().emit('server-check-online', { 'current_user' : this.socket.currentUser , 'user_all' : currentAllSocket , 'reconnect' : false})

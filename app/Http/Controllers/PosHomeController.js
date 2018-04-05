@@ -2,13 +2,13 @@
 const Inventory = use('App/Model/Inventory')
 const Detail = use('App/Model/PosDetail')
 const Option = use('App/Model/Option')  // EDIT
+const Antl = use('Antl')
 const GoodsInventoryController = use('App/Http/Controllers/GoodsInventoryController')
 
 var moment = require('moment')
 class PosHomeController{
 
     * show (request, response){
-        GoodsInventoryController.save
         const inventory = yield Inventory.query().where('active',1).fetch()
         // Lấy doanh thu tất cả kho
         const date_range = yield Option.query().where("code","DATE_RANGE_CHART").first()
