@@ -14,7 +14,10 @@
     var ds = '';
     var a = []; var b; var data = [];
     var status = 0;
-    var voucher = ''; var storedarrId = [];
+    var voucher = '';
+    var storedarrId = [];
+    var index = 0;
+    var currentIndex = 0;
 
     var initLoadData = function (dataId) {
         var postdata = { data: JSON.stringify(dataId) };
@@ -60,8 +63,8 @@
     };
 
     var initBindData = function () {
-        if (localStorage.dataId) {
-            var dataId = localStorage.dataId;
+        if (sessionStorage.dataId) {
+            var dataId = sessionStorage.dataId;
             initLoadData(dataId);
         }
     };
@@ -84,10 +87,10 @@
     };
 
     var initCheckSession = function () {
-        if (!localStorage.status) {
+        if (!sessionStorage.status) {
             status = 1;
         } else {
-            status = parseInt(localStorage.status);
+            status = parseInt(sessionStorage.status);
         }
         return status;
     };
@@ -207,7 +210,7 @@
       var $this = e.currentTarget ? e.currentTarget : e
       obj.value = jQuery($this).val();
       if(obj.value){
-      obj.id = localStorage.dataId;
+      obj.id = sessionStorage.dataId;
       var postdata = { data: JSON.stringify(obj) };
       RequestURLWaiting(Ermis.link+'-scan', 'json', postdata, function (result) {
           if (result.status === true) {
@@ -478,7 +481,7 @@
         jQuery(".k-input").addClass('disabled');
         if (flag === 1) {//ADD
             jQuery('#add-top-menu-detail').show();
-            localStorage.removeItem("dataId");
+            sessionStorage.removeItem("dataId");
             jQuery('.cancel,.save,.choose,.cancel-window,.filter,.reference,.advance_teacher,.advance_employee').removeClass('disabled');
             jQuery('.cancel').on('click', initCancel);
             jQuery('.save').on('click', initSave);
@@ -543,7 +546,7 @@
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);
             jQuery('.delete').on('click', initDelete);
-            if (!localStorage.dataId) {
+            if (!sessionStorage.dataId) {
                 jQuery('.print,.delete,.edit').addClass('disabled');
                 jQuery('.print,.delete,.edit').off('click');
             }
@@ -572,7 +575,7 @@
             jQuery('.print-item').on('click', initPrint);
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);
-            if (!localStorage.dataId) {
+            if (!sessionStorage.dataId) {
                 jQuery('.print,.delete,.edit').addClass('disabled');
                 jQuery('.print,.delete,.edit').off('click');
             }
@@ -936,7 +939,7 @@
         e.preventDefault();
         if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
             if (Ermis.per.e) {
-                    var dataId = localStorage.dataId;
+                    var dataId = sessionStorage.dataId;
                     var postdata = { data:JSON.stringify(dataId) };
                     RequestURLWaiting(Ermis.link+'-write', 'json', postdata, function (result) {
                         if (result.status === true) {
@@ -956,7 +959,7 @@
         e.preventDefault();
         if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
             if (Ermis.per.e) {
-                    var dataId = localStorage.dataId;
+                    var dataId = sessionStorage.dataId;
                     var postdata = { data: JSON.stringify(dataId) };
                     RequestURLWaiting(Ermis.link+'-unwrite', 'json', postdata, function (result) {
                         if (result.status === true) {
@@ -979,7 +982,7 @@
             $.when(KendoUiConfirm(transText.are_you_sure, transText.message)).then(function (confirmed) {
                 if (confirmed) {
                     var obj = {}; var crit = false;
-                    obj.id = localStorage.dataId;
+                    obj.id = sessionStorage.dataId;
                     obj.detail = $kGrid.data("kendoGrid").dataSource.data();
                     obj.type = jQuery('#tabstrip').find('.k-state-active').attr("data-search");
                     obj.total_number = ConvertNumber(jQuery('#quantity_total').html());
@@ -1037,7 +1040,9 @@
                             var postdata = { data: JSON.stringify(obj) };
                             RequestURLWaiting(Ermis.link+'-save', 'json', postdata, function (result) {
                                 if (result.status === true) {
-                                    localStorage.dataId = result.dataId;
+                                    sessionStorage.dataId = result.dataId;
+                                    storedarrId.push(result.dataId);
+                                    sessionStorage.arrId = JSON.stringify(storedarrId);
                                     initStatus(2);
                                     initActive("1");
                                     jQuery('.voucher').val(result.voucher_name);
@@ -1066,7 +1071,7 @@
         if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
             if (Ermis.per.a) {
             initStatus(1);
-            localStorage.removeItem('dataID');
+            sessionStorage.removeItem('dataID');
             } else {
                 kendo.alert(transText.you_not_permission_add);
             }
@@ -1080,28 +1085,32 @@
             if (Ermis.per.d) {
             $.when(KendoUiConfirm(transText.are_you_sure, transText.message)).then(function (confirmed) {
                 if (confirmed) {
-                    var dataId = localStorage.dataId;
+                    var dataId = sessionStorage.dataId;
                     var postdata = { data: JSON.stringify(dataId) };
                     RequestURLWaiting(Ermis.link+'-delete', 'json', postdata, function (result) {
                         if (result.status === true) {
-                            var current = localStorage.current;
-                            delete storedarrId[current];
-                            storedarrId.sort();
+                            //var current = sessionStorage.current;
+                            storedarrId = storedarrId.filter(function(e) { return e != parseInt(sessionStorage.dataId) })
+                            //storedarrId.sort();
+                            sessionStorage.arrId = JSON.stringify(storedarrId);
+                            //if (storedarrId.length > 0) {
+                            //    storedarrId.length = storedarrId.length - 1;
+                            //}
                             if (storedarrId.length > 0) {
-                                storedarrId.length = storedarrId.length - 1;
-                            }
+                                index =  index - 1;
+                                var dataId = getAtIndex(index);
+                                sessionStorage.dataId = dataId;
+                                initLoadData(dataId);
+                              } else {
+                                  sessionStorage.removeItem('dataId');
+                                  initStatus(4);
+                              }
                         }else{
                           kendo.alert(result.message);
                         }
                     }, true);
-                    if (storedarrId.length > 0) {
-                        localStorage.current = 0;
-                        localStorage.dataId = storedarrId[localStorage.current];
-                        dataId = localStorage.dataId;
-                        initLoadData(dataId);
-                    } else {
-                        initStatus(4);
-                    }
+
+
                 }
             });
             } else {
@@ -1129,8 +1138,8 @@
         if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
             $.when(KendoUiConfirm(transText.are_you_sure, transText.message)).then(function (confirmed) {
                 if (confirmed) {
-                    if (localStorage.dataId) {
-                        var dataId = localStorage.dataId;
+                    if (sessionStorage.dataId) {
+                        var dataId = sessionStorage.dataId;
                         initLoadData(dataId);
                         initStatus(5);
                     } else {
@@ -1148,7 +1157,7 @@
             //$.when(KendoUiConfirm(transText.are_you_sure, transText.message)).then(function (confirmed) {
             //    if (confirmed) {
                     var obj = {};
-                    obj.id = localStorage.dataId;
+                    obj.id = sessionStorage.dataId;
                     obj.voucher = jQuery(this).attr('data-id');
                         var postdata = { data: JSON.stringify(obj) };
                         RequestURLWaiting(Ermis.link+'-print', 'json', postdata, function (result) {
@@ -1175,8 +1184,8 @@
         jQuerylink.data('lockedAt', +new Date());
     };
     var initGetStoredArrId = function () {
-        if (localStorage.arrId) {
-            storedarrId = JSON.parse(localStorage.arrId);
+        if (sessionStorage.arrId) {
+            storedarrId = JSON.parse(sessionStorage.arrId);
             return storedarrId;
         }
     };
@@ -1184,15 +1193,15 @@
         var jQuerylink = jQuery(e.target);
         e.preventDefault();
         if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
-            if (localStorage.current > 0) {
-                localStorage.current = parseInt(localStorage.current) - 1;
-                var dataId = storedarrId[localStorage.current];
-                localStorage.dataId = dataId;
+            //if (sessionStorage.current > 0) {
+                index =  index - 1;
+                var dataId = getAtIndex(index);
+                sessionStorage.dataId = dataId;
                 initLoadData(dataId);
-            } else {
-                jQuery('.back').addClass('disabled');
-            }
-            jQuery('.forward').removeClass('disabled');
+          //  } else {
+          //      jQuery('.back').addClass('disabled');
+          //  }
+          //  jQuery('.forward').removeClass('disabled');
         }
         jQuerylink.data('lockedAt', +new Date());
     };
@@ -1200,15 +1209,15 @@
         var jQuerylink = jQuery(e.target);
         e.preventDefault();
         if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
-            if (localStorage.current < storedarrId.length-1) {
-                localStorage.current = parseInt(localStorage.current) + 1;
-                var dataId = storedarrId[localStorage.current];
-                localStorage.dataId = dataId;
-                initLoadData(dataId);
-            } else {
-                jQuery('.forward').addClass('disabled');
-            }
-            jQuery('.back').removeClass('disabled');
+          //  if (sessionStorage.current < storedarrId.length-1) {
+            index =  index + 1;
+            var dataId = getAtIndex(index);
+            sessionStorage.dataId = dataId;
+            initLoadData(dataId);
+          //  } else {
+          //    jQuery('.forward').addClass('disabled');
+          //  }
+          //  jQuery('.back').removeClass('disabled');
         }
         jQuerylink.data('lockedAt', +new Date());
     };
@@ -1291,9 +1300,11 @@
           if (data[i].purchase_price !== 0 && check !== -1) {
               data[i].purchase_price = data[i].purchase_price.replace(/\,/g, "");
           }
-          if (data[i].quantity > 0 && data[i].price > 0) {
+          var a = grid.columns
+          var searchResultArray = findObjectByKey(a ,'field','price');
+          if (data[i].quantity > 0 && !searchResultArray.hidden) {
                 total += data[i].quantity * data[i].price;
-            }else if(data[i].quantity > 0 && data[i].purchase_price > 0){
+            }else if(data[i].quantity > 0 && searchResultArray.hidden){
                 total += data[i].quantity * data[i].purchase_price;
             }
         }
@@ -1503,6 +1514,16 @@
        }
        return value;
    };
+
+     getAtIndex = function(i) {
+      if (i === 0) {
+        return storedarrId[currentIndex];
+      } else if (i < 0) {
+        return storedarrId[-(currentIndex + storedarrId.length + i) % storedarrId.length];
+      } else if (i > 0) {
+        return storedarrId[(currentIndex + i) % storedarrId.length];
+      }
+    }
 
    checkboxClicked = function(element) {
 

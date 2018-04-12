@@ -8,7 +8,7 @@ var Client = function () {
         const client = io.channel(channel)
         client.connect(function (error, connected) {
           if (error) {
-            kendo.alert(error);
+            //kendo.alert(error);
             return
           }
           // all good

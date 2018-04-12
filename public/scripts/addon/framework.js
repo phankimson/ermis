@@ -56,6 +56,15 @@ function ConvertNumber ($string){
     return $string;
 }
 
+function findObjectByKey(array, key, value) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][key] === value) {
+            return array[i];
+        }
+    }
+    return null;
+}
+
 function UIkitshowNotify (message, status ,timeout,group , pos) {
   thisNotify = UIkit.notify({
       message: message ? message : '',
