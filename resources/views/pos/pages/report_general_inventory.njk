@@ -37,9 +37,9 @@
             <td>
             <select class="droplist xlarge" name="item">
                 <option readonly selected value="">--Select--</option>
-                {% for x in item %}
+                {% asyncAll  x in item %}
                 <option value="{{ x.id }}">{{ x.barcode }} - {{x.name}}</option>
-                {% endfor %}
+                {% endall  %}
 
             </select>
             </td>
@@ -50,9 +50,9 @@
             <td>
             <select class="droplist xlarge" name="size">
                 <option readonly selected value="">--Select--</option>
-                {% for x in size %}
+                {% asyncAll  x in size %}
                 <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
-                {% endfor %}
+                {% endall  %}
 
             </select>
             </td>
