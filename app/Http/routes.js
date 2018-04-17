@@ -460,6 +460,10 @@ Route.post('/receipt-cash-voucher-voucher-print', 'ReceiptCashGeneralController.
   Route.get('/check-goods-general', 'CheckGoodsGeneralController.show')
   Route.post('/check-goods-general-delete', 'CheckGoodsGeneralController.delete')
 
+  // Update purchase price
+   Route.get('/update-purchase-price', 'UpdatePurchasePriceController.show')
+   Route.post('/update-purchase-price-save', 'UpdatePurchasePriceController.save')
+
   //Approved
   Route.get('/approved-inventory-voucher', 'ApprovedInventoryVoucherController.show')
   Route.post('/approved-inventory-voucher-page', 'ApprovedInventoryVoucherController.page')

@@ -206,7 +206,7 @@ class IssueInventoryVoucherController{
        try {
             const data = JSON.parse(request.input('data'))
             if(data){
-              const closing = yield Closing.query().where('date',moment(data.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).count('* as total')
+              const closing = yield Closing.query().where('date',moment(data.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).where('active',1).count('* as total')
               if(closing[0].total == 0){
                 var general = []
                 var status = 0
@@ -272,10 +272,10 @@ class IssueInventoryVoucherController{
                     detail.barcode = goods.barcode
                     detail.unit = goods.unit
                     detail.quantity = d.quantity
-                    detail.price = goods.price
-                    detail.amount = goods.price * d.quantity
                     detail.purchase_price = convert.Number(d.purchase_price)
                     detail.purchase_amount = convert.Number(d.purchase_price) * d.quantity
+                    detail.price = convert.Number(d.price)
+                    detail.amount = convert.Number(d.price) * d.quantity
                     detail.lot_number = d.lot_number
                     detail.expiry_date = d.expiry_date
                     detail.order = d.order

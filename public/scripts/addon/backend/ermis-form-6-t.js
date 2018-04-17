@@ -215,8 +215,8 @@
     var initStatus = function (flag) {
         shortcut.remove(key + "S");
         shortcut.remove(key + "C");
-        shortcut.remove(key + ">");
-        shortcut.remove(key + "<");
+        shortcut.remove(key + ".");
+        shortcut.remove(key + ",");
         jQuery('.back,.forward,.print,.cancel,.save').addClass('disabled');
         jQuery('.back,.forward,.print-item,.cancel,.save').off('click');
         jQuery('input,textarea').not('.header_main_search_input').not('#files').not('.k-filter-menu input').addClass('disabled');
@@ -225,8 +225,8 @@
         jQuery('.date-picker').addClass('disabled');
         if (flag === 1) {//STATUS = 2
             jQuery('.print,.back,.forward').removeClass('disabled');
-            shortcut.add(key + "<", function (e) { initBack(e); });
-            shortcut.add(key + ">", function (e) { initForward(e); });
+            shortcut.add(key + ",", function (e) { initBack(e); });
+            shortcut.add(key + ".", function (e) { initForward(e); });
             jQuery('.print-item').on('click', initPrint);
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);
@@ -240,8 +240,8 @@
             checkSelectRow();
         } else if (flag === 2) {//SAVE
             jQuery('.print,.back,.forward').removeClass('disabled');
-            shortcut.add(key + "<", function (e) { initBack(e); });
-            shortcut.add(key + ">", function (e) { initForward(e); });
+            shortcut.add(key + ",", function (e) { initBack(e); });
+            shortcut.add(key + ".", function (e) { initForward(e); });
             jQuery('.print-item').on('click', initPrint);
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);
@@ -263,8 +263,8 @@
             jQuery('.print,.back').removeClass('disabled');
             shortcut.add(key + "A", function (e) { initAdd(e); });
             shortcut.add(key + "E", function (e) { initEdit(e); });
-            shortcut.add(key + "<", function (e) { initBack(e); });
-            shortcut.add(key + ">", function (e) { initForward(e); });
+            shortcut.add(key + ",", function (e) { initBack(e); });
+            shortcut.add(key + ".", function (e) { initForward(e); });
             jQuery('.print-item').on('click', initPrint);
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);
@@ -278,8 +278,8 @@
         } else if (flag === 5) { //BIND
             jQuery('#add-top-menu-detail-edit').show();
             jQuery('.print,.back,.forward').removeClass('disabled');
-            shortcut.add(key + "<", function (e) { initBack(e); });
-            shortcut.add(key + ">", function (e) { initForward(e); });
+            shortcut.add(key + ",", function (e) { initBack(e); });
+            shortcut.add(key + ".", function (e) { initForward(e); });
             jQuery('.print-item').on('click', initPrint);
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);

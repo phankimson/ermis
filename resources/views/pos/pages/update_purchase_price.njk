@@ -1,0 +1,93 @@
+
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{ antl.get('index.title') }}</title>
+<link rel="stylesheet" href="{{ url('css/addon/backend/permission.css') }}">
+<link rel="stylesheet" href="{{ url('library/uniform/dist/css/default.css') }}" type="text/css" media="screen" charset="utf-8" />
+{% endblock %}
+
+{% block content %}
+<div class="md-card uk-margin-medium-bottom">
+<div class="md-card-content">
+<div class="uk-grid" id="form-search">
+    <div class="uk-width-medium-1-4">
+
+    </div>
+    <div class="width-large">
+    <table>
+        <tr>
+        <td><span class="row-padding-right-small">{{ antl.get('global.start_date') }} :</span></td>
+        <td>
+        <input type="text" data-type="date" id="start" name="start_date" value="{{ start_date }}" />
+        <span class="row-padding-right-small"></span>
+
+        <span class="row-padding-right-small">{{ antl.get('global.end_date') }}:</span>
+        <input type="text" data-type="date" id="end" name="end_date" value="{{ end_date }}" />
+         </td>
+        </tr>
+
+
+        <tr>
+        <td><label class="row-padding-right-small">{{ antl.get('inventory_voucher.item_name') }}</label></td>
+        <td>
+            <input type="text" class="hidden disabled" readonly name="item"/>
+            <input type="text" class="k-textbox xlarge disabled" readonly id="icon-right" name="item_name"/>
+              <a href="javascript:;" class="search_item"><i class="md-icon material-icons">search</i></a>
+        </td>
+        </tr>
+
+    </table>
+
+        <div class="row-padding-bottom-small"></div>
+        <div>
+            <a href="javascript:;" class="k-button uk-alert-success row-padding-bottom-small get_report" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_note</i>{{ antl.get('global.report') }}</a>
+            <a href="javascript:;" class="k-button k-primary row-padding-bottom-small get_data" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_available</i>{{ antl.get('global.get_data') }}</a>
+            <a href="javascript:;" class="k-button uk-alert-warning btn-hide" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">exit_to_app</i>{{ antl.get('global.hidden_condition') }}</a>
+        </div>
+
+    </div>
+    <div class="uk-width-medium-1-4">
+
+    </div>
+
+</div>
+<div id="form-window-item" style="display:none">
+<div class="uk-width-medium-4-4">
+    <input type="radio" name="filter_nature" id="1" value="1" class="k-radio" checked="checked">
+    <label class="k-radio-label" for="1">{{ antl.get('marial_goods.material_goods') }}</label>
+</div>
+<div class="uk-margin-medium-top"></div>
+
+<select class="droplist" name="filter_field">
+    <option readonly selected value="">--Select--</option>
+    <option value="barcode">{{ antl.get('marial_goods.barcode') }}</option>
+    <option value="code">{{ antl.get('global.code') }}</option>
+    <option value="name">{{ antl.get('global.name') }}</option>
+    <option value="name_en">{{ antl.get('global.name_en') }}</option>
+    <option value="price">{{ antl.get('marial_goods.price') }}</option>
+</select>
+<input type="text" name="filter_value" class="k-textbox">
+<a href="javascript:;" class="uk-margin-left-30 k-button k-primary" id="search_item" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">search</i>{{ antl.get('action.search') }}</a>
+
+<div class="uk-margin-medium-top"></div>
+
+<div id="grid_item"></div>
+
+<div class="uk-margin" style="float : right">
+    <a href="javascript:;" class="k-button k-primary choose" data-uk-tooltip title="{{ antl.get('action.choose') }}"><i class="md-18 material-icons md-color-white">done</i>{{ antl.get('action.choose') }}</a>
+    <a href="javascript:;" class="k-button k-primary cancel-window" data-uk-tooltip title="{{ antl.get('action.close') }}"><i class="md-18 material-icons md-color-white">not_interested</i>{{ antl.get('action.close') }}</a>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+    <script>
+            jQuery(document).ready(function () {
+                Ermis.per = JSON.parse('{{ permission | safe }}')
+            });
+    </script>
+    <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('scripts/addon/backend/update-purchase-price.js ') }}"></script>
+{% endblock %}

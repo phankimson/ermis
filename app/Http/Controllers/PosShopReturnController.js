@@ -162,9 +162,9 @@ class PosShopReturnController {
       //
 
       response.json({ status: true  , message: Antl.formatMessage('messages.return_success') , voucher : v , general : general.id})
-  }else{
-      response.json({ status: false  , message: Antl.formatMessage('messages.return_is_missing')})
-  }
+      }else{
+          response.json({ status: false  , message: Antl.formatMessage('messages.return_is_missing')})
+      }
     }catch(e){
       response.json({ status: false , message: Antl.formatMessage('messages.return_error')})
     }

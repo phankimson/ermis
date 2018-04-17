@@ -200,29 +200,29 @@
                                 { "field" : "unit","title" : "{{ antl.get('inventory_voucher.unit') }}","width" : "100px" ,"set" : "1" },
                                 { "field" : "size","title" : "{{ antl.get('inventory_voucher.size') }}","width" : "100px" ,"set" : "1" },
                                 { "field" : "quantity","title" : "{{ antl.get('inventory_voucher.quantity') }}","width" : "100px",aggregates: ['sum'], footerTemplate: "<p id='quantity_total'>#=sum#</p>" },
-                                { "field" : "purchase_price","title" : "{{ antl.get('inventory_voucher.purchase_price') }}" ,"width" : "150px",format: "{0:n0}",decimals: 0 , footerTemplate: "<p>#=kendo.toString(average, 'n0')#</p>" ,"set" : "3"},
-                                { "field" : "purchase_amount","title" : "{{ antl.get('inventory_voucher.amount') }}" ,"width" : "200px",format: "{0:n0}" ,decimals: 0 , footerTemplate: "<p id='amount_total'>#=calculatePriceAggregate()#</p>" ,template: "#=calculateAmount(quantity,purchase_price)#"},
+                                { "field" : "price","title" : "{{ antl.get('inventory_voucher.price') }}" ,"width" : "150px",format: "{0:n0}",decimals: 0 , footerTemplate: "<p>#=kendo.toString(average, 'n0')#</p>" ,"set" : "3"},
+                                { "field" : "amount","title" : "{{ antl.get('inventory_voucher.amount') }}" ,"width" : "200px",format: "{0:n0}" ,decimals: 0 , footerTemplate: "<p id='amount_total'>#=calculatePriceAggregate()#</p>" ,template: "#=calculateAmount(quantity,price)#"},
                                 { "field" : "lot_number","title" : "{{ antl.get('inventory_voucher.lot_number') }}" ,"width" : "150px" },
                                 { "field" : "expiry_date","title" : "{{ antl.get('inventory_voucher.expiry_date') }}" ,"width" : "150px",format:"{0:dd/MM/yyyy}" },
                                 { "field" : "order","title" : "{{ antl.get('inventory_voucher.order') }}" ,"width" : "200px"},
-                                { "field" : "price", hidden : true, "set" : "3"} ];
+                                { "field" : "purchase_price", hidden : true, "set" : "3"} ];
 
 
             Ermis.field = {
                 detail : {field :"detail" ,defaultValue: 0},
-                price : {field :"price" ,defaultValue: 0},
+                purchase_price : {field :"purchase_price" ,defaultValue: 0},
                 item_id : { field : "item_id",type:"number"},
                 item_name : {editable: false },
                 unit :      {editable: false },
                 quantity : {field : "quantity",type:"number" , validation: { min: 0, required: true }},
-                purchase_price:     {field : "purchase_price",type:"number" , validation: { min: 0, required: true }},
+                price:     {field : "price",type:"number" , validation: { min: 0, required: true }},
                 expiry_date : {type : "date", defaultValue:  ""},
-                purchase_amount:    {editable: false ,type:"number" , validation: { min: 0, required: true }}
+                amount:    {editable: false ,type:"number" , validation: { min: 0, required: true }}
             };
             Ermis.aggregate = [ { field: "item_name", aggregate: "count" },
                                 { field: "quantity", aggregate: "sum" },
-                                { field: "purchase_price", aggregate: "average" },
-                                { field: "purchase_amount", aggregate: "sum" } ];
+                                { field: "price", aggregate: "average" },
+                                { field: "amount", aggregate: "sum" } ];
             Ermis.item =  {{ item | json | safe }};
             Ermis.voucher  =  {{ voucher | json | safe }};
         });

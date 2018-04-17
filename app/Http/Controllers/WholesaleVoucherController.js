@@ -215,7 +215,7 @@ class WholesaleVoucherController{
        try {
             const data = JSON.parse(request.input('data'))
             if(data){
-              const closing = yield Closing.query().where('date',moment(data.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).count('* as total')
+              const closing = yield Closing.query().where('date',moment(data.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).where('active',1).count('* as total')
               if(closing[0].total == 0){
                 var general = []
                 var status = 0

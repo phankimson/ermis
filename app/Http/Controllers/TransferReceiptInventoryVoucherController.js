@@ -64,7 +64,7 @@ class TransferReceiptInventoryVoucherController{
        try {
             const data = JSON.parse(request.input('data'))
             if(data){
-              const closing = yield Closing.query().where('date',moment(data.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).count('* as total')
+              const closing = yield Closing.query().where('date',moment(data.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).where('active',1).count('* as total')
               if(closing[0].total == 0){
                   const general = yield General.find(data.id)
                   var action = 4

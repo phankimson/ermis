@@ -83,7 +83,7 @@ class IssueInventoryGeneralController{
         if(data){
         const action = 4
         const arr = yield General.find(data)
-        const closing = yield Closing.query().where('date',moment(arr.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).count('* as total')
+        const closing = yield Closing.query().where('date',moment(arr.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).where('active',1).count('* as total')
         if(closing[0].total == 0){
         const detail = yield Detail.query().where('general_id',data).fetch()
         // Lưu lịch sử
@@ -123,7 +123,7 @@ class IssueInventoryGeneralController{
           if(data){
             const action = 4
             const arr = yield General.find(data)
-            const closing = yield Closing.query().where('date',moment(arr.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).count('* as total')
+            const closing = yield Closing.query().where('date',moment(arr.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).where('active',1).count('* as total')
             if(closing[0].total == 0){
               const detail = yield Detail.query().where('general_id',data).fetch()
               // Lưu lịch sử
@@ -164,7 +164,7 @@ class IssueInventoryGeneralController{
           if(data){
             const action = 5
             const arr = yield General.find(data)
-            const closing = yield Closing.query().where('date',moment(arr.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).count('* as total')
+            const closing = yield Closing.query().where('date',moment(arr.date_voucher,"YYYY-MM-DD").format("MM/YYYY")).where('active',1).count('* as total')
             if(closing[0].total == 0){
             const detail = yield Detail.query().where('general_id',data).fetch()
             // Lưu lịch sử

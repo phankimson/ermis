@@ -179,7 +179,7 @@
         var data = grid.dataSource.data();
         var total = 0;
         for (var i = 0; i < data.length; i++) {
-                total += data[i].balance - data[i].check ;
+                total += data[i].check - data[i].balance  ;
         }
         return kendo.toString(total, 'n0');
     };
@@ -194,7 +194,9 @@
                 if (data[i].price !== 0 && check !== -1) {
                     data[i].price = data[i].price.replace(/\,/g, "");
                 }
-                total += data[i].balance_amount - data[i].check * data[i].price;
+                total += data[i].check * data[i].price - data[i].balance_amount;
+            }else{
+                total += -data[i].balance_amount;
             }
         }
         return kendo.toString(total, 'n0');

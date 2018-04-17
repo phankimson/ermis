@@ -4,6 +4,7 @@ var Ermis = function () {
   var dataId = '';
   var c = false;
   var room = [];
+  var key = 'Alt+';
 
   var initWsConnectRoom = function(){
     var client = Client.connect('data')
