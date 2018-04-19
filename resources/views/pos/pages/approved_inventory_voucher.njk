@@ -13,15 +13,24 @@
             <div class="md-card">
                 <div class="md-card-content" >
                     <div class="uk-grid" data-uk-grid-margin="" id="form-action">
-                    <div class="uk-width-medium-1-10">
-                        <label for="date_voucher_search">{{ antl.get('inventory_voucher.date_voucher') }}</label>
-                        <input class="md-input" type="text" name="date_voucher_search" data-uk-datepicker="{format:'DD/MM/YYYY'}">
+                    <div class="uk-width-medium-2-10">
+                        <div class="uk-margin-small-top">
+                            <select name="field_search" class="not_load" id="field_search" data-md-selectize data-md-selectize-bottom>
+                            <option value="voucher">{{ antl.get('inventory_voucher.voucher') }}</option>
+                            <option value="date_voucher">{{ antl.get('inventory_voucher.date_voucher') }}</option>
+                            <option value="description">{{ antl.get('inventory_voucher.description') }}</option>
+                            <option value="inventory_receipt">{{ antl.get('inventory_voucher.inventory_receipt') }}</option>
+                            <option value="inventory_issue">{{ antl.get('inventory_voucher.inventory_issue') }}</option>
+                            <option value="total_number">{{ antl.get('inventory_voucher.total_number') }}</option>
+                            <option value="total_amount">{{ antl.get('inventory_voucher.total_amount') }}</option>
+                            </select>
+                        </div>
+                     </div>
+                    <div class="uk-width-medium-2-10">
+                        <label for="customer_search">{{ antl.get('action.search') }}</label>
+                        <input type="text" class="md-input not_load"  name="value_search">
                     </div>
                         <div class="uk-width-medium-1-10">
-                            <label for="voucher_search">{{ antl.get('inventory_voucher.voucher') }}</label>
-                            <input type="text" class="md-input" name="voucher_search">
-                        </div>
-                        <div class="uk-width-medium-3-10">
                             <div class="uk-margin-small-top">
                                 <select name="status_search" id="status_search" data-md-selectize multiple data-md-selectize-bottom>
                                     <option value="">{{ antl.get('inventory_voucher.status') }}</option>
@@ -33,7 +42,7 @@
                         </div>
                         <div class="uk-width-medium-1-10">
                             <div class="uk-margin-top uk-text-nowrap">
-                                <input type="checkbox" name="active_search" data-md-icheck/>
+                                <input type="checkbox" name="active_search" data-md-icheck checked/>
                                 <label for="active_search" class="inline-label">{{ antl.get('action.active') }}</label>
                             </div>
                         </div>

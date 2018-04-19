@@ -1,4 +1,5 @@
 {% set Entities = use('html-entities/lib/html4-entities') %}
+{% set moment = use('moment/moment') %}
 {% extends 'manage.layouts.default' %}
 {% block css %}
 <link href="{{ url('css/addon/customize.css') }}" rel="stylesheet" />
@@ -212,6 +213,15 @@
                                 <div class="uk-width-large-1-2">
                                     <h4 class="heading_c uk-margin-small-bottom">{{ antl.get('index.contact_info') }}</h4>
                                     <ul class="md-list md-list-addon">
+                                    <li>
+                                        <div class="md-list-addon-element">
+                                            <i class="md-list-addon-icon material-icons">nfc</i>
+                                        </div>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">{{ currentUser.barcode }}</span>
+                                            <span class="uk-text-small uk-text-muted">{{ antl.get('user.barcode') }}</span>
+                                        </div>
+                                    </li>
                                         <li>
                                             <div class="md-list-addon-element">
                                                 <i class="md-list-addon-icon material-icons">&#xE158;</i>
@@ -253,9 +263,15 @@
                                 <div class="uk-width-large-1-2">
                                     <h4 class="heading_c uk-margin-small-bottom">{{ antl.get('index.other') }}</h4>
                                     <ul class="md-list">
+                                    <li>
+                                        <div class="md-list-content">
+                                            <span class="md-list-heading">{{ currentUser.created_at }}</span>
+                                            <span class="uk-text-small uk-text-muted">{{ antl.get('user.created') }}</span>
+                                        </div>
+                                    </li>
                                         <li>
                                             <div class="md-list-content">
-                                                <span class="md-list-heading">{{ currentUser.birthday }}</span>
+                                                <span class="md-list-heading"> {{ moment(currentUser.birthday,'YYYY-MM-DD').format("DD/MM/YYYY") }}</span>
                                                 <span class="uk-text-small uk-text-muted">{{ antl.get('user.birthday') }}</span>
                                             </div>
                                         </li>

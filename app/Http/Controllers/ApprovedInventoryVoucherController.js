@@ -50,22 +50,43 @@ class ApprovedInventoryVoucherController{
   * filter (request, response){
     try{
       const data = JSON.parse(request.input('data'))
+      if(data.field_search == 'date_voucher'){
+        data.value_search = moment(data.value_search , "DD/MM/YYYY").format('YYYY-MM-DD')
+      }
+      if(data.value_search != ''){
       const arr = yield Data.query()
       .leftJoin('inventory as t1','t1.id','pos_general.inventory_receipt')
       .leftJoin('inventory as t2','t2.id','pos_general.inventory_issue')
-      .orderBy('id', 'desc')
-      .orWhere('pos_general.voucher',data.voucher_search)
-      .where('pos_general.active',data.active_search)
-      .whereIn('pos_general.status',eval(data.status_search))
-      .orWhere('pos_general.date_voucher',data.date_voucher_search)
+      .where('pos_general.'+data.field_search,"LIKE",'%'+data.value_search+'%')
+      .TypeWhere('pos_general.active',data.active_search)
+      .TypeWhereIn('pos_general.status',eval(data.status_search))
       .select('pos_general.*','t1.name as inventory_receipt','t2.name as inventory_issue')
       .whereIn('type',[1,2,3,4])
+      .orderBy('pos_general.created_at','desc')
       .fetch()
+      console.log(arr)
       if(arr.toJSON().length > 0){
         response.json({ status: true , data : arr.toJSON()})
       }else{
         response.json({ status: false , message: Antl.formatMessage('messages.no_data_found')})
       }
+    }else{
+      const page = 1
+      const option = yield Option.query().where("code","MAX_ITEM_APPROVED").first()
+      const arr = yield Data.query()
+      .leftJoin('inventory as t1','t1.id','pos_general.inventory_receipt')
+      .leftJoin('inventory as t2','t2.id','pos_general.inventory_issue')
+      .orderBy('id', 'desc')
+      .whereIn('type',[1,2,3,4])
+      .select('pos_general.*','t1.name as inventory_receipt','t2.name as inventory_issue')
+      .paginate(page,option.value)
+      if(arr.toJSON().data.length > 0){
+        response.json({ status: true , page : true , data : arr.toJSON().data})
+      }else{
+        response.json({ status: false , message: Antl.formatMessage('messages.no_data_found')})
+      }
+    }
+
     }catch(e){
         response.json({ status: false , error : true ,  message: Antl.formatMessage('messages.error')+' '+ e.message })
     }

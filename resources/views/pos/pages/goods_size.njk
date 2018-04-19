@@ -1,6 +1,7 @@
 
 {% extends 'manage.layouts.ermisform1-big' %}
 {% block content_add %}
+<div id="notification"></div>
     <table>
         <tr>
             <td class="row-label"><label>{{ antl.get('marial_goods.barcode') }} *</label></td>
@@ -38,7 +39,7 @@
         </tr>
         <tr>
             <td><label>{{ antl.get('marial_goods.price') }} *</label></td>
-            <td>    <input type="text" class="number-price medium" data-null="true" data-position="5" data-title="{{ antl.get('marial_goods.price') }}" data-width="200px" data-type="number" data-template="#= FormatNumber(purchase_price) #" name="price" /></td>
+            <td>    <input type="text" class="number-price medium" data-null="true" data-position="5" data-title="{{ antl.get('marial_goods.price') }}" data-width="200px" data-type="number" data-template="#= FormatNumber(price) #" name="price" /></td>
         </tr>
         <tr>
             <td><label>{{ antl.get('marial_goods.purchase_price') }} *</label></td>

@@ -75,15 +75,21 @@ var Ermis = function () {
     })
   }
 
+  var defaultValue = function(){
+    jQuery("input[name='total_amount']").val(jQuery("#amount_total").text());
+    jQuery("input[name='payment']").data("kendoNumericTextBox").value(jQuery("#amount_total").text());
+    jQuery('input[name=discount_percent_special]').data("kendoNumericTextBox").value(0);
+    jQuery("input[name=discount_special]").data("kendoNumericTextBox").value(0);
+    jQuery("input[name=refund]").val(0);
+  }
+
   var changeCoupon = function(){
     jQuery('input[type=radio][name=coupon_type]').on('change',function(){
       jQuery('input[name=coupon_code]').val("");
       jQuery('input[name=coupon]').val(0);
-      jQuery("input[name='payment']").data("kendoNumericTextBox").value(jQuery("#amount_total").text());
-      jQuery('input[name=discount_percent_special]').data("kendoNumericTextBox").value(0);
       jQuery("input[name=discount_percent_special]").data("kendoNumericTextBox").enable(true);
       jQuery("input[name=discount_special]").data("kendoNumericTextBox").enable(true);
-      jQuery("input[name=discount_special]").data("kendoNumericTextBox").value(0);
+      defaultValue();
       var v = jQuery(this).val()
       if(v == ''){
         jQuery("input[name=discount_percent_special]").data("kendoNumericTextBox").enable();
@@ -132,10 +138,7 @@ var Ermis = function () {
     shortcut.add(key + "C", function (e) { initClose(e); });
     jQuery("input[name=discount_percent_special]").data("kendoNumericTextBox").enable();
     jQuery("input[name=discount_special]").data("kendoNumericTextBox").enable();
-    jQuery("input[name='total_amount']").val(jQuery("#amount_total").text());
-    jQuery("input[name='payment']").data("kendoNumericTextBox").value(jQuery("#amount_total").text());
-    jQuery('input[name="discount_percent_special"]').val(0);
-    jQuery('input[name="discount_special"]').val(0);
+    defaultValue();
     jQuery("input[name='refund']").val(0);
     jQuery("input[name='coupon']").val(0);
     jQuery("input[name='coupon_code']").val("");
@@ -355,15 +358,15 @@ var Ermis = function () {
       RequestURLWaiting(Ermis.link+'-payment', 'json', postdata, function (result) {
           if (result.status === true) {
              kendo.alert(result.message);
-             search = true;
+             search = false;
              var inventory_name = jQuery('#time_shift').find('span').eq(0).text().split('-');
              room.emit('client-send-invoice', { d :result.general , v : result.voucher , obj : obj, i : inventory_name[0]})
              initStatus(2);
              $kWindow2.close();
              jQuery('input[name="voucher"]').val(result.voucher);
              var id = getId();
-             initUpdateCards(id,result.voucher,result.general)
-             initStatus(4)
+             initUpdateCards(id,result.voucher,result.general);
+             initStatus(4);
           } else {
              kendo.alert(result.message);
           }
@@ -393,6 +396,7 @@ var Ermis = function () {
                             comfirm = true ;
                             initSavePayment(comfirm,obj);
                           } else {
+                             defaultValue();
                              kendo.alert(result.message);
                           }
                       }, true);

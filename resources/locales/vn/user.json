@@ -20,5 +20,7 @@
 "expand" : "Mở rộng",
 "stock_default" : "Kho mặc định",
 "admin" : "Quyền admin",
-"stock" : "Quyền theo kho"
+"stock" : "Quyền theo kho",
+"barcode" : "Mã giảm",
+"created" : "Ngày tạo"
 }

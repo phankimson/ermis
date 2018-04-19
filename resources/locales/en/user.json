@@ -20,5 +20,7 @@
 "manage" : "Manage",
 "stock_default" : "Inventory Default",
 "admin" : "administration",
-"stock" : "Stock user"
+"stock" : "Stock user",
+"barcode" : "Barcode",
+"created" : "Created date"
 }

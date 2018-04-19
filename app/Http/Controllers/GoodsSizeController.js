@@ -31,7 +31,7 @@ class GoodsSizeController{
     const data = JSON.parse(request.input('data'))
     const permission = JSON.parse(yield request.session.get('permission'))
     if(data){
-      const check = yield Data.query().where('code',data.code).first()
+      const check = yield Data.query().where('barcode',data.barcode).first()
       if(check && check.id != data.id){
         response.json({ status: false, message: Antl.formatMessage('messages.duplicate_code')  })
       }else{
@@ -86,7 +86,7 @@ class GoodsSizeController{
       response.json({ status: false , message: Antl.formatMessage('messages.no_data') })
       }
     } catch (e) {
-    response.json({ status: false , message: Antl.formatMessage('messages.update_fail')})
+    response.json({ status: false , message: Antl.formatMessage('messages.update_fail')+e.message})
     }
   }
   * delete (request, response){

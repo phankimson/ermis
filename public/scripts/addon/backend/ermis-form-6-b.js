@@ -3,6 +3,7 @@
     var $kGridSubject = jQuery('#grid_subject');
     var $kGridReference = jQuery('#grid_reference');
     var $kGridBarcode = jQuery('#grid_barcode');
+    var $kGridVoucher = jQuery('#grid_voucher');
     var key = 'Alt+';
     var myWindow = jQuery("#form-window-filter");
     var $kWindow = '';
@@ -10,6 +11,8 @@
     var $kWindow1 = '';
     var myWindow2 = jQuery("#form-window-reference");
     var $kWindow2 = '';
+    var myWindow3 = jQuery("#form-window-voucher");
+    var $kWindow3 = '';
     var dataSource = '';
     var ds = '';
     var a = []; var b; var data = [];
@@ -93,6 +96,121 @@
             status = parseInt(sessionStorage.status);
         }
         return status;
+    };
+
+
+    var initKendoGridVoucher = function () {
+      var grid = $kGridVoucher.kendoGrid({
+            dataSource: {
+                data: []
+            },
+            selectable: "row",
+            height: jQuery(window).height() * 0.5,
+            sortable: true,
+            pageable: true,
+            filterable: true,
+            columns: Ermis.columns_voucher,
+            dataBound: function () {
+                var rows = this.items();
+                $(rows).each(function () {
+                    var index = $(this).index() + 1;
+                    var rowLabel = $(this).find(".row-number");
+                    $(rowLabel).html(index);
+                });
+            }
+        });
+        if(grid.data("kendoGrid")){
+          grid.data("kendoGrid").thead.kendoTooltip({
+            filter: "th",
+            content: function (e) {
+                var target = e.target; // element for which the tooltip is shown
+                return $(target).text();
+            }
+        });
+        }
+
+        $kGridVoucher.dblclick(function (e) {
+            initChooseVoucher(e);
+        });
+
+    };
+
+    var initChooseVoucher = function (e) {
+        var jQuerylink = jQuery(e.target);
+        e.preventDefault();
+        if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
+            if ($kGridVoucher.find('tr.k-state-selected').length > 0) {
+                var grid = $kGridVoucher.data("kendoGrid");
+                var dataItem = grid.dataItem($kGridVoucher.find('tr.k-state-selected'));
+                $kWindow3.close();
+                initLoadData(dataItem.id)
+            } else {
+                kendo.alert(transText.please_select_line_choose);
+            }
+        }
+        jQuerylink.data('lockedAt', +new Date());
+    };
+
+    var initSearchGridVoucher = function () {
+        jQuery('#search_voucher').on('click', function () {
+            var obj = {};
+            var filter = GetAllDataForm('#form-window-voucher', 2);
+            jQuery.each(filter.columns, function (k, col) {
+                if (col.key === 'text' || col.key === 'password' || col.key === 'number') {
+                    if (jQuery('input[name="' + col.field + '"]').hasClass('number-price') || jQuery('input[name="' + col.field + '"]').hasClass('number')) {
+                        obj[col.field] = jQuery('input[name="' + col.field + '"]').data("kendoNumericTextBox").value();
+                    } else {
+                        obj[col.field] = jQuery('input[name="' + col.field + '"]').val().trim();
+                        if (col.type === 'date') {
+                            obj[col.field] = formatDateDefault(obj[col.field]);
+                        } else if (col.type === 'datetime') {
+                            obj[col.field] = formatDateTimeDefault(obj[col.field]);
+                        }
+                    }
+
+                } else if (col.key === 'select' && jQuery('select[name = ' + col.field + ']').hasClass("droplist")) {
+                    obj[col.field] = jQuery('.droplist[name="' + col.field + '"]').data('kendoDropDownList').value();
+                } else if (col.key === 'select' && jQuery('select[name = ' + col.field + ']').hasClass("multiselect")) {
+                    var arr = jQuery('.multiselect[name="' + col.field + '"]').data('kendoMultiSelect').value();
+                    obj[col.field] = arr.join();
+                } else if (col.key === 'textarea') {
+                    obj[col.field] = jQuery('textarea[name="' + col.field + '"]').val();
+                }  else if (col.key === 'checkbox') {
+                    if (jQuery('input[name="' + col.field + '"]').parent().hasClass('checked')) {
+                        if (col.type === 'boolean') {
+                            obj[col.field] = true;
+                        } else if (col.type === 'number'){
+                            obj[col.field] = 1;
+                        }else {
+                            obj[col.field] = '1';
+                        }
+                    } else {
+                        if (col.type === 'boolean') {
+                            obj[col.field] = false;
+                        }else if (col.type === 'number'){
+                            obj[col.field] =  0;
+                        } else {
+                            obj[col.field] = '0';
+                        }
+                    }
+                }else if (col.key === 'radio') {
+                    obj[col.field] = jQuery('input[name="' + col.field + '"]:checked').val();
+                }
+            });
+
+            var postdata = { data: JSON.stringify(obj) };
+            RequestURLWaiting(Ermis.link+'-find', 'json', postdata, function (result) {
+                if (result.status === true) {
+                    var grid = $kGridVoucher.data("kendoGrid");
+                    var ds = new kendo.data.DataSource({ data: result.data });
+                    grid.setDataSource(ds);
+                    grid.dataSource.page(1);
+                }else{
+                  kendo.alert(result.message);
+                }
+            }, true);
+        });
+
     };
 
 
@@ -472,13 +590,14 @@
         shortcut.remove(key + "D");
         shortcut.remove(key + ".");
         shortcut.remove(key + ",");
-        jQuery('.add,.edit,.delete,.back,.forward,.print,.cancel,.save,.choose,.cancel-window,.filter,.reference,.write_item,.unwrite_item,.advance_teacher,.advance_employee').addClass('disabled');
-        jQuery('.add,.edit,.delete,.back,.forward,.print-item,.cancel,.save,.choose,.cancel-window,.filter,.reference,.write_item,.unwrite_item,.advance_teacher,.advance_employee').off('click');
+        jQuery('.add,.edit,.delete,.back,.forward,.print,.cancel,.save,.choose,.cancel-window,.filter,.pageview,.reference,.write_item,.unwrite_item,.advance_teacher,.advance_employee').addClass('disabled');
+        jQuery('.add,.edit,.delete,.back,.forward,.print-item,.cancel,.save,.choose,.cancel-window,.pageview,.filter,.reference,.write_item,.unwrite_item,.advance_teacher,.advance_employee').off('click');
         jQuery('input,textarea').not('.header_main_search_input').not('#files').not('.k-filter-menu input').addClass('disabled');
         jQuery(".droplist").addClass('disabled');
         jQuery('input:checkbox').parent().addClass('disabled');
         jQuery('.date-picker').addClass('disabled');
         jQuery(".k-input").addClass('disabled');
+        jQuery('.choose_voucher').on('click', initChooseVoucher);
         if (flag === 1) {//ADD
             jQuery('#add-top-menu-detail').show();
             sessionStorage.removeItem("dataId");
@@ -498,8 +617,8 @@
             jQuery(".k-input").removeClass('disabled');
             jQuery('input:checkbox').parent().removeClass('disabled');
             jQuery('.date-picker,.month-picker').removeClass('disabled');
-            jQuery('input[name!="__RequestVerificationToken"]').not('[type=radio]').not(".date-picker,#start,#end,.month-picker,.voucher").val("");
-            jQuery(".date-picker,#end,#start").val(kendo.toString(kendo.parseDate(new Date()), 'dd/MM/yyyy'));
+            jQuery('input[name!="__RequestVerificationToken"]').not('[type=radio]').not(".date-picker,.start,.end,.month-picker,.voucher").val("");
+            jQuery(".date-picker,.end,.start").val(kendo.toString(kendo.parseDate(new Date()), 'dd/MM/yyyy'));
             jQuery(".voucher").val(voucher);
             $kGrid.data('kendoGrid').dataSource.data([]);
             $kGrid.removeClass('disabled');
@@ -535,7 +654,7 @@
             jQuery('.date-picker,.month-picker').removeClass('disabled');
             $kGrid.removeClass('disabled');
         } else if (flag === 4) { //CANCEL
-            jQuery('.add,.edit,.print,.back,.forward,.delete').removeClass('disabled');
+            jQuery('.add,.edit,.print,.back,.forward,.delete,.pageview').removeClass('disabled');
             shortcut.add(key + "A", function (e) { initAdd(e); });
             shortcut.add(key + "E", function (e) { initEdit(e); });
             shortcut.add(key + ",", function (e) { initBack(e); });
@@ -546,11 +665,12 @@
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);
             jQuery('.delete').on('click', initDelete);
+            jQuery('.pageview').on('click', initVoucherForm);
             if (!sessionStorage.dataId) {
                 jQuery('.print,.delete,.edit').addClass('disabled');
                 jQuery('.print,.delete,.edit').off('click');
             }
-            jQuery('input').not('[type=radio]').not(".date-picker,#start,#end,.month-picker,.voucher").val("");
+            jQuery('input').not('[type=radio]').not(".date-picker,.start,.end,.month-picker,.voucher").val("");
             $kGrid.data('kendoGrid').dataSource.data([]);
             $kGrid.addClass('disabled');
         } else if (flag === 5) { //BIND
@@ -567,7 +687,7 @@
             jQuery('.forward').on('click', initForward);
             jQuery('.delete').on('click', initDelete);
         } else if (flag === 6) { //Write = 1
-            jQuery('.add,.print,.back,.forward').removeClass('disabled');
+            jQuery('.add,.print,.back,.forward,.pageview').removeClass('disabled');
             shortcut.add(key + "A", function (e) { initAdd(e); });
             shortcut.add(key + ".", function (e) { initBack(e); });
             shortcut.add(key + ",", function (e) { initForward(e); });
@@ -575,6 +695,7 @@
             jQuery('.print-item').on('click', initPrint);
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);
+            jQuery('.pageview').on('click', initVoucherForm);
             if (!sessionStorage.dataId) {
                 jQuery('.print,.delete,.edit').addClass('disabled');
                 jQuery('.print,.delete,.edit').off('click');
@@ -610,52 +731,315 @@
         }
     }
 
-
-    var initKendoStartDatePicker = function () {
+    var initKendoStartEndDatePicker = function () {
       var todayDate = kendo.toString(kendo.parseDate(new Date()), 'dd/MM/yyyy');
-        start = jQuery("#start").kendoDatePicker({
-            change: startChange,
-            format: "dd/MM/yyyy"
-        }).data("kendoDatePicker");
-        function startChange() {
-            var startDate = start.value(todayDate),
-            endDate = end.value(todayDate);
-
-            if (startDate) {
+      function startChange() {
+            var startDate = start.value(),
+                endDate = end.value();
+                if (startDate) {
                 startDate = new Date(startDate);
                 startDate.setDate(startDate.getDate());
                 end.min(startDate);
-            } else if (endDate) {
-                start.max(new Date(endDate));
-            } else {
+              } else if (endDate) {
+                  start.max(new Date(endDate));
+              } else {
                 endDate = new Date();
                 start.max(endDate);
-                end.min(endDate);
+                  end.min(endDate);
             }
-        }
-    };
-    var initKendoEndDatePicker = function () {
-        end = jQuery("#end").kendoDatePicker({
-            change: endChange,
-            format: "dd/MM/yyyy"
-        }).data("kendoDatePicker");
-        function endChange() {
-            var endDate = end.value(),
-            startDate = start.value();
+      }
 
-            if (endDate) {
+            function endChange() {
+            var endDate = end.value(),
+                startDate = start.value();
+
+                if (endDate) {
                 endDate = new Date(endDate);
                 endDate.setDate(endDate.getDate());
                 start.max(endDate);
-            } else if (startDate) {
+              } else if (startDate) {
                 end.min(new Date(startDate));
-            } else {
+              } else {
                 endDate = new Date();
                 start.max(endDate);
                 end.min(endDate);
-            }
-        }
+                  }
+              }
+        var start = jQuery("#start").kendoDatePicker({
+            change: startChange,
+            format: "dd/MM/yyyy"
+          }).data("kendoDatePicker");
+
+        var end = jQuery("#end").kendoDatePicker({
+            change: endChange,
+            format: "dd/MM/yyyy"
+          }).data("kendoDatePicker");
+          start.max(end.value());
+          end.min(start.value());
+
+          jQuery("#fast_date").kendoDropDownList({
+              filter: "contains",
+              select: onSelect
+          });
+          function onSelect(e) {
+              if (e.item) {
+                  var dataItem = this.dataItem(e.item);
+                  var year = ''; var result = '';
+                  if (dataItem.value === "today") {
+                      end.value(new Date);
+                      start.value(new Date);
+                  } else if (dataItem.value === "this_week") {
+                      end.value(moment().endOf('week').format("DD/MM/YYYY"));
+                      start.value(moment().startOf('week').format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "this_month") {
+                      end.value(moment().endOf('month').format("DD/MM/YYYY"));
+                      start.value(moment().startOf('month').format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "this_quarter") {
+                      end.value(moment().endOf('quarter').format("DD/MM/YYYY"));
+                      start.value(moment().startOf('quarter').format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "this_year") {
+                      end.value(moment().endOf('year').format("DD/MM/YYYY"));
+                      start.value(moment().startOf('year').format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "january") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "01");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "february") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "02");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "march") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "03");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "april") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "04");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "may") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "05");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "june") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "06");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "july") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "07");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "august") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "08");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "september") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "09");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "october") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "10");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "november") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "11");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "december") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "12");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "the_1st_quarter") {
+                      year = moment().format('YYYY');
+                      result = getQuarterDateRange(year, "01");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "the_2nd_quarter") {
+                      year = moment().format('YYYY');
+                      result = getQuarterDateRange(year, "04");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "the_3rd_quarter") {
+                      year = moment().format('YYYY');
+                      result = getQuarterDateRange(year, "07");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "the_4th_quarter") {
+                      year = moment().format('YYYY');
+                      result = getQuarterDateRange(year, "10");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  }
+              }
+          }
     };
+
+
+    var initKendoStartEndADatePicker = function () {
+      var todayDate = kendo.toString(kendo.parseDate(new Date()), 'dd/MM/yyyy');
+      function startChange() {
+            var startDate = start.value(),
+                endDate = end.value();
+                if (startDate) {
+                startDate = new Date(startDate);
+                startDate.setDate(startDate.getDate());
+                end.min(startDate);
+              } else if (endDate) {
+                  start.max(new Date(endDate));
+              } else {
+                endDate = new Date();
+                start.max(endDate);
+                  end.min(endDate);
+            }
+      }
+
+            function endChange() {
+            var endDate = end.value(),
+                startDate = start.value();
+
+                if (endDate) {
+                endDate = new Date(endDate);
+                endDate.setDate(endDate.getDate());
+                start.max(endDate);
+              } else if (startDate) {
+                end.min(new Date(startDate));
+              } else {
+                endDate = new Date();
+                start.max(endDate);
+                end.min(endDate);
+                  }
+              }
+        var start = jQuery("#start_a").kendoDatePicker({
+            change: startChange,
+            format: "dd/MM/yyyy"
+          }).data("kendoDatePicker");
+
+        var end = jQuery("#end_a").kendoDatePicker({
+            change: endChange,
+            format: "dd/MM/yyyy"
+          }).data("kendoDatePicker");
+          start.max(end.value());
+          end.min(start.value());
+
+          jQuery("#fast_date_a").kendoDropDownList({
+              filter: "contains",
+              select: onSelect
+          });
+          function onSelect(e) {
+              if (e.item) {
+                  var dataItem = this.dataItem(e.item);
+                  var year = ''; var result = '';
+                  if (dataItem.value === "today") {
+                      end.value(new Date);
+                      start.value(new Date);
+                  } else if (dataItem.value === "this_week") {
+                      end.value(moment().endOf('week').format("DD/MM/YYYY"));
+                      start.value(moment().startOf('week').format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "this_month") {
+                      end.value(moment().endOf('month').format("DD/MM/YYYY"));
+                      start.value(moment().startOf('month').format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "this_quarter") {
+                      end.value(moment().endOf('quarter').format("DD/MM/YYYY"));
+                      start.value(moment().startOf('quarter').format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "this_year") {
+                      end.value(moment().endOf('year').format("DD/MM/YYYY"));
+                      start.value(moment().startOf('year').format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "january") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "01");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "february") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "02");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "march") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "03");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "april") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "04");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "may") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "05");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "june") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "06");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "july") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "07");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "august") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "08");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "september") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "09");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "october") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "10");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "november") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "11");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "december") {
+                      year = moment().format('YYYY');
+                      result = getMonthDateRange(year, "12");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "the_1st_quarter") {
+                      year = moment().format('YYYY');
+                      result = getQuarterDateRange(year, "01");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "the_2nd_quarter") {
+                      year = moment().format('YYYY');
+                      result = getQuarterDateRange(year, "04");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "the_3rd_quarter") {
+                      year = moment().format('YYYY');
+                      result = getQuarterDateRange(year, "07");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  } else if (dataItem.value === "the_4th_quarter") {
+                      year = moment().format('YYYY');
+                      result = getQuarterDateRange(year, "10");
+                      end.value(result.end.format("DD/MM/YYYY"));
+                      start.value(result.start.format("DD/MM/YYYY"));
+                  }
+              }
+          }
+    };
+
 
     var initKendoDatePicker = function () {
         jQuery(".date-picker").kendoDatePicker({
@@ -670,114 +1054,6 @@
         });
     };
 
-    var initKendoUiDropListDate = function () {
-        jQuery("#fast_date").kendoDropDownList({
-            filter: "contains",
-            select: onSelect
-        });
-        function onSelect(e) {
-            if (e.item) {
-                var dataItem = this.dataItem(e.item);
-                var year = ''; var result = '';
-                if (dataItem.value === "today") {
-                    end.value(new Date);
-                    start.value(new Date);
-                } else if (dataItem.value === "this_week") {
-                    end.value(moment().endOf('week').format("DD/MM/YYYY"));
-                    start.value(moment().startOf('week').format("DD/MM/YYYY"));
-                } else if (dataItem.value === "this_month") {
-                    end.value(moment().endOf('month').format("DD/MM/YYYY"));
-                    start.value(moment().startOf('month').format("DD/MM/YYYY"));
-                } else if (dataItem.value === "this_quarter") {
-                    end.value(moment().endOf('quarter').format("DD/MM/YYYY"));
-                    start.value(moment().startOf('quarter').format("DD/MM/YYYY"));
-                } else if (dataItem.value === "this_year") {
-                    end.value(moment().endOf('year').format("DD/MM/YYYY"));
-                    start.value(moment().startOf('year').format("DD/MM/YYYY"));
-                } else if (dataItem.value === "january") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "01");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "february") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "02");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "march") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "03");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "april") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "04");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "may") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "05");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "june") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "06");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "july") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "07");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "august") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "08");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "september") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "09");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "october") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "10");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "november") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "11");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "december") {
-                    year = moment().format('YYYY');
-                    result = getMonthDateRange(year, "12");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "the_1st_quarter") {
-                    year = moment().format('YYYY');
-                    result = getQuarterDateRange(year, "01");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "the_2nd_quarter") {
-                    year = moment().format('YYYY');
-                    result = getQuarterDateRange(year, "04");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "the_3rd_quarter") {
-                    year = moment().format('YYYY');
-                    result = getQuarterDateRange(year, "07");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                } else if (dataItem.value === "the_4th_quarter") {
-                    year = moment().format('YYYY');
-                    result = getQuarterDateRange(year, "10");
-                    end.value(result.end.format("DD/MM/YYYY"));
-                    start.value(result.start.format("DD/MM/YYYY"));
-                }
-            }
-        }
-    };
 
     var initKendoButton = function () {
         jQuery("#search_grid").kendoButton();
@@ -822,9 +1098,23 @@
             modal: true
         }).data("kendoWindow").center();
 
+        $kWindow3 = myWindow3.kendoWindow({
+            width: "1000px",
+            title: "",
+            visible: false,
+            actions: [
+                "Pin",
+                "Minimize",
+                "Maximize",
+                "Close"
+            ],
+            modal: true
+        }).data("kendoWindow").center();
+
         $kWindow.title("Tìm kiếm đối tượng");
         $kWindow1.title("Tìm kiếm hàng hóa");
         $kWindow2.title("Tham chiếu");
+        $kWindow3.title("Tìm kiếm chứng từ");
     };
     var initFilterForm = function () {
         $kWindow.open();
@@ -834,6 +1124,9 @@
     };
     var initReferenceForm = function () {
         $kWindow2.open();
+    };
+    var initVoucherForm = function () {
+        $kWindow3.open();
     };
 
     var initGetDataBarcode = function () {
@@ -1284,6 +1577,8 @@
                 $kWindow1.close();
             }else if ($kWindow2.element.is(":hidden") === false) {
                 $kWindow2.close();
+            }else if ($kWindow3.element.is(":hidden") === false) {
+                $kWindow3.close();
             }
         }
         jQuerylink.data('lockedAt', +new Date());
@@ -1554,13 +1849,14 @@
             initSearchGridSubject();
             initKendoUiContextMenu();
             initKendoUiContextMenuGrid();
-            initKendoUiDropListDate();
             initKendoGridReference();
             initKendoGridBarcode();
+            initKendoGridVoucher();
+            initSearchGridVoucher();
             initGetDataBarcode();
             initGetDataReference();
-            initKendoEndDatePicker();
-            initKendoStartDatePicker();
+            initKendoStartEndDatePicker();
+            initKendoStartEndADatePicker();
             initBindData();
             initGetStoredArrId();
             initMonthDate();

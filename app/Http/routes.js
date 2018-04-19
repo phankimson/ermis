@@ -334,6 +334,7 @@ Route.group('pos-group', function () {
   Route.post('/receipt-inventory-voucher-unwrite', 'ReceiptInventoryGeneralController.unwrite')
   Route.post('/receipt-inventory-voucher-delete', 'ReceiptInventoryGeneralController.delete')
   Route.post('/receipt-inventory-voucher-print', 'ReceiptInventoryGeneralController.prints')
+  Route.post('/receipt-inventory-voucher-find', 'ReceiptInventoryGeneralController.get')
   Route.get('/receipt-inventory-voucher-downloadExcel', 'ReceiptInventoryGeneralController.downloadExcel')
 
   // Issue Inventory General
@@ -356,6 +357,7 @@ Route.group('pos-group', function () {
   Route.post('/issue-inventory-voucher-unwrite', 'IssueInventoryGeneralController.unwrite')
   Route.post('/issue-inventory-voucher-delete', 'IssueInventoryGeneralController.delete')
   Route.post('/issue-inventory-voucher-print', 'IssueInventoryGeneralController.prints')
+  Route.post('/issue-inventory-voucher-find', 'IssueInventoryGeneralController.get')
 
   // Transfer Issue Inventory General
   Route.get('/transfer-issue-inventory-general', 'TransferIssueInventoryGeneralController.show')
@@ -376,6 +378,7 @@ Route.group('pos-group', function () {
   Route.post('/transfer-issue-inventory-voucher-unwrite', 'TransferIssueInventoryGeneralController.unwrite')
   Route.post('/transfer-issue-inventory-voucher-delete', 'TransferIssueInventoryGeneralController.delete')
   Route.post('/transfer-issue-inventory-voucher-print', 'TransferIssueInventoryGeneralController.prints')
+  Route.post('/transfer-issue-inventory-voucher-find', 'TransferIssueInventoryGeneralController.get')
 
   // Wholesale General
   Route.get('/wholesale-general', 'WholesaleGeneralController.show')
@@ -397,6 +400,7 @@ Route.group('pos-group', function () {
   Route.post('/wholesale-voucher-unwrite', 'WholesaleGeneralController.unwrite')
   Route.post('/wholesale-voucher-delete', 'WholesaleGeneralController.delete')
   Route.post('/wholesale-voucher-print', 'WholesaleGeneralController.prints')
+  Route.post('/wholesale-voucher-find', 'WholesaleGeneralController.get')
 
   // Transfer Receipt Inventory General
   Route.get('/transfer-receipt-inventory-general', 'TransferReceiptInventoryGeneralController.show')
@@ -410,6 +414,7 @@ Route.group('pos-group', function () {
   Route.post('/transfer-receipt-inventory-voucher-bind', 'TransferReceiptInventoryVoucherController.bind')
   Route.post('/transfer-receipt-inventory-voucher-print', 'TransferReceiptInventoryGeneralController.prints')
   Route.post('/transfer-receipt-inventory-voucher-scan', 'TransferReceiptInventoryVoucherController.scan')
+  Route.post('/transfer-receipt-inventory-voucher-find', 'TransferReceiptInventoryGeneralController.get')
 
   // Receipt cash General
 Route.get('/receipt-cash-general', 'ReceiptCashGeneralController.show')
@@ -462,7 +467,8 @@ Route.post('/receipt-cash-voucher-voucher-print', 'ReceiptCashGeneralController.
 
   // Update purchase price
    Route.get('/update-purchase-price', 'UpdatePurchasePriceController.show')
-   Route.post('/update-purchase-price-save', 'UpdatePurchasePriceController.save')
+   Route.post('/update-purchase-price-update', 'UpdatePurchasePriceController.update')
+   Route.post('/update-purchase-price-load', 'ReceiptInventoryVoucherController.load')
 
   //Approved
   Route.get('/approved-inventory-voucher', 'ApprovedInventoryVoucherController.show')

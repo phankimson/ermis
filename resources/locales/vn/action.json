@@ -38,5 +38,7 @@
     "accepted" : "Accepted",
     "completed" : "Completed",
     "filter" : "Lọc",
-    "approved_all" : "Duyệt tất cả"
+    "approved_all" : "Duyệt tất cả",
+    "update" : "Cập nhật",
+    "pageview" : "Tìm chứng từ"
 }

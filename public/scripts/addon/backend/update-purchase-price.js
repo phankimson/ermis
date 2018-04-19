@@ -173,8 +173,9 @@
         });
     };
 
-    var initReport = function (e) {
-        jQuery('.get_report').on('click', function () {
+    var initUpdate = function (e) {
+      if (Ermis.per.e) {
+        jQuery('.update').on('click', function () {
             var obj = {};
             jQuery.each(data.columns, function (k, col) {
                 if (col.key === 'text' || col.key === 'password' || col.key === 'number') {
@@ -219,19 +220,17 @@
                 }
             });
             var postdata = { data: JSON.stringify(obj) };
-            RequestURLWaiting(Ermis.link+'-get', 'json', postdata, function (result) {
-                if (result.status === true) {
-                    jQuery('#report').show( "fast", function showNext() {
-                        $table.bootstrapTable('load', result.data);
-                    });
-                    jQuery('#grid').hide(1000);
-                    jQuery('#list').hide(1000);
+            RequestURLWaiting(Ermis.link+'-update', 'json', postdata, function (result) {
+                if(result.status == true){
+                  jQuery('#notification').EPosMessage('success', result.message);
                 }else{
-                    kendo.alert(result.message)
+                  jQuery('#notification').EPosMessage('error', result.message);
                 }
             }, true);
         })
-
+      } else {
+          kendo.alert(transText.you_not_permission_edit);
+      }
     };
 
 
@@ -364,6 +363,23 @@
         });
     };
 
+    var initMonthDate = function () {
+        $(".month-picker").kendoDatePicker({
+            // defines the start view
+            start: "year",
+
+            // defines when the calendar should return date
+            depth: "year",
+
+            // display month and year in the input
+            format: "MM/yyyy",
+
+            // specifies that DateInput is used for masking the input element
+            dateInput: true
+        });
+    };
+
+
     var initKendoItemDropList = function(){
       jQuery("#item").kendoDropDownList({
         template: '#= barcode # | #= name # | #= size #',
@@ -438,6 +454,7 @@
         init: function () {
             initKendoUiDialog();
             initStatus();
+            initMonthDate();
             initKendoUiContextMenu();
             initKendoStartDatePicker();
             initKendoEndDatePicker();
@@ -447,7 +464,8 @@
             initGetColunm();
             initHideShow();
             initSearchData();
-            initReport();
+            initUpdate();
+
         }
 
     };

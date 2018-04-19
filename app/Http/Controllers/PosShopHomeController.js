@@ -158,27 +158,33 @@ class PosShopHomeController{
     * check (request, response){
       try{
       const data = JSON.parse(request.input('data'))
-      const user = yield User.findBy('barcode',data)
-      const inventory = yield request.session.get('inventory')
-      var permission = 0;
-      if(user.role == 1 || user.role == 2){
-        permission = 63
-      }else{
-        const per = yield UserPermission.query().where('user_id',session.id).where('inventory_id',inventory).innerJoin('menu', 'menu.id', 'user_permission.menu_id').where('menu.link',link.substr(1)).first()
-        if(per){
-        permission = per.permission;
+      if(data || data != ""){
+        const user = yield User.findBy('barcode',data)
+        const inventory = yield request.session.get('inventory')
+        var permission = 0;
+        if(user.role == 1 || user.role == 2){
+          permission = 63
+        }else{
+          const per = yield UserPermission.query().where('user_id',session.id).where('inventory_id',inventory).innerJoin('menu', 'menu.id', 'user_permission.menu_id').where('menu.link',link.substr(1)).first()
+          if(per){
+          permission = per.permission;
+          }
         }
-      }
-      if(permission > 0){
-      var bitmask = new Bitmask();
-      var arr = bitmask.getPermissions(permission)
-      if(arr.s){
-          response.json({ status: true })
+        if(permission > 0){
+        var bitmask = new Bitmask();
+        var arr = bitmask.getPermissions(permission)
+        if(arr.s){
+            user.barcode = Math.random().toString(36).slice(-8)
+            yield user.save()
+            response.json({ status: true })
+        }else{
+            response.json({ status: false ,  message: Antl.formatMessage('messages.you_not_permission_special') })
+        }
       }else{
           response.json({ status: false ,  message: Antl.formatMessage('messages.you_not_permission_special') })
       }
     }else{
-        response.json({ status: false ,  message: Antl.formatMessage('messages.you_not_permission_special') })
+      response.json({ status: false ,  message: Antl.formatMessage('messages.you_not_permission_special') })
     }
     }catch(e){
       response.json({ status: false , message: Antl.formatMessage('messages.you_not_permission_special')})

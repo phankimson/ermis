@@ -38,5 +38,7 @@
     "accepted" : "Accepted",
     "completed" : "Completed",
     "filter" : "Filter",
-    "approved_all" : "Approved all"
+    "approved_all" : "Approved all",
+    "update" : "Update",
+    "pageview" : "Find Voucher"
 }

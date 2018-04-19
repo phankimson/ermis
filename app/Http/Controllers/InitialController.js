@@ -174,16 +174,16 @@ class InitialController{
           for(let d of data.suplier){
                 var result = []
             if(d.debt_account != null || d.credit_account != null){
-              result =yield Data.query().where('type',1).where('item',d.id).first()
+              result =yield Data.query().where('type',2).where('item',d.id).first()
               if(result){
-                result.debt_account = d.debt_account
-                result.credit_account = d.credit_account
+                result.debt_account = d.debt_account?d.debt_account:0
+                result.credit_account = d.credit_account?d.credit_account:0
               }else{
                 result = new Data()
                 result.type = 2
                 result.item = d.id
-                result.debt_account = d.debt_account
-                result.credit_account = d.credit_account
+                result.debt_account = d.debt_account?d.debt_account:0
+                result.credit_account = d.credit_account?d.credit_account:0
               }
               yield result.save()
             }
@@ -192,16 +192,16 @@ class InitialController{
           for(let d of data.customer){
                 var result = []
             if(d.debt_account != null || d.credit_account != null){
-               result =yield Data.query().where('type',1).where('item',d.id).first()
+               result =yield Data.query().where('type',3).where('item',d.id).first()
               if(result){
-                result.debt_account = d.debt_account
-                result.credit_account = d.credit_account
+                result.debt_account = d.debt_account?d.debt_account:0
+                result.credit_account = d.credit_account?d.credit_account:0
               }else{
                 result = new Data()
                 result.type = 3
                 result.item = d.id
-                result.debt_account = d.debt_account
-                result.credit_account = d.credit_account
+                result.debt_account = d.debt_account?d.debt_account:0
+                result.credit_account = d.credit_account?d.credit_account:0
               }
               yield result.save()
             }

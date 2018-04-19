@@ -14,7 +14,7 @@ class PosShopUserController {
     const captcha = data['g-recaptcha-response']
     try {
     const login = yield request.auth.attempt(username,password)
-    if (login  && captcha != "") {
+    if (login) {
       const user = yield request.auth.getUser()
       if(user.stock_default != 0){
       yield request.session.put({ inventory: user.stock_default , shiftId: shiftId })

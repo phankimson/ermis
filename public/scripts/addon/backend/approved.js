@@ -119,6 +119,11 @@ var Ermis = function () {
         var postdata = { data: JSON.stringify(obj) };
         RequestURLWaiting(Ermis.link+'-filter', 'json', postdata, function (result) {
             if (result.status === true) {
+              if(result.page){
+                jQuery('.uk-pagination').removeClass('hidden');
+              }else{
+                jQuery('.uk-pagination').addClass('hidden');
+              }
                 bindData(result.data);
             } else {
                 kendo.alert(result.message);
