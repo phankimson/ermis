@@ -590,14 +590,16 @@
         shortcut.remove(key + "D");
         shortcut.remove(key + ".");
         shortcut.remove(key + ",");
-        jQuery('.add,.edit,.delete,.back,.forward,.print,.cancel,.save,.choose,.cancel-window,.filter,.pageview,.reference,.write_item,.unwrite_item,.advance_teacher,.advance_employee').addClass('disabled');
-        jQuery('.add,.edit,.delete,.back,.forward,.print-item,.cancel,.save,.choose,.cancel-window,.pageview,.filter,.reference,.write_item,.unwrite_item,.advance_teacher,.advance_employee').off('click');
+        shortcut.remove(key + "I");
+        jQuery('.add,.edit,.delete,.back,.forward,.print,.cancel,.save,.choose,.filter,.pageview,.reference,.write_item,.unwrite_item,.advance_teacher,.advance_employee').addClass('disabled');
+        jQuery('.add,.edit,.delete,.back,.forward,.print-item,.cancel,.save,.choose,.pageview,.filter,.reference,.write_item,.unwrite_item,.advance_teacher,.advance_employee').off('click');
         jQuery('input,textarea').not('.header_main_search_input').not('#files').not('.k-filter-menu input').addClass('disabled');
         jQuery(".droplist").addClass('disabled');
         jQuery('input:checkbox').parent().addClass('disabled');
-        jQuery('.date-picker').addClass('disabled');
-        jQuery(".k-input").addClass('disabled');
+        jQuery('.date-picker').not(".start,.end").addClass('disabled');
+        jQuery(".k-input").not(".start,.end").addClass('disabled');
         jQuery('.choose_voucher').on('click', initChooseVoucher);
+        shortcut.add(key + "I", function (e) { initChooseVoucher(e); });
         if (flag === 1) {//ADD
             jQuery('#add-top-menu-detail').show();
             sessionStorage.removeItem("dataId");
@@ -666,6 +668,7 @@
             jQuery('.forward').on('click', initForward);
             jQuery('.delete').on('click', initDelete);
             jQuery('.pageview').on('click', initVoucherForm);
+            shortcut.add(key + "I", function (e) { initChooseVoucher(e); });
             if (!sessionStorage.dataId) {
                 jQuery('.print,.delete,.edit').addClass('disabled');
                 jQuery('.print,.delete,.edit').off('click');
@@ -696,6 +699,7 @@
             jQuery('.back').on('click', initBack);
             jQuery('.forward').on('click', initForward);
             jQuery('.pageview').on('click', initVoucherForm);
+            shortcut.add(key + "I", function (e) { initChooseVoucher(e); });
             if (!sessionStorage.dataId) {
                 jQuery('.print,.delete,.edit').addClass('disabled');
                 jQuery('.print,.delete,.edit').off('click');

@@ -36,7 +36,7 @@ class ReportGeneralDebtController{
             for(var d of subject.toJSON()){
                 if(arr.filter(x => x.id === d.id).length == 0){
                    // Số đầu kỳ
-                  const opening_balance = yield Initial.query().where('item',d.id).where('type',3).sum('debt_account as q').sum('credit_account as a')    
+                  const opening_balance = yield Initial.query().where('item',d.id).where('type',3).sum('debt_account as q').sum('credit_account as a')
                    // Số đầu kỳ
                    const opening_receipt = yield Data.query()
                   .where('subject',d.id).where('subject_key',this.subject_key).where('active',data.active).whereIn('type',[4,5])

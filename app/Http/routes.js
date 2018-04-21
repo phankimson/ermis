@@ -608,6 +608,7 @@ Route.group('pos-shop-group', function () {
   Route.post('/transfer-issue-inventory-voucher-unwrite', 'TransferIssueInventoryGeneralController.unwrite')
   Route.post('/transfer-issue-inventory-voucher-delete', 'TransferIssueInventoryGeneralController.delete')
   Route.post('/transfer-issue-inventory-voucher-print', 'TransferIssueInventoryGeneralController.prints')
+  Route.post('/transfer-issue-inventory-voucher-find', 'TransferIssueInventoryGeneralController.get')
 
   // Transfer Receipt Inventory General
   Route.get('/transfer-receipt-inventory-general', 'TransferReceiptInventoryGeneralController.show')
@@ -621,6 +622,7 @@ Route.group('pos-shop-group', function () {
   Route.post('/transfer-receipt-inventory-voucher-bind', 'TransferReceiptInventoryVoucherController.bind')
   Route.post('/transfer-receipt-inventory-voucher-print', 'TransferReceiptInventoryGeneralController.prints')
   Route.post('/transfer-receipt-inventory-voucher-scan', 'TransferReceiptInventoryVoucherController.scan')
+  Route.post('/transfer-receipt-inventory-voucher-find', 'TransferReceiptInventoryGeneralController.get')
 
   // Report General Inventory
   Route.get('/report-general-inventory', 'ReportGeneralInventoryController.show')

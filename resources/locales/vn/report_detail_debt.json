@@ -1,7 +1,7 @@
 {
     "title": "Báo cáo chi tiết công nợ khách hàng",
-    "debt" : "Nợ",
-    "credit" : "Có",
-    "closing" : "Tồn",
+    "debt" : "Phát sinh",
+    "credit" : "Thanh toán",
+    "closing" : "Còn lại",
     "customer" : "Khách hàng"
 }
