@@ -31,18 +31,18 @@
                 <li>
                     <label for="icon-right">{{ antl.get('global.username') }}</label>
                     <span class="k-textbox k-space-right" style="width: 100%;">
-                        <input type="text" id="icon-right" name="username" placeholder="{{ antl.get('global.username') }}" />
+                        <input type="text" class="icon-right" name="username" placeholder="{{ antl.get('global.username') }}" />
                         <a href="javascript:;" class="k-icon k-i-user" >&nbsp;</a>
                     </span>
                 </li>
                 <li>
                     <label for="icon-right">{{ antl.get('global.password') }}</label>
                     <span class="k-textbox k-space-right" style="width: 100%;">
-                        <input type="password" id="icon-right" name="password" placeholder="{{ antl.get('global.password') }}"/>
+                        <input type="password" class="icon-right" name="password" placeholder="{{ antl.get('global.password') }}"/>
                         <a href="javascript:;" class="k-icon k-i-password" >&nbsp;</a>
                     </span>
                 </li>
-                <li>            
+                <li>
                     <!-- Generate recaptcha field -->
                     {{ recaptcha.field | safe }}
                 </li>
