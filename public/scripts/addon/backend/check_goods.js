@@ -128,6 +128,8 @@
                          }else{
                            grid.dataSource.insert(0 , i);
                          }
+                        }else{
+                          grid.dataSource.insert(0 , i);
                         }
                       });
                     }
@@ -336,7 +338,10 @@
     };
 
 
-    var initSave = function () {
+    var initSave = function (e) {
+      var jQuerylink = jQuery(e.target);
+      e.preventDefault();
+      if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
         var obj = {};
         obj.detail = $kGrid.data("kendoGrid").dataSource.data();
         obj.balance_total = ConvertNumber(jQuery("#balance_total").html());
@@ -400,6 +405,8 @@
         RequestURLWaiting(Ermis.link+'-save', 'json', postdata, function (result) {
               kendo.alert(result.message);
         }, true);
+      }
+      jQuerylink.data('lockedAt', +new Date());
     }
     var initCancel = function () {
       var grid = $kGrid.data("kendoGrid");

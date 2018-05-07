@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
 {% endblock %}
 {% block content %}
-<div id="import"></div>
+<div id="print"></div>
+<div id="print_template"></div>
 <div class="md-card uk-margin-medium-bottom">
     <div class="md-card-toolbar">
         <div class="md-card-toolbar-heading-text">
             <a class="new"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.new_page') }}">insert_drive_file</i></a>
             <a class="view"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.view') }}">remove_red_eye</i></a>
             <a class="delete"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.delete') }}">clear</i></a>
+            <a class="print"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.print') }}">local_printshop</i></a>
         </div>
         <div class="md-card-toolbar-actions">
         <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
@@ -58,5 +60,6 @@
     });
 </script>
     <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+    <script src="{{ url('library/jquery.print/jQuery.print.js') }}"></script>
     <script src="{{ url('scripts/addon/backend/check_goods_general.js') }}"></script>
 {% endblock %}

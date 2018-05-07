@@ -57,5 +57,6 @@
     "type" : "Loại",
     "refesh" : "Làm mới",
     "start_time" : "Thời gian kết thúc",
-    "end_time" : "Thời gian kết thúc"
+    "end_time" : "Thời gian kết thúc",
+    "refesh" : "Làm mới"
 }

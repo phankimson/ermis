@@ -1,6 +1,7 @@
 ﻿var Ermis = function () {
     var $kGrid = jQuery("#grid");
     var dataId = '';
+    var $print = '';
     var initKendoGrid = function () {
         dataSource = new kendo.data.DataSource({
             data: Ermis.data,
@@ -82,7 +83,9 @@
           e.preventDefault();
           if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
               if (Ermis.per.d) {
-                  if ($kGrid.find('.k-state-selected').length > 0) {
+                var grid = $kGrid.data("kendoGrid");
+                var selectedItem = grid.dataItem(grid.select());
+                if (selectedItem) {
                       $.when(KendoUiConfirm(transText.are_you_sure, transText.message)).then(function (confirmed) {
                           if (confirmed) {
                               var postdata = { data: JSON.stringify(dataId)};
@@ -108,10 +111,88 @@
           jQuerylink.data('lockedAt', +new Date());
       };
 
+      var initPrint = function (e) {
+          var jQuerylink = jQuery(e.target);
+          e.preventDefault();
+          if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
+            var grid = $kGrid.data("kendoGrid");
+            var selectedItem = grid.dataItem(grid.select());
+            if (selectedItem) {
+              if ($print) {
+                  $print.data("kendoDialog").open();
+              } else {
+                  initKendoUiDialog(1);
+              }
+            } else {
+                kendo.alert(transText.please_select_line);
+            }
+          }
+          jQuerylink.data('lockedAt', +new Date());
+      };
+
+      var initKendoUiDialog = function (type) {
+        if (type === 1) {
+            $print = $("#print").kendoDialog({
+                width: "400px",
+                title: "Print",
+                closable: true,
+                modal: true,
+                actions: [
+                    { text: "In Giảm", action: onPrintDown },
+                    { text: "In Tăng", action: onPrintUp },
+                    { text: "Close", primary: true }
+                ]
+            });
+        }
+        function onPrintDown(e) {
+          var obj = {};
+          var grid = $kGrid.data("kendoGrid");
+          var dataItem  = grid.dataItem(grid.select());
+          if(dataItem){
+            obj.id = dataItem.id;
+            obj.type = 11;
+            obj.voucher = 9;
+            var postdata = { data: JSON.stringify(obj)};
+            RequestURLWaiting(Ermis.link+'-print', 'json', postdata, function (result) {
+                if (result.status === true) {
+                  if (result.detail_content) {
+                    var decoded = $("<div/>").html(result.print_content).text();
+                      decoded = decoded.replace('<tr class="detail_content"></tr>', result.detail_content);
+                      PrintForm(jQuery('#print_template'), decoded);
+                      jQuery('#print_template').html("");
+                  }
+                }
+            }, true);
+          }
+        }
+        function onPrintUp(e) {
+          var obj = {};
+          var grid = $kGrid.data("kendoGrid");
+          var dataItem  = grid.dataItem(grid.select());
+          if(dataItem){
+            obj.id = dataItem.id;
+            obj.type = 10;
+            obj.voucher = 8;
+            var postdata = { data: JSON.stringify(obj)};
+            RequestURLWaiting(Ermis.link+'-print', 'json', postdata, function (result) {
+                if (result.status === true) {
+                  if (result.detail_content) {
+                    var decoded = $("<div/>").html(result.print_content).text();
+                      decoded = decoded.replace('<tr class="detail_content"></tr>', result.detail_content);
+                      PrintForm(jQuery('#print_template'), decoded);
+                      jQuery('#print_template').html("");
+                  }
+                }
+            }, true);
+          }
+        }
+      };
+
       var initStatus = function(){
         jQuery(".view").on("click",initView);
         jQuery(".new").on("click",initNew);
         jQuery('.delete').on('click', initDelete);
+        jQuery(".print").on("click", initPrint);
       }
 
     return {
@@ -119,6 +200,7 @@
         init: function () {
             initKendoGrid();
             initStatus();
+            initKendoUiDialog();
         }
     };
 }();

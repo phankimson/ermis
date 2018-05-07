@@ -464,6 +464,7 @@ Route.post('/receipt-cash-voucher-voucher-print', 'ReceiptCashGeneralController.
  // Check Goods General
   Route.get('/check-goods-general', 'CheckGoodsGeneralController.show')
   Route.post('/check-goods-general-delete', 'CheckGoodsGeneralController.delete')
+  Route.post('/check-goods-general-print', 'CheckGoodsGeneralController.prints')
 
   // Update purchase price
    Route.get('/update-purchase-price', 'UpdatePurchasePriceController.show')

@@ -56,5 +56,6 @@
     "action" : "Action",
     "type" : "Type",
     "start_time" : "Start time",
-    "end_time" : "End time"
+    "end_time" : "End time",
+    "refesh" : "Refesh"
 }

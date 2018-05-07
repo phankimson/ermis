@@ -1,0 +1,50 @@
+  {% set moment = use('moment/moment') %}
+<div class="uk-width-medium-4-4">
+<select class="droplist medium" id="fast_date_a">
+    <option value="">{{ antl.get('action.choose') }}</option>
+    <option value="today">{{ antl.get('global.today') }}</option>
+    <option value="this_week">{{ antl.get('global.this_week') }}</option>
+    <option value="this_month">{{ antl.get('global.this_month') }}</option>
+    <option value="this_quarter">{{ antl.get('global.this_quarter') }}</option>
+    <option value="this_year">{{ antl.get('global.this_year') }}</option>
+    <option value="january">{{ antl.get('global.january') }}</option>
+    <option value="february">{{ antl.get('global.february') }}</option>
+    <option value="march">{{ antl.get('global.march') }}</option>
+    <option value="april">{{ antl.get('global.april') }}</option>
+    <option value="may">{{ antl.get('global.may') }}</option>
+    <option value="june">{{ antl.get('global.june') }}</option>
+    <option value="july">{{ antl.get('global.july') }}</option>
+    <option value="august">{{ antl.get('global.august') }}</option>
+    <option value="september">{{ antl.get('global.september') }}</option>
+    <option value="october">{{ antl.get('global.october') }}</option>
+    <option value="november">{{ antl.get('global.november') }}</option>
+    <option value="december">{{ antl.get('global.december') }}</option>
+    <option value="the_1st_quarter">{{ antl.get('global.the_1st_quarter') }}</option>
+    <option value="the_2nd_quarter">{{ antl.get('global.the_2nd_quarter') }}</option>
+    <option value="the_3rd_quarter">{{ antl.get('global.the_3rd_quarter') }}</option>
+    <option value="the_4th_quarter">{{ antl.get('global.the_4th_quarter') }}</option>
+</select>
+</div>
+<div class="uk-margin-medium-top"></div>
+
+<span>{{ antl.get('global.start_date') }} :</span>
+<input type="text" data-type="date" id="start_a" class="start" name="start_date" value="{{moment().format("DD/MM/YYYY")}}" />
+
+<span>{{ antl.get('global.end_date') }}:</span>
+<input type="text" data-type="date" id="end_a" class="end" name="end_date" value="{{moment().format("DD/MM/YYYY")}}" />
+
+<select class="droplist medium-responsive" name="active">
+    <option value="">{{ antl.get('global.all') }}</option>
+    <option value="0">{{ antl.get('global.not_recorded') }}</option>
+    <option value="1">{{ antl.get('global.recorded') }}</option>
+</select>
+
+  <a href="javascript:;" class="uk-margin-left-30 k-button k-primary" id="search_voucher" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">search</i>{{ antl.get('action.search') }}</a>
+<div class="uk-margin-medium-top"></div>
+
+<div id="grid_voucher"></div>
+
+<div class="uk-margin" style="float : right">
+    <a href="javascript:;" class="k-button k-primary choose_voucher" data-uk-tooltip title="{{ antl.get('action.choose') }}"><i class="md-18 material-icons md-color-white">done</i>{{ antl.get('action.choose') }}</a>
+    <a href="javascript:;" class="k-button k-primary cancel-window" data-uk-tooltip title="{{ antl.get('action.close') }}"><i class="md-18 material-icons md-color-white">not_interested</i>{{ antl.get('action.close') }}</a>
+</div>

@@ -193,6 +193,10 @@ class CheckGoodsController{
           general_k.status = 1
           general_k.active = 1
           yield general_k.save()
+          var total_amount_c = 0
+          var total_amount_k = 0
+          var total_quantity_c = 0
+          var total_quantity_k = 0
           for(var d of data.detail){
             const goods = yield GoodsSize.query().where('goods_size.id',d.goods)
                           .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
@@ -216,12 +220,17 @@ class CheckGoodsController{
               detail_r.quantity = detail.difference
               detail_r.amount = detail.difference_amount
               detail_r.purchase_amount = goods.purchase_price * detail.difference
+              total_amount_c += detail.difference_amount
+              total_quantity_c += detail.difference
             }else{
               detail_r.quantity = 0-detail.difference
+              total_quantity_k += 0-detail.difference
               if(detail.difference_amount>0){
                 detail_r.amount = detail.difference_amount
+                total_amount_k += detail.difference_amount
               }else{
                 detail_r.amount = 0-detail.difference_amount
+                total_amount_k += 0-detail.difference_amount
               }
               detail_r.purchase_amount = 0-(goods.purchase_price * detail.difference)
               detail_r.general_id = general_k.id
@@ -252,6 +261,14 @@ class CheckGoodsController{
 
             }
           }
+
+          general_c.total_number = total_quantity_c
+          general_c.total_amount = total_amount_c
+          yield general_c.save()
+
+          general_k.total_number = total_quantity_k
+          general_k.total_amount = total_amount_k
+          yield general_k.save()
           // Lưu lịch sử
           const menu = yield Menu.query().where('code',this.menu).first()
           let hs = new HistoryAction()
@@ -304,16 +321,18 @@ class CheckGoodsController{
           return i;
         }
         });
-          data[index].check = data[index].check + 1
+          data[index].check = data[index].check + parseInt(d.quantity?d.quantity:1)
         }else{
-          data.push({id : goodsize.id ,
-                    barcode : goodsize.barcode ,
-                    item : goodsize.name ,
-                    unit : goodsize.unit ,
-                    price : goodsize.price ,
-                    balance : 0,
-                    balance_amount : 0,
-                    check : 1
+          data.push({
+                      id : goodsize.id ,
+                      goods : goodsize.id ,
+                      barcode : goodsize.barcode ,
+                      item : goodsize.name ,
+                      unit : goodsize.unit ,
+                      price : goodsize.price ,
+                      balance : 0,
+                      balance_amount :0,
+                      check : parseInt(d.quantity?d.quantity:1)
             })
         }
         s = s +1
