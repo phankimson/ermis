@@ -4,6 +4,7 @@ var Client = function () {
         const io = ws('', {
           connectionTimeout: 600000,  // in milliseconds
           reconnectInterval: 60000,
+          reconnect: true
         })
         const client = io.channel(channel)
         client.connect(function (error, connected) {

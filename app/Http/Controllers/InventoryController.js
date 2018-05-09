@@ -15,7 +15,7 @@ class InventoryController{
       const title = Antl.formatMessage('inventory.title')  // EDIT
       const data = yield Data.query().orderBy('id', 'desc').fetch()
       const company = yield Company.query().where('active',1).fetch()
-      const show = yield response.view('manage/pages/inventory', {key : this.key ,title: title , data: data.toJSON() , company : company.toJSON()})  // EDIT
+      const show = yield response.view('manage/pages/inventory', {key : this.key ,room : this.room  ,title: title , data: data.toJSON() , company : company.toJSON()})  // EDIT
       response.send(show)
   }
 

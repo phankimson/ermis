@@ -16,7 +16,7 @@ class UserManagerController{
       const title = Antl.formatMessage('user.title')  // EDIT
       const data = yield Data.query().orderBy('id', 'desc').fetch()
       const inventory = yield Inventory.query().where('active', 1).fetch()
-      const show = yield response.view('manage/pages/user', {key : this.key ,title: title , data: data.toJSON() , inventory :inventory.toJSON()  })  // EDIT
+      const show = yield response.view('manage/pages/user', {key : this.key ,room : this.room,title: title , data: data.toJSON() , inventory :inventory.toJSON()  })  // EDIT
       response.send(show)
   }
 

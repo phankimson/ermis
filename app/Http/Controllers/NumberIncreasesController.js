@@ -15,7 +15,7 @@ class NumberIncreasesController{
       const title = Antl.formatMessage('number_increases.title')  // EDIT
       const data = yield Data.all()
       const inventory = yield Inventory.query().where('active', 1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('manage/pages/number_increases', {key : this.key ,title: title , data: data.toJSON() ,inventory :inventory.toJSON() })  // EDIT
+      const show = yield response.view('manage/pages/number_increases', {key : this.key ,room : this.room  ,title: title , data: data.toJSON() ,inventory :inventory.toJSON() })  // EDIT
       response.send(show)
   }
   * save (request, response){

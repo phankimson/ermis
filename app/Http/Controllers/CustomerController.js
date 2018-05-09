@@ -21,7 +21,7 @@ class CustomerController{
       const data = yield Data.query().orderBy('id', 'desc').fetch()
       const group = yield Group.query().where('active', 1).where('type',this.group).orderBy('id', 'desc').fetch()
       const discount = yield Discount.query().where('type',3).where('active',1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('pos/pages/customer', {key : this.key ,title: title , data: data.toJSON() , discount : discount.toJSON() , group : group.toJSON()})  // EDIT
+      const show = yield response.view('pos/pages/customer', {key : this.key ,room : this.room ,title: title , data: data.toJSON() , discount : discount.toJSON() , group : group.toJSON()})  // EDIT
       response.send(show)
   }
 

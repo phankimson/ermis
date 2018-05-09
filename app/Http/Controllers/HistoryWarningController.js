@@ -18,7 +18,7 @@ class HistoryWarningController{
       .select('history_warning.*','inventory.name as inventory_name')
       .fetch()
       const stock = yield Stock.query().where('active',1).fetch()
-      const show = yield response.view('pos/pages/history_warning', {key : this.key,date :date ,stock :stock.toJSON(),data :data.toJSON(), title: title }) // EDIT
+      const show = yield response.view('pos/pages/history_warning', {key : this.key ,room : this.room ,date :date ,stock :stock.toJSON(),data :data.toJSON(), title: title }) // EDIT
       response.send(show)
   }
 

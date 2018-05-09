@@ -31,7 +31,7 @@ class CheckGoodsController{
       const title = Antl.formatMessage('check_goods.title')  // EDIT
       const inventory = yield request.session.get('inventory')
       const stock = yield Stock.query().where('active',1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('pos/pages/check_goods', {key : this.key ,title: title , stock : stock.toJSON() })  // EDIT
+      const show = yield response.view('pos/pages/check_goods', {key : this.key ,room : this.room ,title: title , stock : stock.toJSON() })  // EDIT
       response.send(show)
   }
 

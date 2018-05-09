@@ -12,7 +12,7 @@ class ConfigController{
   * show (request, response){
       const title = Antl.formatMessage('config.title')  // EDIT
       const data = yield Option.query().where("active","1").fetch()
-      const show = yield response.view('manage/pages/config', {key : this.key ,title: title , data: data.toJSON() })  // EDIT
+      const show = yield response.view('manage/pages/config', {key : this.key ,room : this.room  ,title: title , data: data.toJSON() })  // EDIT
       response.send(show)
   }
   * cancel (request, response){

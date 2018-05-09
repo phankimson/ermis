@@ -9,13 +9,15 @@ var ErmisAdd2 = function () {
           item_value = (initBarcodeMasker(result.data))
           jQuery("input[name='code']").val(item_value)
         });
-          if(group_value != '' && style_value != '' && model_value != ''){
+
+        group_value = jQuery("select[name='group']").data("kendoDropDownList").text().split(" - ",1);
+        style_value = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",1);
+        model_value = jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",1);
+
+          if(group_value != '--Select--' && style_value != '--Select--' && model_value != '--Select--'){
             jQuery("input[name='barcode']").val(group_value+model_value+style_value)
           }else{
-            group_value = jQuery("select[name='group']").data("kendoDropDownList").text().split(" - ",1);
-            style_value = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",1);
-            model_value = jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",1);
-            if(group_value && style_value && model_value){
+            if(group_value != '--Select--' && style_value != '--Select--' && model_value != '--Select--'){
             jQuery("input[name='barcode']").val(group_value[0]+model_value[0]+style_value[0])
             }
           }
@@ -44,15 +46,18 @@ var ErmisAdd2 = function () {
 
         var model_c =  jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",2);
         var style_c = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",2);
-        jQuery("input[name='name'],input[name='name_en']").val(model_c[1]+' - '+style_c[1])
+        if(model_c[1] != 'undefined' && style_c[1] != 'undefined'){
+          jQuery("input[name='name'],input[name='name_en']").val(model_c[1]+' - '+style_c[1])
+        }
 
-        if(group_value != '' && style_value != '' && model_value != ''){
+        group_value = jQuery("select[name='group']").data("kendoDropDownList").text().split(" - ",1);
+        style_value = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",1);
+        model_value = jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",1);
+
+        if(group_value != '--Select--' && style_value != '--Select--' && model_value != '--Select--'){
           jQuery("input[name='barcode']").val(group_value+model_value+style_value)
         }else{
-          group_value = jQuery("select[name='group']").data("kendoDropDownList").text().split(" - ",1);
-          style_value = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",1);
-          model_value = jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",1);
-          if(group_value && style_value && model_value){
+          if(group_value != '--Select--' && style_value != '--Select--' && model_value != '--Select--'){
           jQuery("input[name='barcode']").val(group_value[0]+model_value[0]+style_value[0])
           }
         }
@@ -70,15 +75,17 @@ var ErmisAdd2 = function () {
 
           var model_c =  jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",2);
           var style_c = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",2);
-          jQuery("input[name='name'],input[name='name_en']").val(model_c[1]+' - '+style_c[1])
-
-        if(group_value != '' && style_value != '' && model_value != ''){
-          jQuery("input[name='barcode']").val(group_value+model_value+style_value)
-        }else{
+          if(model_c[1] && style_c[1]){
+            jQuery("input[name='name'],input[name='name_en']").val(model_c[1]+' - '+style_c[1])
+          }
           group_value = jQuery("select[name='group']").data("kendoDropDownList").text().split(" - ",1);
           style_value = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",1);
           model_value = jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",1);
-          if(group_value && style_value && model_value){
+
+        if(group_value != '--Select--' && style_value != '--Select--' && model_value != '--Select--'){
+          jQuery("input[name='barcode']").val(group_value+model_value+style_value)
+        }else{
+          if(group_value != '--Select--' && style_value != '--Select--' && model_value != '--Select--'){
           jQuery("input[name='barcode']").val(group_value[0]+model_value[0]+style_value[0])
           }
         }

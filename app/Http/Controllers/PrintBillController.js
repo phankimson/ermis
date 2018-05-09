@@ -26,7 +26,7 @@ class PrintBillController{
       .select('pos_general.*','customer.name as subject')
       .paginate(page,option.value)
       data.toJSON().page = Math.ceil(data.toJSON().total / data.toJSON().perPage)
-      const show = yield response.view('pos/pages/print_bill', {key : this.key ,title: title , data: data.toJSON() })  // EDIT
+      const show = yield response.view('pos/pages/print_bill', {key : this.key,room : this.room ,title: title , data: data.toJSON() })  // EDIT
       response.send(show)
   }
   * page (request, response){

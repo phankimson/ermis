@@ -10,12 +10,13 @@ class PosUserManagerController{
       this.type = ""  // EDIT
       this.key = "user"  // EDIT
       this.download = "User.xlsx"  // EDIT
+      this.room = "user"  // EDIT
     }
   * show (request, response){
       const title = Antl.formatMessage('user.title')  // EDIT
       const data = yield Data.query().where('role','>','1').orderBy('id', 'desc').fetch()
       const inventory = yield Inventory.query().where('active', 1).fetch()
-      const show = yield response.view('pos/pages/user', {key : this.key ,title: title , data: data.toJSON() , inventory :inventory.toJSON()  })  // EDIT
+      const show = yield response.view('pos/pages/user', {key : this.key ,room : this.room  ,title: title , data: data.toJSON() , inventory :inventory.toJSON()  })  // EDIT
       response.send(show)
   }
 

@@ -613,6 +613,7 @@
                     jQuery('select[name="' + col.field + '"]').data('kendoDropDownList').value("0");
                 } else {
                  if(jQuery('select[name="' + col.field + '"]').hasClass("multiselect")){
+                   jQuery('select[name="' + col.field + '"]').data('kendoMultiSelect').value([]);
                     jQuery('select[name="' + col.field + '"]').data('kendoMultiSelect').value(dataItem[col.field].split(","));
                   }else{
                     jQuery('select[name="' + col.field + '"]').data('kendoDropDownList').value(dataItem[col.field]);

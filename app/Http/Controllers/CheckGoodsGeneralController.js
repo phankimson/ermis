@@ -29,7 +29,7 @@ class CheckGoodsGeneralController{
       const title = Antl.formatMessage('check_goods.title')  // EDIT
       const inventory = yield request.session.get('inventory')
       const data = yield CheckGoodsGeneral.query().where('inventory',inventory).where('active',1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('pos/pages/check_goods_general', {key : this.key ,title: title , data : data.toJSON() })  // EDIT
+      const show = yield response.view('pos/pages/check_goods_general', {key : this.key ,room : this.room ,title: title , data : data.toJSON() })  // EDIT
       response.send(show)
   }
   * delete(request, response){

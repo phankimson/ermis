@@ -140,7 +140,7 @@
                 if (col.key === 'select' && jQuery('select[name = ' + col.field + ']').hasClass("droplist")) {
                     jQuery('.droplist[name="' + col.field + '"]').data('kendoDropDownList').value("0");
                 } else if (col.key === 'select' && jQuery('select[name = ' + col.field + ']').hasClass("multiselect")) {
-                    jQuery('.multiselect[name="' + col.field + '"]').data('kendoMultiSelect').value("0");
+                    jQuery('.multiselect[name="' + col.field + '"]').data('kendoMultiSelect').value([]);
                 } else if (col.key === 'checkbox') {
                     jQuery('input[name="' + col.field + '"]').parent().addClass('checked');
                 } else if (col.type === 'date') {
@@ -629,6 +629,7 @@
                     jQuery('select[name="' + col.field + '"]').data('kendoDropDownList').value("0");
                 } else {
                  if(jQuery('select[name="' + col.field + '"]').hasClass("multiselect")){
+                   jQuery('select[name="' + col.field + '"]').data('kendoMultiSelect').value([]);
                     jQuery('select[name="' + col.field + '"]').data('kendoMultiSelect').value(dataItem[col.field].split(","));
                   }else{
                     jQuery('select[name="' + col.field + '"]').data('kendoDropDownList').value(dataItem[col.field]);

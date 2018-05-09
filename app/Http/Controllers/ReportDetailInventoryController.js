@@ -27,7 +27,7 @@ class ReportDetailInventoryController{
       //.innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
       //.innerJoin('size', 'size.id', 'goods_size.size').select('goods_size.id','goods_size.barcode','marial_goods.name as name','size.name as size')
       //.fetch()
-      const show = yield response.view('pos/pages/report_detail_inventory', {key : this.key ,title: title , end_date:end_date , start_date :start_date , stock : stock.toJSON()})  // EDIT
+      const show = yield response.view('pos/pages/report_detail_inventory', {key : this.key ,room : this.room,title: title , end_date:end_date , start_date :start_date , stock : stock.toJSON()})  // EDIT
       response.send(show)
   }
   * get (request, response) {

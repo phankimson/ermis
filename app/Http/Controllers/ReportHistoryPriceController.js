@@ -16,7 +16,7 @@ class ReportHistoryPriceController{
       const date_range = yield Option.query().where("code","MAX_DATE_RANGER_REPORT").first()
       const end_date = moment().format('DD/MM/YYYY')
       const start_date = moment().subtract((date_range.value - 1), 'days').format('DD/MM/YYYY')
-      const show = yield response.view('pos/pages/report_history_price', {key : this.key ,title: title , end_date:end_date , start_date :start_date })  // EDIT
+      const show = yield response.view('pos/pages/report_history_price', {key : this.key,room : this.room ,title: title , end_date:end_date , start_date :start_date })  // EDIT
       response.send(show)
   }
   * get (request, response) {

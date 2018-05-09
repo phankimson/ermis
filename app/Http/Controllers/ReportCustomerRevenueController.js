@@ -19,7 +19,7 @@ class ReportCustomerRevenueController{
       const end_date = moment().format('DD/MM/YYYY')
       const stock = yield Inventory.query().where('active',1).orderBy('id', 'desc').fetch()
       const shift = yield Shift.query().where('active',1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('pos/pages/report_customer_revenue', {key : this.key ,title: title , end_date:end_date  , shift_list : shift.toJSON() , stock : stock.toJSON()})  // EDIT
+      const show = yield response.view('pos/pages/report_customer_revenue', {key : this.key ,room : this.room,title: title , end_date:end_date  , shift_list : shift.toJSON() , stock : stock.toJSON()})  // EDIT
       response.send(show)
   }
   * get (request, response) {

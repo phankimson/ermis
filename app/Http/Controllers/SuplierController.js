@@ -19,7 +19,7 @@ class SuplierController{
       const title = Antl.formatMessage('suplier.title')  // EDIT
       const data = yield Data.query().orderBy('id', 'desc').fetch()
       const group = yield Group.query().where('active', 1).where('type',this.group).orderBy('id', 'desc').fetch()
-      const show = yield response.view('pos/pages/suplier', {key : this.key ,title: title , data: data.toJSON() , group : group.toJSON()})  // EDIT
+      const show = yield response.view('pos/pages/suplier', {key : this.key ,room : this.room ,title: title , data: data.toJSON() , group : group.toJSON()})  // EDIT
       response.send(show)
   }
 

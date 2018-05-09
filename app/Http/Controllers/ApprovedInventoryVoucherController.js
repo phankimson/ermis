@@ -23,7 +23,7 @@ class ApprovedInventoryVoucherController{
       .select('pos_general.*','t1.name as inventory_receipt','t2.name as inventory_issue')
       .paginate(page,option.value)
       data.toJSON().page = Math.ceil(data.toJSON().total / data.toJSON().perPage)
-      const show = yield response.view('pos/pages/approved_inventory_voucher', {key : this.key ,title: title , data: data.toJSON() })  // EDIT
+      const show = yield response.view('pos/pages/approved_inventory_voucher', {key : this.key ,room : this.room ,title: title , data: data.toJSON() })  // EDIT
       response.send(show)
   }
   * page (request, response){

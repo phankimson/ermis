@@ -13,7 +13,7 @@ class MenuController{
   * show (request, response){
       const title = Antl.formatMessage('menu.title')  // EDIT
       const data = yield Data.query().where('type',this.type).orderBy('id', 'desc').fetch()
-      const show = yield response.view('manage/pages/menu', {key : this.key ,title: title , data: data.toJSON()})  // EDIT
+      const show = yield response.view('manage/pages/menu', {key : this.key ,room : this.room  ,title: title , data: data.toJSON()})  // EDIT
       response.send(show)
   }
   * get (request, response){

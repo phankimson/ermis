@@ -52,7 +52,7 @@ class InitialController{
       .select("goods_size.id","marial_goods.nature","goods_size.barcode as barcode","marial_goods.name as name","unit.name as unit","size.name as size","initial.quantity","initial.amount").fetch()
 
       const stock = yield Stock.query().where('active',1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('pos/pages/initial', {key : this.key ,title: title , data2: data2,data3: data3,data4: data4.toJSON() , stock : stock.toJSON() })  // EDIT
+      const show = yield response.view('pos/pages/initial', {key : this.key,room : this.room  ,title: title , data2: data2,data3: data3,data4: data4.toJSON() , stock : stock.toJSON() })  // EDIT
       response.send(show)
   }
   * cancel (request, response){

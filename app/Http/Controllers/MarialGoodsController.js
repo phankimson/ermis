@@ -44,7 +44,7 @@ class MarialGoodsController{
       const discount = yield Discount.query().where('type',1).where('active',1).orderBy('id', 'desc').fetch()
       const warranty_period = yield WarrantyPeriod.query().where('active',1).orderBy('id', 'desc').fetch()
 
-      const show = yield response.view('pos/pages/marial_goods', {key : this.key ,title: title , data: data.toJSON() , model : model.toJSON(), size : size.toJSON() , gender : gender.toJSON() , type_ : type_.toJSON() , group : group.toJSON() , style : style.toJSON() , origin : origin.toJSON() , unit : unit.toJSON(), discount : discount.toJSON() , warranty_period : warranty_period.toJSON() })  // EDIT
+      const show = yield response.view('pos/pages/marial_goods', {key : this.key , room : this.room ,title: title , data: data.toJSON() , model : model.toJSON(), size : size.toJSON() , gender : gender.toJSON() , type_ : type_.toJSON() , group : group.toJSON() , style : style.toJSON() , origin : origin.toJSON() , unit : unit.toJSON(), discount : discount.toJSON() , warranty_period : warranty_period.toJSON() })  // EDIT
       response.send(show)
   }
 

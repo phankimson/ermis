@@ -29,7 +29,7 @@ class GoodsEvaluationController{
                     .TypeWhere('goods_inventory.inventory', inventory)
                     .select('goods_size.*','goods_inventory.*','unit.name as unit','marial_goods.name as name','size.name as size').paginate(page,option.value)
       data.toJSON().page = Math.ceil(data.toJSON().total / data.toJSON().perPage)
-      const show = yield response.view('pos/pages/goods_evaluation', {key : this.key ,title: title , data: data.toJSON() ,item :item.toJSON(),stock:stock.toJSON(),warning:warning.toJSON() })  // EDIT
+      const show = yield response.view('pos/pages/goods_evaluation', {key : this.key ,room : this.room ,title: title , data: data.toJSON() ,item :item.toJSON(),stock:stock.toJSON(),warning:warning.toJSON() })  // EDIT
       response.send(show)
   }
   * page (request, response){

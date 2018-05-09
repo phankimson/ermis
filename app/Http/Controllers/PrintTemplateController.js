@@ -16,7 +16,7 @@ class PrintTemplateController{
       const title = Antl.formatMessage('print_template.title')  // EDIT
       const data = yield Data.query().orderBy('id', 'desc').fetch()
       const menu = yield Menu.query().where('active', 1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('manage/pages/print_template', {key : this.key ,title: title , data: data.toJSON() , menu : menu.toJSON()})  // EDIT
+      const show = yield response.view('manage/pages/print_template', {key : this.key ,room : this.room,title: title , data: data.toJSON() , menu : menu.toJSON()})  // EDIT
       response.send(show)
   }
 

@@ -19,7 +19,7 @@ class ReportGeneralRevenueController{
       const end_date = moment().format('DD/MM/YYYY')
       const start_date = moment().subtract((date_range.value - 1), 'days').format('DD/MM/YYYY')
       const stock = yield Inventory.query().where('active',1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('pos/pages/report_general_revenue', {key : this.key ,title: title , end_date:end_date , start_date :start_date , stock: stock.toJSON()})  // EDIT
+      const show = yield response.view('pos/pages/report_general_revenue', {key : this.key ,room : this.room,title: title , end_date:end_date , start_date :start_date , stock: stock.toJSON()})  // EDIT
       response.send(show)
   }
   * get (request, response) {

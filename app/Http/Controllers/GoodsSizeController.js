@@ -22,7 +22,7 @@ class GoodsSizeController{
       const data = yield Data.query().orderBy('id', 'desc').fetch()
       const goods = yield MarialGoods.query().where('active',1).orderBy('id', 'desc').fetch()
       const size = yield Size.query().where('active',1).orderBy('id', 'desc').fetch()
-      const show = yield response.view('pos/pages/goods_size', {key : this.key ,title: title , data: data.toJSON() , goods : goods.toJSON() , size : size.toJSON() })  // EDIT
+      const show = yield response.view('pos/pages/goods_size', {key : this.key ,room : this.room  ,title: title , data: data.toJSON() , goods : goods.toJSON() , size : size.toJSON() })  // EDIT
       response.send(show)
   }
 
