@@ -7,6 +7,7 @@ const Option = use('App/Model/Option')  // EDIT
 const Size = use('App/Model/Size')  // EDIT
 const MarialGoods = use('App/Model/MarialGoods')  // EDIT
 const GoodsSize = use('App/Model/GoodsSize')  // EDIT
+const GoodsInventory = use('App/Model/GoodsInventory')  // EDIT
 const Initial = use('App/Model/Initial')  // EDIT
 const Inventory = use('App/Model/Inventory')  // EDIT
 var moment = require('moment')
@@ -31,23 +32,23 @@ class ReportGeneralInventoryController{
   * get (request, response) {
      try {
         const data = JSON.parse(request.input('data'))
-        const size = yield Size.query().TypeWhere('id',data.size).pluck('id')
-        const item = yield MarialGoods.query().TypeWhere('id',data.item).pluck('id')
-        const goodsize1 = yield GoodsSize.query()
-        .where('goods_size.active',1).whereIn('goods_size.goods',item)
-        .whereIn('goods_size.size',size)
+        const goodsize1 = yield Initial.query()
+        .innerJoin('goods_size', 'goods_size.id', 'initial.item')
+        .where('initial.inventory',data.inventory)
+        .where('goods_size.active',1).TypeWhere('goods_size.goods',data.item)
+        .TypeWhere('goods_size.size',data.size)
         .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
         .innerJoin('unit', 'unit.id', 'marial_goods.unit')
         .innerJoin('size', 'size.id', 'goods_size.size')
-        .has('initial')
         .select('goods_size.*','unit.name as unit','marial_goods.name as name','size.name as size').fetch()
-        const goodsize2 = yield GoodsSize.query()
-        .where('goods_size.active',1).whereIn('goods_size.goods',item)
-        .whereIn('goods_size.size',size)
+        const goodsize2 = yield GoodsInventory.query()
+        .innerJoin('goods_size', 'goods_size.id', 'goods_inventory.goods_size')
+        .where('goods_inventory.inventory',data.inventory)
+        .where('goods_size.active',1).TypeWhere('goods_size.goods',data.item)
+        .TypeWhere('goods_size.size',data.size)
         .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
         .innerJoin('unit', 'unit.id', 'marial_goods.unit')
         .innerJoin('size', 'size.id', 'goods_size.size')
-        .has('detail')
         .select('goods_size.*','unit.name as unit','marial_goods.name as name','size.name as size').fetch()
         var goodsize = goodsize1.toJSON().concat(goodsize2.toJSON())
         var arr = []
