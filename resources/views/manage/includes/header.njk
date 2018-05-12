@@ -210,8 +210,6 @@
                                 <ul id="header_alerts" class="uk-switcher uk-margin">
                                     <li>
                                         <ul class="md-list md-list-addon">
-                                        {% set Chat = use('App/Model/Chat') %}
-                                        {% yield chat = Chat.query().innerJoin('users', 'users.id', 'chat.user_send').where('chat.user_receipt',currentUser.id).select('chat.*','users.username','users.avatar') %}
                                         {% for c in chat %}
                                             <li>
                                                 <div class="md-list-addon-element">

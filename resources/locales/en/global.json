@@ -57,5 +57,6 @@
     "type" : "Type",
     "start_time" : "Start time",
     "end_time" : "End time",
-    "refesh" : "Refesh"
+    "refesh" : "Refesh",
+    "sync" : "Sync"
 }

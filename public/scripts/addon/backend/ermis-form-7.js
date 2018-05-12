@@ -351,7 +351,7 @@
             RequestURLWaiting(Ermis.link+'-Get', 'json', postdata, function (result) {
                 if (result.status === true) {
                     if (jQuery('#grid').attr('id') === 'grid') {
-                        dataSource = new kendo.data.DataSource({ data: result.data, aggregate: Ermis.aggregate, schema: { model: { fields: Ermis.field } } });
+                        dataSource = new kendo.data.DataSource({ data: result.data , pageSize : 20 , aggregate: Ermis.aggregate, schema: { model: { fields: Ermis.field } } });
                         var grid = $kGrid.data("kendoGrid");
                         grid.setDataSource(dataSource);
                         $kGrid.show(1000);

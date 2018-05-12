@@ -62,7 +62,7 @@ class ChatController {
       var currentUser = this.socket.currentUser
      setTimeout(function () {
        var user = currentAllSocket.filter(x => x.user === currentUser.id)
-       if(user){
+       if(user.length > 0){
          if(user[0].reconnect === false){
            socket.toEveryone().emit('server-check-offline', currentUser)
             currentAllSocket = currentAllSocket.filter(x => x.user != currentUser.id)

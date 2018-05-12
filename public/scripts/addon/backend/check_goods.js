@@ -32,6 +32,15 @@
         $kGrid.removeAttr('style');
       }
     }
+
+    var initChange = function(e){
+      $(".droplist").on("change", function(){
+        initStatus(1);
+        $kGrid.data('kendoGrid').dataSource.data([]);
+      });
+
+    }
+
     var initExport = function (e) {
         var jQuerylink = jQuery(e.target);
         e.preventDefault();
@@ -450,6 +459,7 @@
             initMonthDate();
             initGetColunm();
             initKendoGrid();
+            initChange();
         }
     };
 }();

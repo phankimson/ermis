@@ -493,6 +493,7 @@
                 dataId = null;
                 $kWindow.title(transText.add);
                 initStatus(2);
+                sessionStorage.action = 1;
             } else {
                 kendo.alert(transText.you_not_permission_add);
             }
@@ -509,6 +510,7 @@
                     dataId = null;
                     $kWindow.title(transText.copy);
                     initStatus(3);
+                    sessionStorage.action = 2;
                 } else {
                     kendo.alert(transText.please_select_line_copy);
                 }
@@ -527,6 +529,7 @@
                 if ($kGrid.find('tr.k-state-selected').length > 0) {
                     $kWindow.title(transText.edit);
                     initStatus(3);
+                    sessionStorage.action = 3;
                 } else {
                     kendo.alert(transText.please_select_line_edit);
                 }
@@ -569,6 +572,7 @@
                                 myWindow.data("kendoWindow").close();
                                 kendo.alert(result.message);
                                 initStatus(4);
+                                sessionStorage.action = 4;
                             }, true);
                         }
                     });
@@ -588,6 +592,7 @@
         if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
             if ($import) {
                 $import.data("kendoDialog").open();
+                sessionStorage.action = 5;
             } else {
                 initKendoUiDialog(2);
             }
@@ -601,6 +606,7 @@
         if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
             if ($export) {
                 $export.data("kendoDialog").open();
+                sessionStorage.action = 6;
             } else {
                 initKendoUiDialog(1);
             }

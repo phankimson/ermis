@@ -1,0 +1,139 @@
+
+{% extends 'manage.layouts.default' %}
+
+{% block css %}
+<title>{{ antl.get('index.title') }}</title>
+<link rel="stylesheet" href="{{ url('css/bootstrap.css') }}" />
+<link rel="stylesheet" href="{{ url('css/addon/customize.css') }}" />
+<link rel="stylesheet" href="{{ url('css/addwidthdroplist.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="md-card uk-margin-medium-bottom">
+    <div class="md-card-toolbar">
+        <div class="md-card-toolbar-heading-text">
+           {{ title }}
+        </div>
+        <div class="md-card-toolbar-actions">
+            <i class="md-icon material-icons toolbar_fixed btn-show" id="btn-show" data-uk-tooltip title="{{ antl.get('global.open_condition') }}" style="display:none">launch</i>
+            <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
+            <i class="md-icon material-icons refesh" data-uk-tooltip title="{{ antl.get('action.refesh') }}"></i>
+            <div class="md-card-dropdown" data-uk-dropdown="{pos:'bottom-right'}" aria-haspopup="true" aria-expanded="false">
+                <i class="md-icon material-icons"></i>
+                <div class="uk-dropdown uk-dropdown-bottom" aria-hidden="true" tabindex="" style="min-width: 200px; top: 32px; left: -168px;">
+                    <ul class="uk-nav">
+                        <li><a class="get_report" href="javascript:;">{{ antl.get('global.sync') }}</a></li>
+                        <li><a class="btn-hide" href="javascript:;">{{ antl.get('global.hidden_condition') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="md-card-content">
+    <div class="uk-grid" id="form-search">
+        <div class="uk-width-medium-1-4">
+
+        </div>
+        <div class="width-large">
+        <table>
+            <tr>
+            <td><span class="row-padding-right-small">{{ antl.get('global.start_date') }} :</span></td>
+            <td>
+            <input type="text" data-type="date" id="start" name="start_date" value="{{ end_date }}" />
+            <span class="row-padding-right-small"></span>
+
+            <span class="row-padding-right-small">{{ antl.get('global.end_date') }}:</span>
+            <input type="text" data-type="date" id="end" name="end_date" value="{{ end_date }}" />
+             </td>
+            </tr>
+
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('model.title') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="model" />
+            </td>
+            </tr>
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('size.title') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="size" />
+            </td>
+            </tr>
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('group.title') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="group" />
+            </td>
+            </tr>
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('type.title') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="type" />
+            </td>
+            </tr>
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('origin.title') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="origin" />
+            </td>
+            </tr>
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('gender.title') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="gender" />
+            </td>
+            </tr>
+
+            <tr>
+            <td> <label class="row-padding-right-small">{{ antl.get('marial_goods.title') }}</label></td>
+            <td>
+            <input type="checkbox" data-md-icheck="" checked name="marial_goods" />
+            </td>
+            </tr>
+
+
+
+        </table>
+
+            <div class="row-padding-bottom-small"></div>
+            <div>
+                <a href="javascript:;" class="k-button uk-alert-success row-padding-bottom-small sync" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">import_export</i>{{ antl.get('global.sync') }}</a>
+                <a href="javascript:;" class="k-button uk-alert-warning btn-hide" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">exit_to_app</i>{{ antl.get('global.hidden_condition') }}</a>
+            </div>
+
+        </div>
+        <div class="uk-width-medium-1-4">
+
+        </div>
+
+    </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    jQuery(document).ready(function () {
+      Ermis.per = JSON.parse('{{ permission | safe }}');
+      Ermis.link = "{{ key }}";
+      Ermis.room = "{{ room }}";
+    });
+</script>
+<script src="{{ url('scripts/bootstrap.min.js') }}"></script>
+<script src="{{ url('library/bootstrap-table/src/bootstrap-table.js') }}"></script>
+<script src="{{ url('library/bootstrap-table/src/extensions/export/bootstrap-table-export.js') }}"></script>
+<script src="{{ url('library/bootstrap-table/src/extensions/export/tableExport.js') }}"></script>
+<script src="{{ url('library/bootstrap-table/src/extensions/filter-control/bootstrap-table-filter-control.js') }}"></script>
+<script src="{{ url('library/bootstrap-table/src/extensions/print/bootstrap-table-print.js') }}"></script>
+<script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
+<script src="{{ url('library/kendoui/js/jszip.min.js') }}"></script>
+<script src="{{ url('library/moment/min/moment.min.js') }}"></script>
+<script src="{{ url('scripts/shortcuts.js') }}"></script>
+<script src="{{ url('scripts/addon/backend/db.js') }}"></script>
+{% endblock %}

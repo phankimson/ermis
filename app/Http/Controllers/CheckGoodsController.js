@@ -106,19 +106,24 @@ class CheckGoodsController{
       .TypeWhereNot('pos_general.inventory_issue',data.stock).where('pos_general.active',1).whereIn('pos_general.status',[1,2])
       .whereBetween('pos_general.date_voucher',[moment(startDate , "YYYY-MM-DD").format('YYYY-MM-DD'),moment(endDate, "YYYY-MM-DD").format('YYYY-MM-DD') ])
       .sum('pos_detail.quantity as q').sum('pos_detail.amount as a')
-          arr.push({id : d.id ,
-                    goods : d.id ,
-                    barcode : d.barcode ,
-                    item : d.name ,
-                    unit : d.unit ,
-                    price : d.price ,
-                    balance : a + c + receipt_inventory[0].q - issue_inventory[0].q,
-                    balance_amount : b + e + receipt_inventory[0].a  - issue_inventory[0].a ,
-                    check : 0 ,
-                    check_amount: 0 ,
-                    difference:  0,
-                    difference_amount : 0
-            })
+      var balance = a + c + receipt_inventory[0].q - issue_inventory[0].q
+      var balance_amount = b + e + receipt_inventory[0].a  - issue_inventory[0].a
+      if(balance > 0 && balance_amount > 0){
+        arr.push({id : d.id ,
+                  goods : d.id ,
+                  barcode : d.barcode ,
+                  item : d.name ,
+                  unit : d.unit ,
+                  price : d.price ,
+                  balance : a + c + receipt_inventory[0].q - issue_inventory[0].q,
+                  balance_amount : b + e + receipt_inventory[0].a  - issue_inventory[0].a ,
+                  check : 0 ,
+                  check_amount: 0 ,
+                  difference:  0,
+                  difference_amount : 0
+          })
+      }
+
           }
       }
         response.json({ status: true  , data : arr})

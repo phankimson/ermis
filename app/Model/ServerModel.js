@@ -2,7 +2,11 @@
 
 const Lucid = use('Lucid')
 
-class Model extends Lucid {
+class ServerModel extends Lucid {
+
+  static get connection () {
+  return 'mysql_server'
+}
 
   static boot () {
    super.boot()
@@ -13,10 +17,10 @@ class Model extends Lucid {
     return 'model'
   }
   static get createTimestamp () {
-    return 'created_at'
+    return null
   }
   static get updateTimestamp () {
-   return 'updated_at'
+   return null
    }
    static get deleteTimestamp () {
      return null
@@ -54,4 +58,4 @@ class Model extends Lucid {
 
 }
 
-module.exports = Model
+module.exports = ServerModel

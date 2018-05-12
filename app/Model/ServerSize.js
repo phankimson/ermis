@@ -2,15 +2,19 @@
 
 const Lucid = use('Lucid')
 
-class Model extends Lucid {
+class ServerSize extends Lucid {
+
+  static get connection () {
+  return 'mysql_server'
+}
 
   static boot () {
    super.boot()
-   this.addHook('beforeCreate', 'Model.validate')
-   this.addHook('beforeUpdate', 'Model.validate')
+   this.addHook('beforeCreate', 'Size.validate')
+   this.addHook('beforeUpdate', 'Size.validate')
  }
   static get table () {
-    return 'model'
+    return 'size'
   }
   static get createTimestamp () {
     return 'created_at'
@@ -51,7 +55,6 @@ class Model extends Lucid {
         }
          builder.whereNot(column,0)
        }
-
 }
 
-module.exports = Model
+module.exports = ServerSize

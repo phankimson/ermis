@@ -527,6 +527,10 @@ Route.post('/receipt-cash-voucher-voucher-print', 'ReceiptCashGeneralController.
   Route.get('/report-cost-revenue', 'ReportCostRevenueController.show')
   Route.post('/report-cost-revenue-get', 'ReportCostRevenueController.get')
 
+  // History Warning
+  Route.get('/transfer-database', 'TransferDatabaseController.show')
+  Route.post('/transfer-database-sync', 'TransferDatabaseController.sync')
+
 
   // History Warning
   Route.get('/history-warning', 'HistoryWarningController.show')

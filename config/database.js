@@ -56,6 +56,17 @@ module.exports = {
     }
   },
 
+  mysql_server: {
+    client: 'mysql',
+    connection: {
+      host: Env.get('DB_HOST_SERVER', 'localhost'),
+      port: Env.get('DB_PORT_SERVER', ''),
+      user: Env.get('DB_USER_SERVER', 'root'),
+      password: Env.get('DB_PASSWORD_SERVER', ''),
+      database: Env.get('DB_DATABASE_SERVER', 'ermis')
+    }
+  },
+
   /*
   |--------------------------------------------------------------------------
   | PostgreSQL

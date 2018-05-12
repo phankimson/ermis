@@ -5,10 +5,12 @@ var ErmisAdd2 = function () {
       group.bind('change', function (e) {
        var dataItem = e.sender.dataItem();
        group_value = dataItem.text.split(" - ",1);
-       jQuery.post( Ermis.link+'-load', function( result ) {
-          item_value = (initBarcodeMasker(result.data))
-          jQuery("input[name='code']").val(item_value)
-        });
+       if(sessionStorage.action != 3){
+         jQuery.post( Ermis.link+'-load', function( result ) {
+            item_value = (initBarcodeMasker(result.data))
+            jQuery("input[name='code']").val(item_value)
+          });
+       }
 
         group_value = jQuery("select[name='group']").data("kendoDropDownList").text().split(" - ",1);
         style_value = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",1);
@@ -39,11 +41,12 @@ var ErmisAdd2 = function () {
        var dataItem = e.sender.dataItem();
        style_value = dataItem.text.split(" - ",1);
        style_name = dataItem.text.split(" - ",2);
+        if(sessionStorage.action != 3){
        jQuery.post( Ermis.link+'-load', function( result ) {
         item_value = (initBarcodeMasker(result.data));
           jQuery("input[name='code']").val(item_value)
         });
-
+      }
         var model_c =  jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",2);
         var style_c = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",2);
         if(model_c[1] != 'undefined' && style_c[1] != 'undefined'){
@@ -68,11 +71,12 @@ var ErmisAdd2 = function () {
        var dataItem = e.sender.dataItem();
        model_value = dataItem.text.split(" - ",1);
        model_name = dataItem.text.split(" - ",2);
+        if(sessionStorage.action != 3){
        jQuery.post( Ermis.link+'-load', function( result ) {
           item_value = (initBarcodeMasker(result.data));
           jQuery("input[name='code']").val(item_value);
           });
-
+        }
           var model_c =  jQuery("select[name='model']").data("kendoDropDownList").text().split(" - ",2);
           var style_c = jQuery("select[name='style']").data("kendoDropDownList").text().split(" - ",2);
           if(model_c[1] && style_c[1]){

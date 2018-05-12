@@ -70,7 +70,7 @@ class MarialGoodsController{
     })
 
     if(data){
-      const check = yield Data.query().where('code',data.code).orWhere('barcode',data.code).first()
+      const check = yield Data.query().where('code',data.code).orWhere('barcode',data.barcode).first()
       if(check && check.id != data.id){
         response.json({ status: false, message: Antl.formatMessage('messages.duplicate_code')  })
       }else{

@@ -32,11 +32,14 @@ class HomeController{
   }
 
        * logout(request, response) {
-         // Lưu lịch sử
-         let hs = new HistoryAction()
-         var rs = hs.insertRecord(0,request.currentUser.id,0,'')
-         yield rs.save()
-         //
+         if(request.currentUser){
+           // Lưu lịch sử
+           let hs = new HistoryAction()
+           var rs = hs.insertRecord(0,request.currentUser.id,0,'')
+           yield rs.save()
+           //
+         }
+
         yield request.auth.logout()
         yield request.session.forget('inventory')
         yield request.session.forget('shiftId')

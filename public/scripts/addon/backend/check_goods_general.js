@@ -83,9 +83,7 @@
           e.preventDefault();
           if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
               if (Ermis.per.d) {
-                var grid = $kGrid.data("kendoGrid");
-                var selectedItem = grid.dataItem(grid.select());
-                if (selectedItem) {
+                if ($kGrid.find('tr.k-state-selected').length > 0)  {
                       $.when(KendoUiConfirm(transText.are_you_sure, transText.message)).then(function (confirmed) {
                           if (confirmed) {
                               var postdata = { data: JSON.stringify(dataId)};
@@ -115,9 +113,7 @@
           var jQuerylink = jQuery(e.target);
           e.preventDefault();
           if (!jQuerylink.data('lockedAt') || +new Date() - jQuerylink.data('lockedAt') > 300) {
-            var grid = $kGrid.data("kendoGrid");
-            var selectedItem = grid.dataItem(grid.select());
-            if (selectedItem) {
+            if ($kGrid.find('tr.k-state-selected').length > 0)  {
               if ($print) {
                   $print.data("kendoDialog").open();
               } else {

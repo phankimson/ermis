@@ -6,6 +6,7 @@ const User = use('App/Model/User')
 const Menu = use('App/Model/Menu')
 const Shift = use('App/Model/Shift')
 const HistoryAction = use('App/Model/HistoryAction')
+const Chat = use('App/Model/Chat')
 class GlobalVariable {
 
 * handle (request, response, next) {
@@ -17,9 +18,14 @@ class GlobalVariable {
     // User All
     const users = yield User.all()
     response.viewInstance.global('users', users.toJSON())
-    // HistoryAction
-    const history_action = yield HistoryAction.all()
-    response.viewInstance.global('history_action', history_action.toJSON())
+    if(request.currentUser){
+      // Chat
+      const chat = yield Chat.query().innerJoin('users', 'users.id', 'chat.user_send').where('chat.user_receipt',request.currentUser.id).select('chat.*','users.username','users.avatar').pick(15)
+      response.viewInstance.global('chat', chat.toJSON())
+      // HistoryAction
+      const history_action = yield HistoryAction.query().where('user',request.currentUser.id).pick(15)
+      response.viewInstance.global('history_action', history_action.toJSON())
+    }
     // Menu all
     const menu = yield Menu.all()
     response.viewInstance.global('menu', menu.toJSON())

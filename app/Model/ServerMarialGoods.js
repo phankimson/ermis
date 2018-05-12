@@ -2,15 +2,19 @@
 
 const Lucid = use('Lucid')
 
-class Model extends Lucid {
+class ServerMarialGoods extends Lucid {
+
+  static get connection () {
+  return 'mysql_server'
+}
 
   static boot () {
    super.boot()
-   this.addHook('beforeCreate', 'Model.validate')
-   this.addHook('beforeUpdate', 'Model.validate')
+   this.addHook('beforeCreate', 'MarialGoods.validate')
+   this.addHook('beforeUpdate', 'MarialGoods.validate')
  }
   static get table () {
-    return 'model'
+    return 'marial_goods'
   }
   static get createTimestamp () {
     return 'created_at'
@@ -21,6 +25,7 @@ class Model extends Lucid {
    static get deleteTimestamp () {
      return null
    }
+
    static scopeTypeWhere (builder,column,value) {
      if(value){
       builder.where(column,value)
@@ -54,4 +59,4 @@ class Model extends Lucid {
 
 }
 
-module.exports = Model
+module.exports = ServerMarialGoods
