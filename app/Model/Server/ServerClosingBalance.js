@@ -2,15 +2,9 @@
 
 const Lucid = use('Lucid')
 
-class PaymentMethod extends Lucid {
-
-  static boot () {
-   super.boot()
-   this.addHook('beforeCreate', 'PaymentMethod.validate')
-   this.addHook('beforeUpdate', 'PaymentMethod.validate')
- }
+class ServerClosingBalance extends Lucid {
   static get table () {
-    return 'payment_method'
+    return 'closing_balance'
   }
   static get createTimestamp () {
     return 'created_at'
@@ -21,6 +15,7 @@ class PaymentMethod extends Lucid {
    static get deleteTimestamp () {
      return null
    }
+
    static scopeTypeWhere (builder,column,value) {
      if(value){
       builder.where(column,value)
@@ -54,4 +49,4 @@ class PaymentMethod extends Lucid {
 
 }
 
-module.exports = PaymentMethod
+module.exports = ServerClosingBalance

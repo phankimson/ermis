@@ -13,10 +13,10 @@ class ObjectGroup extends Lucid {
     return 'object_group'
   }
   static get createTimestamp () {
-    return null
+    return 'created_at'
   }
   static get updateTimestamp () {
-   return null
+   return 'updated_at'
    }
    static get deleteTimestamp () {
      return null

@@ -17,7 +17,7 @@ const GoodsInventory = use('App/Model/GoodsInventory')  // EDIT
 const Convert = use('App/Classes/Convert')
 const Database = use('Database')
 var moment = require('moment')
-
+var uuidv1 = require('uuid/v1')
 class IssueInventoryVoucherController{
   constructor () {
       this.type = 2  // EDIT Receipt = 1 , Issue = 2 , Transfer = 3
@@ -221,6 +221,7 @@ class IssueInventoryVoucherController{
                 }else{
                   action = 2
                   general = new General()
+                  general.uuid = uuidv1()
                   // Lưu số nhảy
                   const voucher = yield Voucher.query().where('inventory',inventory).where('code','LIKE',this.voucher).first()
 
@@ -261,6 +262,7 @@ class IssueInventoryVoucherController{
                       detail = yield Detail.find(d.detail)
                     }else{
                       detail = new Detail()
+                      detail.uuid = uuidv1()
                     }
                       const goods = yield GoodsSize.query().where('goods_size.id',d.item_id)
                                     .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')

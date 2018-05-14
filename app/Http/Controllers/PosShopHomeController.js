@@ -23,6 +23,7 @@ const Antl = use('Antl')
 
 const Database = use('Database')
 var moment = require('moment')
+var uuidv1 = require('uuid/v1')
 class PosShopHomeController{
   constructor () {
       this.type = 5  // EDIT Receipt = 1 , Issue = 2 , Transfer = 3
@@ -223,6 +224,7 @@ class PosShopHomeController{
           general.inventory_id = inventory
           general.type = this.type
           general.voucher = v
+          general.uuid =  uuidv1()
           general.description = data.description
           general.date_voucher = moment().format('YYYY-MM-DD')
           general.subject = data.subject
@@ -244,6 +246,7 @@ class PosShopHomeController{
                             .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
                             .leftJoin('discount', 'discount.id', 'marial_goods.discount')
                             .select('goods_size.*',"marial_goods.unit","discount.discount","discount.discount_percent").first()
+            detail.uuid =  uuidv1()
             detail.general_id = general.id
             detail.item_id = d.item_id
             detail.item_name = d.item_name

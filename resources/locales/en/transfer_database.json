@@ -1,3 +1,8 @@
 {
-    "title": "Transfer Database"
+    "title": "Transfer Database",
+    "object" : "Object",
+    "goods" : "Marial goods",
+    "policy" : "Policy",
+    "major" : "Major",
+    "general" : "General"
 }

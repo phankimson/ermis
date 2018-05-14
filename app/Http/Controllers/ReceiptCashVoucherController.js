@@ -14,7 +14,7 @@ const VoucherMask = use('App/Classes/VoucherMask')  // EDIT
 const HistoryAction = use('App/Classes/HistoryAction')  // EDIT
 const Database = use('Database')
 var moment = require('moment')
-
+var uuidv1 = require('uuid/v1')
 class ReceiptCashVoucherController{
   constructor () {
       this.type = 7  // EDIT Receipt = 7
@@ -99,6 +99,7 @@ class ReceiptCashVoucherController{
                   action = 2
                   general = new General()
                   general.user = user.id
+                  general.uuid = uuidv1()
                   // Lưu số nhảy
                   const voucher = yield Voucher.query().where('code',this.voucher).first()
 
@@ -137,6 +138,7 @@ class ReceiptCashVoucherController{
                       detail = yield Detail.find(d.detail)
                     }else{
                       detail = new Detail()
+                      detail.uuid = uuidv1()
                     }
                     detail.general_id = general.id
                     detail.description = d.description

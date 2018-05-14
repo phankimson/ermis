@@ -2,15 +2,19 @@
 
 const Lucid = use('Lucid')
 
-class PaymentMethod extends Lucid {
+class ServerModel extends Lucid {
+
+  static get connection () {
+  return 'mysql_server'
+}
 
   static boot () {
    super.boot()
-   this.addHook('beforeCreate', 'PaymentMethod.validate')
-   this.addHook('beforeUpdate', 'PaymentMethod.validate')
+   this.addHook('beforeCreate', 'Model.validate')
+   this.addHook('beforeUpdate', 'Model.validate')
  }
   static get table () {
-    return 'payment_method'
+    return 'model'
   }
   static get createTimestamp () {
     return 'created_at'
@@ -54,4 +58,4 @@ class PaymentMethod extends Lucid {
 
 }
 
-module.exports = PaymentMethod
+module.exports = ServerModel

@@ -1,3 +1,8 @@
 {
-    "title": "Đồng bộ hóa dữ liệu"
+    "title": "Đồng bộ hóa dữ liệu",
+    "object" : "Đối tượng",
+    "goods" : "Vật tư hàng hóa",
+    "policy" :"Chính sách",
+    "major" : "Nghiệp vụ",
+    "general" : "Tổng hợp"
 }

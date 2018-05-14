@@ -34,21 +34,21 @@ class ReportGeneralInventoryController{
         const data = JSON.parse(request.input('data'))
         const goodsize1 = yield Initial.query()
         .innerJoin('goods_size', 'goods_size.id', 'initial.item')
+        .innerJoin('size', 'size.id', 'goods_size.size')
         .where('initial.inventory',data.inventory)
         .where('goods_size.active',1).TypeWhere('goods_size.goods',data.item)
         .TypeWhere('goods_size.size',data.size)
         .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
         .innerJoin('unit', 'unit.id', 'marial_goods.unit')
-        .innerJoin('size', 'size.id', 'goods_size.size')
         .select('goods_size.*','unit.name as unit','marial_goods.name as name','size.name as size').fetch()
         const goodsize2 = yield GoodsInventory.query()
         .innerJoin('goods_size', 'goods_size.id', 'goods_inventory.goods_size')
+        .innerJoin('size', 'size.id', 'goods_size.size')
         .where('goods_inventory.inventory',data.inventory)
         .where('goods_size.active',1).TypeWhere('goods_size.goods',data.item)
         .TypeWhere('goods_size.size',data.size)
         .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
         .innerJoin('unit', 'unit.id', 'marial_goods.unit')
-        .innerJoin('size', 'size.id', 'goods_size.size')
         .select('goods_size.*','unit.name as unit','marial_goods.name as name','size.name as size').fetch()
         var goodsize = goodsize1.toJSON().concat(goodsize2.toJSON())
         var arr = []
@@ -82,20 +82,24 @@ class ReportGeneralInventoryController{
                  const closing_balance_quantity = opening_balance[0].q +opening_receipt[0].q - opening_issue[0].q + receipt_inventory[0].q - issue_inventory[0].q
                  const closing_balance_amount = opening_balance[0].a + opening_receipt[0].a -  opening_issue[0].a + receipt_inventory[0].a - issue_inventory[0].a
                  const closing_balance_discount = opening_issue[0].d + issue_inventory[0].d
-                   if((opening_balance[0].q +opening_receipt[0].q + opening_issue[0].q + receipt_inventory[0].q + issue_inventory[0].q) > 0 && opening_balance[0].a + opening_receipt[0].a +  opening_issue[0].a + receipt_inventory[0].a + issue_inventory[0].a > 0 ){
+                 const quantity_opening = opening_balance[0].q +opening_receipt[0].q - opening_issue[0].q
+                 const amount_opening = (data.price == "amount")? (opening_balance[0].a +opening_receipt[0].a - opening_issue[0].a) : (opening_balance[0].a +opening_receipt[0].a - opening_issue[0].a - opening_issue[0].d )
+                 const amount_issue = (data.price == "amount")? issue_inventory[0].a : (issue_inventory[0].a + issue_inventory[0].d)
+                 const amount_closing = (data.price == "amount")? closing_balance_amount : (closing_balance_amount - closing_balance_discount)
+                   if(closing_balance_quantity > 0 ){
                      arr.push({id : d.id ,
                                barcode : d.barcode ,
                                item : d.name+ ' - ' + d.size,
                                unit : d.unit ,
                                price : (data.price == "amount")? d.price : d.purchase_price,
-                               quantity_opening : opening_balance[0].q +opening_receipt[0].q - opening_issue[0].q,
+                               quantity_opening : quantity_opening,
                                quantity_receipt : receipt_inventory[0].q ,
                                quantity_issue : issue_inventory[0].q ,
                                quantity_closing: closing_balance_quantity ,
-                               amount_opening:  (data.price == "amount")? (opening_balance[0].a +opening_receipt[0].a - opening_issue[0].a) : (opening_balance[0].a +opening_receipt[0].a - opening_issue[0].a - opening_issue[0].d ),
+                               amount_opening:  amount_opening ,
                                amount_receipt : receipt_inventory[0].a,
-                               amount_issue : (data.price == "amount")? issue_inventory[0].a : (issue_inventory[0].a + issue_inventory[0].d) ,
-                               amount_closing : (data.price == "amount")? closing_balance_amount : (closing_balance_amount - closing_balance_discount)})
+                               amount_issue : amount_issue,
+                               amount_closing : amount_closing })
                    }
                  }
                }

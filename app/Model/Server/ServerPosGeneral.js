@@ -2,16 +2,14 @@
 
 const Lucid = use('Lucid')
 
-class PaymentMethod extends Lucid {
-
-  static boot () {
-   super.boot()
-   this.addHook('beforeCreate', 'PaymentMethod.validate')
-   this.addHook('beforeUpdate', 'PaymentMethod.validate')
- }
+class ServerPosGeneral extends Lucid {
+  static get connection () {
+  return 'mysql_server'
+}
   static get table () {
-    return 'payment_method'
+    return 'pos_general'
   }
+
   static get createTimestamp () {
     return 'created_at'
   }
@@ -52,6 +50,23 @@ class PaymentMethod extends Lucid {
          builder.whereNot(column,0)
        }
 
+       detail () {
+         return this
+         .hasMany('App/Model/PosDetail','id','general_id')
+         .innerJoin('unit', 'unit.id', 'pos_detail.unit')
+         .innerJoin('goods_size', 'goods_size.id', 'pos_detail.item_id')
+         .innerJoin('size', 'size.id', 'goods_size.size')
+         .where('pos_detail.active',1)
+         .orderBy('pos_detail.id', 'desc')
+         .select("pos_detail.*","goods_size.barcode as code","unit.name as unit","size.name as size")
+       }
+       payment () {
+         return this
+         .hasOne('App/Model/Payment','id','general')
+         .where('active',1)
+         .orderBy('id', 'desc')
+       }
+
 }
 
-module.exports = PaymentMethod
+module.exports = ServerPosGeneral

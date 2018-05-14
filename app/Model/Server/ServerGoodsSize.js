@@ -2,25 +2,23 @@
 
 const Lucid = use('Lucid')
 
-class ServerModel extends Lucid {
-
+class ServerGoodsSize extends Lucid {
   static get connection () {
   return 'mysql_server'
 }
-
   static boot () {
    super.boot()
-   this.addHook('beforeCreate', 'Model.validate')
-   this.addHook('beforeUpdate', 'Model.validate')
+   this.addHook('beforeCreate', 'GoodsSize.validate')
+   this.addHook('beforeUpdate', 'GoodsSize.validate')
  }
   static get table () {
-    return 'model'
+    return 'goods_size'
   }
   static get createTimestamp () {
-    return null
+    return 'created_at'
   }
   static get updateTimestamp () {
-   return null
+   return 'updated_at'
    }
    static get deleteTimestamp () {
      return null
@@ -55,7 +53,19 @@ class ServerModel extends Lucid {
         }
          builder.whereNot(column,0)
        }
+       initial () {
+         return this
+         .hasMany('App/Model/Initial','id','item')
+         .where('type',1)
+       }
+       detail (){
+         return this
+         .hasMany('App/Model/PosDetail','id','item_id')
+         .innerJoin('pos_general', 'pos_general.id', 'pos_detail.general_id')
+         .where('pos_general.active',1)
+         .whereIn('pos_general.status',[1,2])
+       }
 
 }
 
-module.exports = ServerModel
+module.exports = ServerGoodsSize

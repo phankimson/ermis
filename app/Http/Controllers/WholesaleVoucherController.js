@@ -231,6 +231,7 @@ class WholesaleVoucherController{
                 }else{
                   action = 2
                   general = new General()
+                  general.uuid =  uuidv1()
                   // Lưu số nhảy
                   const voucher = yield Voucher.query().where('inventory',inventory).where('code','LIKE',this.voucher).first()
 
@@ -274,6 +275,7 @@ class WholesaleVoucherController{
                       detail = yield Detail.find(d.detail)
                     }else{
                       detail = new Detail()
+                      detail.uuid =  uuidv1()
                     }
                       const goods = yield GoodsSize.query().where('goods_size.id',d.item_id)
                                     .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')

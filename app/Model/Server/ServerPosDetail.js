@@ -2,8 +2,10 @@
 
 const Lucid = use('Lucid')
 
-class PosDetail extends Lucid {
-
+class ServerPosDetail extends Lucid {
+  static get connection () {
+  return 'mysql_server'
+}
   static get table () {
     return 'pos_detail'
   }
@@ -96,4 +98,4 @@ class PosDetail extends Lucid {
          }
 }
 
-module.exports = PosDetail
+module.exports = ServerPosDetail

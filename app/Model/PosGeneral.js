@@ -7,6 +7,7 @@ class PosGeneral extends Lucid {
   static get table () {
     return 'pos_general'
   }
+
   static get createTimestamp () {
     return 'created_at'
   }

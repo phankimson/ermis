@@ -2,15 +2,17 @@
 
 const Lucid = use('Lucid')
 
-class PaymentMethod extends Lucid {
-
+class ServerCoupon extends Lucid {
+  static get connection () {
+  return 'mysql_server'
+}
   static boot () {
    super.boot()
-   this.addHook('beforeCreate', 'PaymentMethod.validate')
-   this.addHook('beforeUpdate', 'PaymentMethod.validate')
+   this.addHook('beforeCreate', 'Coupon.validate')
+   this.addHook('beforeUpdate', 'Coupon.validate')
  }
   static get table () {
-    return 'payment_method'
+    return 'coupon'
   }
   static get createTimestamp () {
     return 'created_at'
@@ -21,6 +23,9 @@ class PaymentMethod extends Lucid {
    static get deleteTimestamp () {
      return null
    }
+   static scopeCheckDateRange (builder,column1,column2,value) {
+      builder.where(column1,'>=',value).where(column2,'<=',value)
+    }
    static scopeTypeWhere (builder,column,value) {
      if(value){
       builder.where(column,value)
@@ -54,4 +59,4 @@ class PaymentMethod extends Lucid {
 
 }
 
-module.exports = PaymentMethod
+module.exports = ServerCoupon

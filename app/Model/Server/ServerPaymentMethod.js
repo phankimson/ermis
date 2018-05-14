@@ -2,8 +2,10 @@
 
 const Lucid = use('Lucid')
 
-class PaymentMethod extends Lucid {
-
+class ServerPaymentMethod extends Lucid {
+  static get connection () {
+  return 'mysql_server'
+}
   static boot () {
    super.boot()
    this.addHook('beforeCreate', 'PaymentMethod.validate')
@@ -54,4 +56,4 @@ class PaymentMethod extends Lucid {
 
 }
 
-module.exports = PaymentMethod
+module.exports = ServerPaymentMethod

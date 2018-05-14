@@ -14,7 +14,7 @@ const GoodsInventory = use('App/Model/GoodsInventory')  // EDIT
 const Option = use('App/Model/Option')  // EDIT
 
 var moment = require('moment')
-
+var uuidv1 = require('uuid/v1')
 class PosShopReturnController {
   constructor () {
       this.type = 5  // EDIT Sale = 5
@@ -81,6 +81,7 @@ class PosShopReturnController {
       const arr =  yield General.find(data.id)
 
       const general = new General()
+      general.uuid =  uuidv1()
       general.inventory_id = inventory
       general.type = this.return
       general.voucher = v
@@ -106,6 +107,7 @@ class PosShopReturnController {
           yield arr_d.save()
 
           detail = new Detail()
+          detail.uuid =  uuidv1()
           detail.general_id = general.id
           detail.item_id = arr_d.item_id
           detail.item_name = arr_d.item_name

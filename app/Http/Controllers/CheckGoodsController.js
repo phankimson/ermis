@@ -18,7 +18,7 @@ const Convert = use('App/Classes/Convert')  // EDIT
 const Menu = use('App/Model/Menu')
 const NumberIncreases = use('App/Model/NumberIncreases')
 var moment = require('moment')
-
+var uuidv1 = require('uuid/v1')
 class CheckGoodsController{
   constructor () {
       this.type = "1"  // EDIT
@@ -172,6 +172,7 @@ class CheckGoodsController{
           yield general.save()
           // Tạo phiếu NK
           const general_c = new General()
+          general_c.uuid =  uuidv1()
           general_c.inventory_id = data.stock
           general_c.type = 10
           general_c.voucher = v
@@ -186,6 +187,7 @@ class CheckGoodsController{
           yield general_c.save()
           // Tạo phiếu XK
           const general_k = new General()
+          general_k.uuid =  uuidv1()
           general_k.inventory_id = data.stock
           general_k.type = 11
           general_k.voucher = v
@@ -220,6 +222,7 @@ class CheckGoodsController{
             yield detail.save()
             if(detail.difference != 0 || detail.difference_amount != 0){
             const detail_r = new Detail()
+            detail_r.uuid = uuidv1()
             if(detail.difference>0){
               detail_r.general_id = general_c.id
               detail_r.quantity = detail.difference

@@ -2,8 +2,10 @@
 
 const Lucid = use('Lucid')
 
-class User extends Lucid {
-
+class ServerUser extends Lucid {
+  static get connection () {
+  return 'mysql_server'
+}
   static boot () {
    super.boot()
    this.addHook('beforeCreate', 'User.encryptPassword')
@@ -65,4 +67,4 @@ class User extends Lucid {
 
 }
 
-module.exports = User
+module.exports = ServerUser
