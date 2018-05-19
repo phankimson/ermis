@@ -50,9 +50,10 @@ class InvoiceManageController{
      }else{
          response.json({ status: false , message: Antl.formatMessage('messages.no_data') })
      }
-   
- }catch(e){
-   response.json({ status: false ,error : true , message: Antl.formatMessage('messages.error')+' ' + e.message })
- }
+
+     }catch(e){
+       response.json({ status: false ,error : true , message: Antl.formatMessage('messages.error')+' ' + e.message })
+     }
+  }
 }
 module.exports = InvoiceManageController

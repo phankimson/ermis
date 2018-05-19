@@ -19,23 +19,25 @@ var Ermis = function () {
 
   var initLoadPrintData = function () {
     jQuery.each(Ermis.print_data, function (k, d) {
-    var obj = {};
-        obj.id = tabs_count;
-        obj.voucher = d.voucher;
-        obj.detail = d.detail;
-        obj.general = d.id;
-        obj.discount_percent = d.discount_percent;
-        obj.discount = d.discount;
-        obj.subject = d.subject;
-        obj.description = d.description;
-        obj.total_number = d.total_number;
-        obj.total_amount = d.total_amount;
-        obj.print = true;
-      dataObj.push(obj)
-      if(k == 0 && k+1 < Ermis.print_data.length ){
-        initAddTabs(null,2)
-      }else if(k+1 < Ermis.print_data.length){
-        initAddTabs(null,0)
+      if(d.print == 0){
+        var obj = {};
+            obj.id = tabs_count;
+            obj.voucher = d.voucher;
+            obj.detail = d.detail;
+            obj.general = d.id;
+            obj.discount_percent = d.discount_percent;
+            obj.discount = d.discount;
+            obj.subject = d.subject;
+            obj.description = d.description;
+            obj.total_number = d.total_number;
+            obj.total_amount = d.total_amount;
+            obj.print = true;
+          dataObj.push(obj)
+          if(k == 0 && k+1 < Ermis.print_data.length ){
+            initAddTabs(null,2)
+          }else if(k+1 < Ermis.print_data.length){
+            initAddTabs(null,0)
+          }
       }
       });
       UIkit.switcher('#invoice_tabs').show(1);

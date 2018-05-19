@@ -30,6 +30,7 @@ const ServerClosingBalance = use('App/Model/Server/ServerClosingBalance')  // ED
 const ServerPaymentMethod = use('App/Model/Server/ServerPaymentMethod')  // EDIT
 const ServerPosDetail = use('App/Model/Server/ServerPosDetail')  // EDIT
 const ServerPosGeneral = use('App/Model/Server/ServerPosGeneral')  // EDIT
+const ServerGoodsInventory = use('App/Model/Server/ServerGoodsInventory')  // EDIT
 const Model = use('App/Model/Model')  // EDIT
 const MarialGoods = use('App/Model/MarialGoods')  // EDIT
 const Size = use('App/Model/Size')  // EDIT
@@ -58,6 +59,7 @@ const ClosingBalance = use('App/Model/ClosingBalance')  // EDIT
 const PaymentMethod = use('App/Model/PaymentMethod')  // EDIT
 const PosDetail = use('App/Model/PosDetail')  // EDIT
 const PosGeneral = use('App/Model/PosGeneral')  // EDIT
+const GoodsInventory = use('App/Model/GoodsInventory')  // EDIT
 
 var moment = require('moment')
 class TransferDatabaseController{
@@ -68,8 +70,9 @@ class TransferDatabaseController{
     }
   * show (request, response){
       const title = Antl.formatMessage('transfer_database.title')  // EDIT
+      const start_date = moment().subtract(1, 'days').format('DD/MM/YYYY')
       const end_date = moment().format('DD/MM/YYYY')
-      const show = yield response.view('pos/pages/transfer_database', {key : this.key ,room : this.room,title: title , end_date:end_date })  // EDIT
+      const show = yield response.view('pos/pages/transfer_database', {key : this.key ,room : this.room,title: title , end_date:end_date, start_date:start_date })  // EDIT
       response.send(show)
   }
   * sync (request, response){
@@ -599,7 +602,7 @@ class TransferDatabaseController{
           .where('type',3)
           .fetch()
           for(var k of smg6.toJSON()){
-            const dt6 = yield ServerPosDetail.query().where('general_id',k.id).fetch()
+            const dt6 = yield PosDetail.query().where('general_id',k.id).fetch()
               for(var l of dt6.toJSON()){
                 const sg6 = yield ServerPosDetail.find(l.id)
                 sg6.quantity_receipt = d.quantity_receipt
@@ -613,8 +616,61 @@ class TransferDatabaseController{
               yield mg6.save()
             }
           }
-      }
 
+          // Gửi Xuất hàng lên server
+          const smg7 = yield PosGeneral.query()
+          .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
+          .where('inventory_issue', inventory)
+          .where('type',3)
+          .fetch()
+          for(var k of smg7.toJSON()){
+            const dt7 = yield PosDetail.query().where('general_id',k.id).fetch()
+              for(var l of dt7.toJSON()){
+                const d7 = yield ServerPosDetail.findBy('uuid',k.uuid)
+                if(!d7){
+                   yield ServerPosDetail.create(l)
+                }
+              }
+              const mg7 = yield ServerPosGeneral.findBy('uuid',k.uuid)
+                if(!mg7){
+                yield ServerPosGeneral.create(k)
+              }
+          }
+          // Gửi nhập đổi
+          const smg8 = yield PosGeneral.query()
+          .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
+          .where('inventory', inventory)
+          .where('type', 6)
+          .fetch()
+          for(var k of smg8.toJSON()){
+            // Gửi chi tiết
+            const dt8 = yield PosDetail.query().where('general_id',k.id).fetch()
+              for(var l of dt8.toJSON()){
+                const d8 = yield ServerPosDetail.findBy('uuid',k.uuid)
+                if(!d8){
+                   yield ServerPosDetail.create(l)
+                   const siv8 = yield ServerGoodsInventory.query().where('goods_size',l.item_id).where('inventory',inventory).first()
+                   if(!siv8){
+                     const siv8 = new ServerGoodsInventory()
+                     siv3.goods_size = l.item_id
+                     siv3.quantity = siv3.quantity + l.quantity
+                     siv3.retail = siv3.retail - l.quantity
+                     siv3.inventory = inventory
+                     yield siv3.save()
+                   }else{
+                     siv3.quantity = siv3.quantity + l.quantity
+                     siv3.retail = siv3.retail - l.quantity
+                     yield siv3.save()
+                   }
+                }
+              }
+            const mg3 = yield ServerPosGeneral.findBy('uuid',k.uuid)
+            if(!mg3){
+              yield ServerPosGeneral.create(k)
+            }
+
+      }
+    }
       response.json({ status: true , message: Antl.formatMessage('messages.update_success') })
     } catch (e) {
     response.json({ status: false , message: Antl.formatMessage('messages.update_fail') + e.message})

@@ -7,11 +7,11 @@
     "cancel" : "Cancel",
     "import" : "Import",
     "export" : "Export",
-    "load" : "Lấy dữ liệu",
-    "print" : "In",
-    "show" :"Hiển thị",
-    "hide" :"Ẩn",
-    "support" :"Hỗ trợ",
+    "load" : "Load",
+    "print" : "Print",
+    "show" :"Show",
+    "hide" :"Hide",
+    "support" :"Support",
     "new_page" : "New Page",
     "view" : "View",
     "write" : "Write",
@@ -40,5 +40,5 @@
     "filter" : "Filter",
     "approved_all" : "Approved all",
     "update" : "Update",
-    "pageview" : "Find Voucher"  
+    "pageview" : "Find Voucher"
 }
