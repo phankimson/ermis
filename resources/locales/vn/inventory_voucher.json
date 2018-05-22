@@ -40,5 +40,6 @@
     "invoice" : "Số hóa đơn",
     "reference" : "Tham chiếu",
     "return" : "Trả hàng",
-    "receipt_cash" : "Thanh toán"
+    "receipt_cash" : "Thanh toán",
+    "total_row" : "Tổng dòng"
 }

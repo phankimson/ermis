@@ -40,5 +40,6 @@
     "invoice" : "Invoice",
     "reference" : "Reference",
     "return" : "Return",
-    "receipt_cash" : "Receipt cash"
+    "receipt_cash" : "Receipt cash",
+    "total_row" : "Total row"
 }

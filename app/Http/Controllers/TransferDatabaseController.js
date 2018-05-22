@@ -31,6 +31,7 @@ const ServerPaymentMethod = use('App/Model/Server/ServerPaymentMethod')  // EDIT
 const ServerPosDetail = use('App/Model/Server/ServerPosDetail')  // EDIT
 const ServerPosGeneral = use('App/Model/Server/ServerPosGeneral')  // EDIT
 const ServerGoodsInventory = use('App/Model/Server/ServerGoodsInventory')  // EDIT
+const ServerPayment = use('App/Model/Server/ServerPayment')  // EDIT
 const Model = use('App/Model/Model')  // EDIT
 const MarialGoods = use('App/Model/MarialGoods')  // EDIT
 const Size = use('App/Model/Size')  // EDIT
@@ -60,6 +61,7 @@ const PaymentMethod = use('App/Model/PaymentMethod')  // EDIT
 const PosDetail = use('App/Model/PosDetail')  // EDIT
 const PosGeneral = use('App/Model/PosGeneral')  // EDIT
 const GoodsInventory = use('App/Model/GoodsInventory')  // EDIT
+const Payment = use('App/Model/Payment')  // EDIT
 
 var moment = require('moment')
 class TransferDatabaseController{
@@ -454,6 +456,7 @@ class TransferDatabaseController{
       }
 
       if(data.major){
+        // Đóng / mở kỳ
         const smg = yield ServerClosing.query()
         .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
         .fetch()
@@ -468,7 +471,7 @@ class TransferDatabaseController{
             yield Closing.create(k)
           }
         }
-
+        // Số tồn cuối kỳ đóng sổ
         const smg1 = yield ServerClosingBalance.query()
         .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
         .where('inventory', inventory)
@@ -488,22 +491,22 @@ class TransferDatabaseController{
         // Gửi bán hàng
         const smg3 = yield PosGeneral.query()
         .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
-        .where('inventory', inventory)
+        .where('inventory_id', inventory)
         .where('type', 5)
         .fetch()
         for(var k of smg3.toJSON()){
           // Gửi chi tiết
           const dt3 = yield PosDetail.query().where('general_id',k.id).fetch()
             for(var l of dt3.toJSON()){
-              const d3 = yield ServerPosDetail.findBy('uuid',k.uuid)
+              const d3 = yield ServerPosDetail.findBy('uuid',l.uuid)
               if(!d3){
                  yield ServerPosDetail.create(l)
                  const siv3 = yield ServerGoodsInventory.query().where('goods_size',l.item_id).where('inventory',inventory).first()
                  if(!siv3){
                    const siv3 = new ServerGoodsInventory()
                    siv3.goods_size = l.item_id
-                   siv3.quantity = siv3.quantity - l.quantity
-                   siv3.retail = siv3.retail + l.quantity
+                   siv3.quantity = 0 - l.quantity
+                   siv3.retail = 0 + l.quantity
                    siv3.inventory = inventory
                    yield siv3.save()
                  }else{
@@ -519,7 +522,7 @@ class TransferDatabaseController{
           }
 
           // Gửi thanh toán
-          const py = yield Payment.findBy('general',k.id)
+          const py = yield Payment.findBy('id',k.id)
           if(!py){
             yield ServerPayment.create(py)
           }
@@ -528,14 +531,14 @@ class TransferDatabaseController{
         // Gửi xuất nhập Kiểm kê
         const smg4 = yield ServerPosGeneral.query()
         .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
-        .where('inventory', inventory)
+        .where('inventory_id', inventory)
         .whereIn('type', [10,11])
         .fetch()
           for(var k of smg3.toJSON()){
             // Gửi chi tiết
             const dt4 = yield ServerPosDetail.query().where('general_id',k.id).fetch()
               for(var l of dt4.toJSON()){
-                const d4 = yield PosDetail.findBy('uuid',k.uuid)
+                const d4 = yield PosDetail.findBy('uuid',l.uuid)
                 if(!d4){
                    yield PosDetail.create(l)
                    const siv4 = yield GoodsInventory.query().where('goods_size',l.item_id).where('inventory',inventory).first()
@@ -573,10 +576,10 @@ class TransferDatabaseController{
           for(var k of smg5.toJSON()){
             const dt5 = yield ServerPosDetail.query().where('general_id',k.id).fetch()
               for(var l of dt5.toJSON()){
-                const d5 = yield PosDetail.findBy('uuid',k.uuid)
+                const d5 = yield PosDetail.findBy('uuid',l.uuid)
                 if(!d5){
                    yield PosDetail.create(l)
-                   const siv5 = yield GoodsInventory.query().where('goods_size',l.item_id).where('inventory',inventory).first()
+                   const siv5 = yield GoodsInventory.query().where('goods_size',l.item_id).where('inventory',k.inventory_issue).first()
                    if(siv5){
                      siv5.quantity = siv5.quantity + l.quantity
                      yield siv5.save()
@@ -584,7 +587,7 @@ class TransferDatabaseController{
                      const balance = new GoodsInventory()
                      balance.goods_size = l.item_id
                      balance.quantity = l.quantity
-                     balance.inventory = inventory
+                     balance.inventory = k.inventory_issue
                      yield balance.save()
                    }
                 }
@@ -595,7 +598,7 @@ class TransferDatabaseController{
             }
           }
 
-          // Gửi nhập hàng lên server
+          // Cập nhật trạng thái nhận hàng nhận
           const smg6 = yield PosGeneral.query()
           .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
           .where('inventory_receipt', inventory)
@@ -605,9 +608,20 @@ class TransferDatabaseController{
             const dt6 = yield PosDetail.query().where('general_id',k.id).fetch()
               for(var l of dt6.toJSON()){
                 const sg6 = yield ServerPosDetail.find(l.id)
-                sg6.quantity_receipt = d.quantity_receipt
-                sg6.status = d.status
+                sg6.quantity_receipt = l.quantity_receipt
+                sg6.status = l.status
                 yield sg6.save()
+                const siv6 = yield ServerGoodsInventory.query().where('goods_size',l.item_id).where('inventory',inventory).first()
+                if(siv6){
+                  siv6.quantity = siv6.quantity + l.quantity_receipt
+                  yield siv6.save()
+                }else{
+                  const balance = new ServerGoodsInventory()
+                  balance.goods_size = l.item_id
+                  balance.quantity = l.quantity_receipt
+                  balance.inventory = inventory
+                  yield balance.save()
+                }
               }
             const mg6 = yield ServerPosGeneral.findBy('uuid',k.uuid)
               if(mg6){
@@ -626,9 +640,20 @@ class TransferDatabaseController{
           for(var k of smg7.toJSON()){
             const dt7 = yield PosDetail.query().where('general_id',k.id).fetch()
               for(var l of dt7.toJSON()){
-                const d7 = yield ServerPosDetail.findBy('uuid',k.uuid)
+                const d7 = yield ServerPosDetail.findBy('uuid',l.uuid)
                 if(!d7){
                    yield ServerPosDetail.create(l)
+                   const siv7 = yield ServerGoodsInventory.query().where('goods_size',l.item_id).where('inventory',inventory).first()
+                   if(siv7){
+                     siv7.quantity = siv6.quantity - l.quantity
+                     yield siv7.save()
+                   }else{
+                     const balance = new ServerGoodsInventory()
+                     balance.goods_size = l.item_id
+                     balance.quantity = 0-l.quantity
+                     balance.inventory = inventory
+                     yield balance.save()
+                   }
                 }
               }
               const mg7 = yield ServerPosGeneral.findBy('uuid',k.uuid)
@@ -636,36 +661,61 @@ class TransferDatabaseController{
                 yield ServerPosGeneral.create(k)
               }
           }
+
+          // Cập nhật trang thái xuất hàng server
+          const smg9 = yield ServerPosGeneral.query()
+          .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
+          .where('inventory_issue', inventory)
+          .where('type',3)
+          .fetch()
+
+          for(var k of smg9.toJSON()){
+            const dt9 = yield ServerPosDetail.query().where('general_id',k.id).fetch()
+              for(var l of dt9.toJSON()){
+                const sg9 = yield PosDetail.find(l.id)
+                sg9.quantity_receipt = l.quantity_receipt
+                sg9.status = l.status
+                yield sg9.save()
+              }
+            const mg9 = yield PosGeneral.findBy('uuid',k.uuid)
+              if(mg9){
+              mg9.traders = k.traders
+              mg9.status = k.status
+              yield mg9.save()
+            }
+          }
+
+
           // Gửi nhập đổi
           const smg8 = yield PosGeneral.query()
           .whereBetween('updated_at',[moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD 00:00:00'),moment(data.end_date , "YYYY-MM-DD").format('YYYY-MM-DD 23:59:59') ])
-          .where('inventory', inventory)
+          .where('inventory_id', inventory)
           .where('type', 6)
           .fetch()
           for(var k of smg8.toJSON()){
             // Gửi chi tiết
             const dt8 = yield PosDetail.query().where('general_id',k.id).fetch()
               for(var l of dt8.toJSON()){
-                const d8 = yield ServerPosDetail.findBy('uuid',k.uuid)
+                const d8 = yield ServerPosDetail.findBy('uuid',l.uuid)
                 if(!d8){
                    yield ServerPosDetail.create(l)
                    const siv8 = yield ServerGoodsInventory.query().where('goods_size',l.item_id).where('inventory',inventory).first()
                    if(!siv8){
                      const siv8 = new ServerGoodsInventory()
-                     siv3.goods_size = l.item_id
-                     siv3.quantity = siv3.quantity + l.quantity
-                     siv3.retail = siv3.retail - l.quantity
-                     siv3.inventory = inventory
-                     yield siv3.save()
+                     siv8.goods_size = l.item_id
+                     siv8.quantity = 0 + l.quantity
+                     siv8.retail = 0 - l.quantity
+                     siv8.inventory = inventory
+                     yield siv8.save()
                    }else{
-                     siv3.quantity = siv3.quantity + l.quantity
-                     siv3.retail = siv3.retail - l.quantity
-                     yield siv3.save()
+                     siv8.quantity = siv3.quantity + l.quantity
+                     siv8.retail = siv3.retail - l.quantity
+                     yield siv8.save()
                    }
                 }
               }
-            const mg3 = yield ServerPosGeneral.findBy('uuid',k.uuid)
-            if(!mg3){
+            const mg8 = yield ServerPosGeneral.findBy('uuid',k.uuid)
+            if(!mg8){
               yield ServerPosGeneral.create(k)
             }
 

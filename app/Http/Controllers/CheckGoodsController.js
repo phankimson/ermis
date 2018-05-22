@@ -9,6 +9,8 @@ const GoodsSize = use('App/Model/GoodsSize')  // EDIT
 const Initial = use('App/Model/Initial')  // EDIT
 const Detail = use('App/Model/PosDetail')  // EDIT
 const General = use('App/Model/PosGeneral')  // EDIT
+const IDetail = use('App/Model/PosImportDetail')  // EDIT
+const IGeneral = use('App/Model/PosImportGeneral')  // EDIT
 const Stock = use('App/Model/Inventory')  // EDIT
 const Antl = use('Antl')
 const Helpers = use('Helpers')
@@ -64,17 +66,19 @@ class CheckGoodsController{
       const closing = yield Closing.query().where('date',lastMonth).where('active',1).first()
       var arr = []
       if(closing){
-        const goodsize1 = yield GoodsSize.query()
+        const goodsize1 = yield Initial.query()
+        .innerJoin('goods_size', 'goods_size.id', 'initial.item')
         .where('goods_size.active',1)
+        .where('initial.inventory',data.stock)
         .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
         .innerJoin('unit', 'unit.id', 'marial_goods.unit')
-        .has('initial')
         .select('goods_size.*','unit.name as unit').fetch()
-        const goodsize2 = yield GoodsSize.query()
+        const goodsize2 = yield GoodsInventory.query()
+        .innerJoin('goods_size', 'goods_size.id', 'goods_inventory.goods_size')
         .where('goods_size.active',1)
+        .where('goods_inventory.inventory',data.stock)
         .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
         .innerJoin('unit', 'unit.id', 'marial_goods.unit')
-        .has('detail')
         .select('goods_size.*','unit.name as unit').fetch()
         var goodsize = goodsize1.toJSON().concat(goodsize2.toJSON())
         for(var d of goodsize){
@@ -299,24 +303,34 @@ class CheckGoodsController{
     response.download(Helpers.storagePath("CheckGoods.xlsx"))
   }
 
-  * import (request, response){
-    try{
-    const file = request.file('files', {
-      allowedExtensions: ['xls', 'xlsx']
-    })
+  * get (request, response){
+  try {
+    const data = JSON.parse(request.input('data'))
+    const arr = yield IGeneral.query()
+    .whereBetween('date_voucher',[moment(data.start_date , "DD/MM/YYYY").format('YYYY-MM-DD'),moment(data.end_date , "DD/MM/YYYY").format('YYYY-MM-DD') ])
+    .where('active',1).fetch()
+    if(arr){
+        response.json({ status: true  , data : arr.toJSON() })
+    }else{
+        response.json({ status: false , message: Antl.formatMessage('messages.no_data') })
+    }
+  } catch (e) {
+    response.json({ status: false , error : true , message: Antl.formatMessage('messages.error')+' ' + e.message})
+  }
+  }
 
-    var XLSX = require('xlsx')
-    var workbook = XLSX.readFile(file[1].tmpPath())
-    var sheet_name_list = workbook.SheetNames
-    const arr = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
+  * processed (request, response){
+    const da = JSON.parse(request.input('data'))
     var data = []
     var message = ''
     var s = 0
     var e = 0
+    var d = Object.keys(da).map(function(k) { return da[k] })
+    const arr = yield IDetail.query().whereIn('general',d).fetch()
     if(arr){
-      for(let d of arr){
+      for(let d of arr.toJSON()){
       const goodsize = yield GoodsSize.query()
-      .where('goods_size.active',1).where('goods_size.barcode',d.barcode)
+      .where('goods_size.active',1).where('goods_size.id',d.item_id)
       .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
       .innerJoin('unit', 'unit.id', 'marial_goods.unit')
       .select('goods_size.*','unit.name as unit').first()
@@ -343,14 +357,64 @@ class CheckGoodsController{
                       check : parseInt(d.quantity?d.quantity:1)
             })
         }
-        s = s +1
+      }
+    }
+    response.json({ status: true , message: Antl.formatMessage('messages.total_code_imported',{count_sucess : s })+' '+Antl.formatMessage('messages.total_code_error',{count_error : e })+' '+message , data : data})
+    }else{
+      response.json({ status: false , message: Antl.formatMessage('messages.failed_import')})
+    }
+  }
+
+  * import (request, response){
+    try{
+    const file = request.file('files', {
+      allowedExtensions: ['xls', 'xlsx']
+    })
+
+    var XLSX = require('xlsx')
+    var workbook = XLSX.readFile(file[1].tmpPath())
+    var sheet_name_list = workbook.SheetNames
+    const arr = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
+    var data = []
+    var message = ''
+    var s = 0
+    var e = 0
+    var t = 0
+    var r = 0
+    const inventory = yield request.session.get('inventory')
+    if(arr){
+      const general_i = new IGeneral()
+      general_i.date_voucher = moment().format('YYYY-MM-DD')
+      general_i.description = sheet_name_list[0]
+      general_i.active = 1
+      yield general_i.save()
+      for(let d of arr){
+      const goodsize = yield GoodsSize.query()
+      .where('goods_size.active',1).where('goods_size.barcode',d.barcode)
+      .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
+      .innerJoin('unit', 'unit.id', 'marial_goods.unit')
+      .select('goods_size.*','unit.name as unit').first()
+      if(goodsize){
+        const detail_i = new IDetail()
+        detail_i.general = general_i.id
+        detail_i.barcode = goodsize.barcode
+        detail_i.item_id = goodsize.id
+        detail_i.item_name = goodsize.name
+        detail_i.number = parseInt(d.quantity?d.quantity:1)
+        detail_i.active = 1
+        yield detail_i.save()
+        t +=  parseInt(d.quantity?d.quantity:1)
+        r = r + 1
       }else{
         message += d.barcode+','
         e = e +1
       }
 
     }
-response.json({ status: true , message: Antl.formatMessage('messages.total_code_imported',{count_sucess : s })+' '+Antl.formatMessage('messages.total_code_error',{count_error : e })+' '+message , data : data})
+      general_i.total_number = t
+      general_i.total_row = r
+      yield general_i.save()
+      response.json({ status: true , message: Antl.formatMessage('messages.total_code_imported',{count_sucess : s })+' '+Antl.formatMessage('messages.total_code_error',{count_error : e })+' '+message , data : data})
     }else{
       response.json({ status: false , message: Antl.formatMessage('messages.failed_import')})
     }

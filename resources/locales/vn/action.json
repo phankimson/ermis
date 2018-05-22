@@ -11,7 +11,7 @@
     "hide" :"Ẩn",
     "support" :"Hỗ trợ",
     "import" : "Import",
-    "export" : "Export",  
+    "export" : "Export",
     "new_page" : "Tạo mới",
     "view" : "Xem",
     "write" : "Ghi sổ",
@@ -40,5 +40,6 @@
     "filter" : "Lọc",
     "approved_all" : "Duyệt tất cả",
     "update" : "Cập nhật",
-    "pageview" : "Tìm chứng từ"
+    "pageview" : "Tìm chứng từ",
+    "processed" : "Xử lý"
 }

@@ -458,6 +458,8 @@ Route.post('/receipt-cash-voucher-voucher-print', 'ReceiptCashGeneralController.
   Route.post('/check-goods-save', 'CheckGoodsController.save')
   Route.post('/check-goods-cancel', 'CheckGoodsController.cancel')
   Route.post('/check-goods-load', 'CheckGoodsController.load')
+  Route.post('/check-goods-get', 'CheckGoodsController.get')
+  Route.post('/check-goods-processed', 'CheckGoodsController.processed')
   Route.get('/check-goods-downloadExcel', 'CheckGoodsController.downloadExcel')
   Route.post('/check-goods-import', 'CheckGoodsController.import')
 

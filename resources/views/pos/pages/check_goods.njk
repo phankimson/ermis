@@ -10,6 +10,50 @@
 {% block content %}
 <div id="export"></div>
 <div id="import"></div>
+<div id="form-window-import"  style="display:none">
+<select class="droplist medium" id="fast_date">
+    <option value="">{{ antl.get('action.choose') }}</option>
+    <option value="today">{{ antl.get('global.today') }}</option>
+    <option value="this_week">{{ antl.get('global.this_week') }}</option>
+    <option value="this_month">{{ antl.get('global.this_month') }}</option>
+    <option value="this_quarter">{{ antl.get('global.this_quarter') }}</option>
+    <option value="this_year">{{ antl.get('global.this_year') }}</option>
+    <option value="january">{{ antl.get('global.january') }}</option>
+    <option value="february">{{ antl.get('global.february') }}</option>
+    <option value="march">{{ antl.get('global.march') }}</option>
+    <option value="april">{{ antl.get('global.april') }}</option>
+    <option value="may">{{ antl.get('global.may') }}</option>
+    <option value="june">{{ antl.get('global.june') }}</option>
+    <option value="july">{{ antl.get('global.july') }}</option>
+    <option value="august">{{ antl.get('global.august') }}</option>
+    <option value="september">{{ antl.get('global.september') }}</option>
+    <option value="october">{{ antl.get('global.october') }}</option>
+    <option value="november">{{ antl.get('global.november') }}</option>
+    <option value="december">{{ antl.get('global.december') }}</option>
+    <option value="the_1st_quarter">{{ antl.get('global.the_1st_quarter') }}</option>
+    <option value="the_2nd_quarter">{{ antl.get('global.the_2nd_quarter') }}</option>
+    <option value="the_3rd_quarter">{{ antl.get('global.the_3rd_quarter') }}</option>
+    <option value="the_4th_quarter">{{ antl.get('global.the_4th_quarter') }}</option>
+</select>
+
+<span>{{ antl.get('global.start_date') }} :</span>
+<input type="text" id="start" name="start_date" value="{{ moment().format("DD/MM/YYYY") }}" />
+
+<span>{{ antl.get('global.end_date') }}:</span>
+<input type="text" id="end" name="end_date" value="{{ moment().format("DD/MM/YYYY") }}" />
+
+
+<a href="javascript:;" class="uk-margin-left-30 k-button k-primary" id="search_import" data-uk-tooltip=""><i class="md-18 material-icons md-color-white">event_available</i>{{ antl.get('global.get_data') }}</a>
+
+<div class="uk-margin-medium-top"></div>
+
+<div id="grid_import"></div>
+
+<div class="uk-margin" style="float : right">
+    <a href="javascript:;" class="k-button k-primary choose_import" data-uk-tooltip title="{{ antl.get('action.choose') }}"><i class="md-18 material-icons md-color-white">done</i>{{ antl.get('action.choose') }}</a>
+    <a href="javascript:;" class="k-button k-primary cancel-window" data-uk-tooltip title="{{ antl.get('action.close') }}"><i class="md-18 material-icons md-color-white">not_interested</i>{{ antl.get('action.close') }}</a>
+</div>
+</div>
 <div class="md-card uk-margin-medium-bottom">
     <div class="md-card-toolbar">
         <div class="md-card-toolbar-heading-text">
@@ -18,6 +62,7 @@
             <a class="cancel"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.cancel') }}">cancel</i></a>
             <a class="import"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.import') }}">archive</i></a>
             <a class="export"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.export') }}">unarchive</i></a>
+            <a class="processed"><i class="md-icon material-icons" data-uk-tooltip title="{{ antl.get('action.processed') }}">shuffle</i></a>
         </div>
         <div class="md-card-toolbar-actions">
         <i class="md-icon material-icons md-card-fullscreen-activate toolbar_fixed" data-uk-tooltip title="{{ antl.get('index.zoom') }}"></i>
@@ -31,6 +76,7 @@
                         <li><a href="javascript:;" class="cancel">{{ antl.get('action.cancel') }}</a></li>
                         <li><a href="javascript:;" class="import">{{ antl.get('action.import') }}</a></li>
                         <li><a href="javascript:;" class="export">{{ antl.get('action.export') }}</a></li>
+                        <li><a href="javascript:;" class="processed">{{ antl.get('action.processed') }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -92,6 +138,12 @@
                              { field: "check_amount", aggregate: "sum" },
                              { field: "difference", aggregate: "sum" },
                              { field: "difference_amount", aggregate: "sum" } ];
+       Ermis.columns_import = [{title: 'Select All',headerTemplate: '<input type="checkbox" id="header-chb-b" class="k-checkbox"><label class="k-checkbox-label" for="header-chb-b"></label>',template: function(dataItem){return '<input type="checkbox" id="c-'+dataItem.id+'" class="k-checkbox"><label class="k-checkbox-label" for="c-'+dataItem.id+'"></label>'},width: 80},
+                                 {"field" : "date_voucher","title" : "{{ antl.get('inventory_voucher.date_voucher') }}" ,template : "#=FormatDate(date_voucher)#" },
+                                 {"field" : "description","title" : "{{ antl.get('inventory_voucher.description') }}" },
+                                 {"field" : "total_number","title" :  "{{ antl.get('inventory_voucher.total_number') }}" },
+                                 {"field" : "total_row","title" :  "{{ antl.get('inventory_voucher.total_row') }}" } ]
+
     });
 </script>
     <script src="{{ url('library/kendoui/js/kendo.all.min.js') }}"></script>
