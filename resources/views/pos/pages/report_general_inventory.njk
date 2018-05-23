@@ -24,7 +24,6 @@
             <td><label class="row-padding-right-medium">{{ antl.get('inventory_voucher.inventory') }}:</label></td>
             <td>
             <select class="droplist xlarge" name="inventory">
-                <option readonly selected value="">--Select--</option>
                 {% for x in stock %}
                 <option value="{{ x.id }}">{{ x.code }} - {{x.name}}</option>
                 {% endfor %}
