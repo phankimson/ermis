@@ -377,12 +377,11 @@ class CheckGoodsController{
     const arr = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
     var data = []
     var message = ''
-    var s = 0
     var e = 0
     var t = 0
     var r = 0
     const inventory = yield request.session.get('inventory')
-    if(arr){
+    if(arr.length > 0){
       const general_i = new IGeneral()
       general_i.date_voucher = moment().format('YYYY-MM-DD')
       general_i.description = sheet_name_list[0]
@@ -414,7 +413,7 @@ class CheckGoodsController{
       general_i.total_number = t
       general_i.total_row = r
       yield general_i.save()
-      response.json({ status: true , message: Antl.formatMessage('messages.total_code_imported',{count_sucess : s })+' '+Antl.formatMessage('messages.total_code_error',{count_error : e })+' '+message , data : data})
+      response.json({ status: true , message: Antl.formatMessage('messages.total_code_imported',{count_sucess : r })+' '+Antl.formatMessage('messages.total_code_error',{count_error : e })+' '+message , data : data})
     }else{
       response.json({ status: false , message: Antl.formatMessage('messages.failed_import')})
     }

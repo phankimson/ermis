@@ -38,5 +38,7 @@ Http.handleError = function * (error, request, response) {
  * starting http server.
  */
 Http.onStart = function () {
-  
+  const Server = use('Adonis/Src/Server')
+
+  Server.getInstance().timeout = 0
 }

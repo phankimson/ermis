@@ -46,7 +46,12 @@ class GoodsInventory extends Lucid {
         }
          builder.whereNot(column,0)
        }
-
+   opening_receipt() {
+     return this.hasMany('App/Model/PosDetail','id','item_id')
+     .innerJoin('pos_general', 'pos_general.id', 'pos_detail.general_id')
+     .whereIn('pos_general.status',[1,2])
+     .select('pos_detail.item_id','pos_general.inventory_receipt','pos_general.active','pos_general.date_voucher','pos_detail.quantity','pos_detail.amount','pos_detail.purchase_amount')
+    }
 }
 
 module.exports = GoodsInventory
