@@ -76,6 +76,7 @@ class ReportGeneralInventoryController{
             var obq = opening_balance.quantity
             var oba = opening_balance.amount
           }
+
           const opening_receipts = yield d.opening_receipt().fetch()
           const opening_receipt = opening_receipts.first()
           var orq = 0
@@ -92,13 +93,13 @@ class ReportGeneralInventoryController{
           if(opening_issue){
             var oiq = opening_issue.quantity
             var oia = opening_issue[data.price]
-            var oid = opening_issue.total_discount
+            var oid = opening_issue.total_discount?opening_issue.total_discount:0
           }
           const receipt_inventorys = yield d.receipt_inventory().fetch()
           const receipt_inventory = receipt_inventorys.first()
           var riq = 0
           var ria = 0
-          if(opening_balance){
+          if(receipt_inventory){
             var riq = receipt_inventory.quantity
             var ria = receipt_inventory[data.price]
           }
@@ -110,7 +111,7 @@ class ReportGeneralInventoryController{
           if(issue_inventory){
             var iiq = issue_inventory.quantity
             var iia = issue_inventory[data.price]
-            var iid = issue_inventory.total_discount
+            var iid = issue_inventory.total_discount?issue_inventory.total_discount:0
           }
           // Số cuối kỳ
           const closing_balance_quantity = obq + orq - oiq + riq - iiq
