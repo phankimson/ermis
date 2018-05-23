@@ -56,7 +56,7 @@ class ReportGeneralInventoryController{
           .where('pos_general.date_voucher','<',moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD'))
           .sum('pos_detail.quantity as q').sum('pos_detail.'+data.price+' as a')
         })
-        .scope('opening_receipt', (builder) => {
+        .scope('opening_issue', (builder) => {
           builder.where('pos_general.inventory_issue',data.inventory).where('pos_general.active',data.active)
           .where('pos_general.date_voucher','<',moment(data.start_date , "YYYY-MM-DD").format('YYYY-MM-DD'))
           .sum('pos_detail.quantity as q').sum('pos_detail.'+data.price+' as a').sum('pos_detail.total_discount as d')
@@ -70,37 +70,56 @@ class ReportGeneralInventoryController{
         for(var d of goodsize){
           const opening_balances = yield d.opening_balance().fetch()
           const opening_balance = opening_balances.first()
-          const obq = opening_balance != undefined ? opening_balance.quantity : 0
-          const oba = opening_balance ? opening_balance.amount : 0
-          console.log(opening_balance)
+          var obq = 0
+          var oba = 0
+          if(opening_balance){
+            var obq = opening_balance.quantity
+            var oba = opening_balance.amount
+          }
           const opening_receipts = yield d.opening_receipt().fetch()
           const opening_receipt = opening_receipts.first()
-          const orq = opening_receipt ? opening_receipt.quantity : 0
-          const ora = opening_receipt ? opening_receipt[data.price] : 0
+          var orq = 0
+          var ora = 0
+          if(opening_receipt){
+            var orq = opening_receipt.quantity
+            var ora = opening_receipt[data.price]
+          }
           const opening_issues = yield d.opening_issue().fetch()
           const opening_issue = opening_issues.first()
-          const oiq = opening_issue ? opening_issue.quantity : 0
-          const oia = opening_issue ? opening_issue[data.price] : 0
-          const oid = opening_issue ? opening_issue.total_discount: 0
+          var oiq = 0
+          var oia = 0
+          var oid = 0
+          if(opening_issue){
+            var oiq = opening_issue.quantity
+            var oia = opening_issue[data.price]
+            var oid = opening_issue.total_discount
+          }
           const receipt_inventorys = yield d.receipt_inventory().fetch()
           const receipt_inventory = receipt_inventorys.first()
-          const riq = receipt_inventory != undefined ? receipt_inventory.quantity : 0
-          const ria = receipt_inventory  ? receipt_inventory[data.price]  : 0
+          var riq = 0
+          var ria = 0
+          if(opening_balance){
+            var riq = receipt_inventory.quantity
+            var ria = receipt_inventory[data.price]
+          }
           const issue_inventorys = yield d.issue_inventory().fetch()
           const issue_inventory = issue_inventorys.first()
-          const iiq = issue_inventory ? issue_inventory.quantity : 0
-          const iia = issue_inventory  ? issue_inventory[data.price]  : 0
-          const iid = issue_inventory ? issue_inventory.total_discount : 0
+          var iiq = 0
+          var iia = 0
+          var iid = 0
+          if(issue_inventory){
+            var iiq = issue_inventory.quantity
+            var iia = issue_inventory[data.price]
+            var iid = issue_inventory.total_discount
+          }
           // Số cuối kỳ
           const closing_balance_quantity = obq + orq - oiq + riq - iiq
           const closing_balance_amount = oba + ora -  oia + ria - iia
           const closing_balance_discount = oid + iid
           const quantity_opening = obq + orq - oiq
-          console.log(closing_balance_quantity)
           const amount_opening = (data.price == "amount")? (oba + ora - oia) : (oba + ora - oia - oid )
           const amount_issue = (data.price == "amount")? iia : (iia + iid)
           const amount_closing = (data.price == "amount")? closing_balance_amount : (closing_balance_amount - closing_balance_discount)
-            if(closing_balance_quantity > 0 ){
               arr.push({id : d.id ,
                         barcode : d.barcode ,
                         item : d.name+ ' - ' + d.size,
@@ -114,7 +133,6 @@ class ReportGeneralInventoryController{
                         amount_receipt : ria,
                         amount_issue : amount_issue,
                         amount_closing : amount_closing })
-            }
         }
         response.json({ status: true  , data : arr})
       }catch(e){
