@@ -4,6 +4,7 @@ const General = use('App/Model/PosGeneral')  // EDIT
 const Detail = use('App/Model/PosDetail')  // EDIT
 const ClosingBalance = use('App/Model/ClosingBalance')  // EDIT
 const GoodsSize = use('App/Model/GoodsSize')  // EDIT
+const GoodsInventory = use('App/Model/GoodsInventory')  // EDIT
 const Inventory = use('App/Model/Inventory')  // EDIT
 const Antl = use('Antl')
 const Helpers = use('Helpers')
@@ -27,7 +28,7 @@ class ClosingController{
     const data = JSON.parse(request.input('data'))
     if(data){
       const check = yield Data.query().where('date',data.date).where('active',1).first()
-      var startDate = moment([moment(data.date,"MM/YYYY").format('YYYY'), moment(data.date,"MM/YYYY").format('MM') - 1]).format("YYYY-MM-DD")
+      var startDate = moment(data.date,"MM/YYYY").format("YYYY-MM-01")
       var endDate = moment(startDate).endOf('month').format("YYYY-MM-DD")
       const general = yield General.query().whereBetween('date_voucher',[startDate,endDate ]).where('active',0).fetch()
       if(check && check.id != data.id){
@@ -57,42 +58,66 @@ class ClosingController{
 
           // Lưu số tồn theo tháng
         const inventory = yield Inventory.query().where('active',1).fetch()
-        const goodsize = yield GoodsSize.query()
-        .where('active',1)
-        .has('detail').fetch()
-
-       if(goodsize.toJSON().length > 0){
         var lastMonth = moment([moment(data.date,"MM/YYYY").format('YYYY'), moment(data.date,"MM/YYYY").format('MM') - 2]).format("YYYY-MM")
         for(var i of inventory.toJSON()){
-          for(var d of goodsize.toJSON()){
+          const goodsize = yield GoodsInventory.query()
+          .innerJoin('goods_size', 'goods_size.id', 'goods_inventory.goods_size')
+          .where('goods_inventory.inventory',i.id)
+          .where('goods_size.active',1)
+          .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
+          .innerJoin('unit', 'unit.id', 'marial_goods.unit')
+          .with('inventory','opening_balance','closing_balance')
+          .scope('inventory', (builder) => {
+            builder.OrMultiWhere('pos_general.inventory_receipt','pos_general.inventory_issue',data.stock).where('pos_general.active',1)
+            .whereBetween('pos_general.date_voucher',[moment(startDate , "YYYY-MM-DD").format('YYYY-MM-DD'),moment(endDate, "YYYY-MM-DD").format('YYYY-MM-DD') ])
+          })
+          .scope('closing_balance', (builder) => {
+            builder.where('inventory',i.id)
+            .where('date',lastMonth)
+          })
+          .select('goods_size.*').fetch()
+          for(var d of goodsize){
             // Lấy số tháng trước
-            const bl = yield ClosingBalance.query().where('date',lastMonth).where('inventory',i.id).where('goods_size',i.id).first()
-            // Số phát sinh nhập
-            const receipt_inventory = yield Detail.query().where('pos_detail.item_id',d.id)
-           .innerJoin('pos_general', 'pos_general.id', 'pos_detail.general_id')
-           .TypeWhereNot('pos_general.inventory_receipt',i.id).where('pos_general.active',1).whereIn('pos_general.status',[1,2])
-           .whereBetween('pos_general.date_voucher',[moment(startDate , "YYYY-MM-DD").format('YYYY-MM-DD'),moment(endDate, "YYYY-MM-DD").format('YYYY-MM-DD') ])
-           .sum('pos_detail.quantity as q').sum('pos_detail.amount as a').sum('pos_detail.purchase_amount as pa')
-           // Số phát sinh xuất
-           const issue_inventory = yield Detail.query().where('pos_detail.item_id',d.id)
-          .innerJoin('pos_general', 'pos_general.id', 'pos_detail.general_id')
-          .TypeWhereNot('pos_general.inventory_issue',i.id).where('pos_general.active',1).whereIn('pos_general.status',[1,2])
-          .whereBetween('pos_general.date_voucher',[moment(startDate , "YYYY-MM-DD").format('YYYY-MM-DD'),moment(endDate, "YYYY-MM-DD").format('YYYY-MM-DD') ])
-          .sum('pos_detail.quantity as q').sum('pos_detail.amount as a').sum('pos_detail.purchase_amount as pa').sum('pos_detail.total_discount as d')
-          if(bl || receipt_inventory || issue_inventory ){
+            const closing_balances = yield d.closing_balance().fetch()
+            const bl = closing_balances.first()
+
+            const inventorys = yield d.inventory().fetch()
+            var riq = 0
+            var ria = 0
+            var ripa = 0
+
+            var iiq = 0
+            var iia = 0
+            var iid = 0
+            var iipa = 0
+
+            for(var k of inventorys){
+              if(k.inventory_receipt == i.id){
+                riq += k.quantity
+                ria += k.amount
+                ripa += k.purchase_amount
+              }else if(k.inventory_issue ==  i.id){
+                iiq += k.quantity
+                iia += k.amount
+                iipa += k.purchase_amount
+                iid += k.total_discount?k.total_discount:0
+              }
+            }
+          if(riq + iiq != 0 ){
             var a = 0
             var b = 0
             var c = 0
             if(bl){
-              a = bl.balance + receipt_inventory[0].q - issue_inventory[0].q
-              b = bl.balance_amount + receipt_inventory[0].a - issue_inventory[0].a
-              c = bl.balance_purchase + receipt_inventory[0].pa - issue_inventory[0].pa
+              a = bl.balance + riq - iiq
+              b = bl.balance_amount + ria - iia
+              c = bl.balance_purchase + ripa - iipa
             }else{
-              a =  receipt_inventory[0].q - issue_inventory[0].q
-              b =  receipt_inventory[0].a - issue_inventory[0].a  - issue_inventory[0].d
-              c =  receipt_inventory[0].pa - issue_inventory[0].pa
+              a = riq - iiq
+              b = ria - iia - iid
+              c = ripa - iipa
               }
               if(a+b+c!=0){
+
                const balance = yield ClosingBalance.query().where('inventory',i.id).where('closing',dataId.id).where('goods_size',d.id).first()
               if(balance){
                 balance.balance = a
@@ -118,7 +143,7 @@ class ClosingController{
         }
 
        response.json({ status: true , message: Antl.formatMessage('messages.update_success') , data : dataId})
-      }
+
      }
     }else{
       response.json({ status: false , message: Antl.formatMessage('messages.update_fail')  })

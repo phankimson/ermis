@@ -60,75 +60,86 @@ class CheckGoodsController{
   * load (request, response){
     try{
       const data = JSON.parse(request.input('data'))
-      var startDate = moment([moment(data.date,"MM/YYYY").format('YYYY'), moment(data.date,"MM/YYYY").format('MM') - 1]).format("YYYY-MM-DD")
+      var startDate = moment(data.date,"DD/MM/YYYY").format("YYYY-MM-01")
       var endDate = moment(data.date,"DD/MM/YYYY").format('YYYY-MM-DD')
       var lastMonth = moment([moment(data.date,"DD/MM/YYYY").format('YYYY'), moment(data.date,"DD/MM/YYYY").format('MM') - 2]).format("MM/YYYY")
       const closing = yield Closing.query().where('date',lastMonth).where('active',1).first()
-      var arr = []
       if(closing){
-        const goodsize1 = yield Initial.query()
-        .innerJoin('goods_size', 'goods_size.id', 'initial.item')
-        .where('goods_size.active',1)
-        .where('initial.inventory',data.stock)
-        .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
-        .innerJoin('unit', 'unit.id', 'marial_goods.unit')
-        .select('goods_size.*','unit.name as unit').fetch()
-        const goodsize2 = yield GoodsInventory.query()
+        const goodsize = yield GoodsInventory.query()
         .innerJoin('goods_size', 'goods_size.id', 'goods_inventory.goods_size')
-        .where('goods_size.active',1)
         .where('goods_inventory.inventory',data.stock)
+        .where('goods_size.active',1)
         .innerJoin('marial_goods', 'marial_goods.id', 'goods_size.goods')
         .innerJoin('unit', 'unit.id', 'marial_goods.unit')
+        .with('inventory','opening_balance','closing_balance')
+        .scope('inventory', (builder) => {
+          builder.OrMultiWhere('pos_general.inventory_receipt','pos_general.inventory_issue',data.stock).where('pos_general.active',1)
+          .whereBetween('pos_general.date_voucher',[moment(startDate , "YYYY-MM-DD").format('YYYY-MM-DD'),moment(endDate, "YYYY-MM-DD").format('YYYY-MM-DD') ])
+        })
+        .scope('opening_balance', (builder) => {
+          builder.where('inventory',data.stock)
+          .sum('quantity as q').sum('amount as a')
+        })
+        .scope('closing_balance', (builder) => {
+          builder.where('inventory',data.stock)
+          .where('date',lastMonth)
+        })
         .select('goods_size.*','unit.name as unit').fetch()
-        var goodsize = goodsize1.toJSON().concat(goodsize2.toJSON())
+        var arr = []
         for(var d of goodsize){
-        var check = arr.filter(x => x.id == d.id)
-        if(check.length == 0){
-        const closing_balance = yield ClosingBalance.query().where('date',lastMonth).where('inventory',data.stock).where('goods_size',d.id).first()
-        const initial = yield Initial.query().where('inventory',data.stock).where('item',d.id).where('type',1).first()
-        var a = 0
-        var b = 0
-        var c = 0
-        var e = 0
+        const closing_balances = yield d.closing_balance().fetch()
+        const closing_balance = closing_balances.first()
+        const opening_balances = yield d.opening_balance().fetch()
+        const opening_balance = opening_balances.first()
+        var cbq = 0
+        var cba = 0
+        var obq = 0
+        var oba = 0
         if(closing_balance){
-          a = closing_balance.balance
-          b = closing_balance.balance_amount
+          cbq = closing_balance.balance
+          cba = closing_balance.balance_amount
         }
-        if(initial){
-          c = initial.quantity
-          e = initial.amount
+        if(opening_balance){
+          obq = opening_balance.quantity
+          oba = opening_balance.amount
         }
-        // Số phát sinh nhập
-        const receipt_inventory = yield Detail.query().where('pos_detail.item_id',d.id)
-       .innerJoin('pos_general', 'pos_general.id', 'pos_detail.general_id')
-       .TypeWhereNot('pos_general.inventory_receipt',data.stock).where('pos_general.active',1).whereIn('pos_general.status',[1,2])
-       .whereBetween('pos_general.date_voucher',[moment(startDate , "YYYY-MM-DD").format('YYYY-MM-DD'),moment(endDate, "YYYY-MM-DD").format('YYYY-MM-DD') ])
-       .sum('pos_detail.quantity as q').sum('pos_detail.amount as a')
-       // Số phát sinh xuất
-       const issue_inventory = yield Detail.query().where('pos_detail.item_id',d.id)
-      .innerJoin('pos_general', 'pos_general.id', 'pos_detail.general_id')
-      .TypeWhereNot('pos_general.inventory_issue',data.stock).where('pos_general.active',1).whereIn('pos_general.status',[1,2])
-      .whereBetween('pos_general.date_voucher',[moment(startDate , "YYYY-MM-DD").format('YYYY-MM-DD'),moment(endDate, "YYYY-MM-DD").format('YYYY-MM-DD') ])
-      .sum('pos_detail.quantity as q').sum('pos_detail.amount as a')
-      var balance = a + c + receipt_inventory[0].q - issue_inventory[0].q
-      var balance_amount = b + e + receipt_inventory[0].a  - issue_inventory[0].a
-      if(balance > 0 && balance_amount > 0){
+
+        const inventorys = yield d.inventory().fetch()
+        var riq = 0
+        var ria = 0
+        
+        var iiq = 0
+        var iia = 0
+        var iid = 0
+
+        for(var k of inventorys){
+          if(k.inventory_receipt == data.stock){
+            riq += k.quantity
+            ria += k.amount
+          }else if(k.inventory_issue ==  data.stock){
+            iiq += k.quantity
+            iia += k.amount
+          }
+        }
+
+      var balance = cbq + obq + riq - iiq
+      var balance_amount = cba + oba + ria  - iia
+      if(balance != 0 ){
         arr.push({id : d.id ,
                   goods : d.id ,
                   barcode : d.barcode ,
                   item : d.name ,
                   unit : d.unit ,
                   price : d.price ,
-                  balance : a + c + receipt_inventory[0].q - issue_inventory[0].q,
-                  balance_amount : b + e + receipt_inventory[0].a  - issue_inventory[0].a ,
+                  balance : balance,
+                  balance_amount : balance_amount,
                   check : 0 ,
                   check_amount: 0 ,
                   difference:  0,
                   difference_amount : 0
           })
-      }
+        }
 
-          }
       }
         response.json({ status: true  , data : arr})
       }else{

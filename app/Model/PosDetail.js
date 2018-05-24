@@ -94,6 +94,12 @@ class PosDetail extends Lucid {
                })
           }
          }
+         static scopeOrMultiWhere(builder,column1,column2,value) {
+           if(value){
+            builder.where(column1,value)
+            builder.orWhere(column1,value)
+           }
+          }
 }
 
 module.exports = PosDetail
